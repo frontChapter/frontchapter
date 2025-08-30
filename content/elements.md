@@ -1,67 +1,67 @@
 ---
-title: "Elements"
+title: "المان‌ها"
 draft: false
 ---
 
-# Heading 1
+# عنوان ۱
 
-## Heading 2
+## عنوان ۲
 
-### Heading 3
+### عنوان ۳
 
-#### Heading 4
+#### عنوان ۴
 
-##### Heading 5
+##### عنوان ۵
 
-###### Heading 6
-
----
-
-### Paragraph
-
-Did you come here for something in particular or just general Riker-bashing? And blowing into maximum warp speed, you appeared for an instant to be in two places at once. We have a saboteur aboard. We know you’re dealing in stolen ore. But I wanna talk about the assassination attempt on Lieutenant Worf. Could someone survive inside a transporter buffer for 75 years? Fate. It protects fools, little children, and ships.
-
-Did you come here for something in particular or just general Riker-bashing? And blowing into maximum warp speed, you appeared for an instant to be in two places at once. We have a saboteur aboard. We know you’re dealing in stolen ore. But I wanna talk about the assassination attempt on Lieutenant Worf. Could someone survive inside a transporter buffer for 75 years? Fate. It protects fools, little children, and ships.
+###### عنوان ۶
 
 ---
 
-### Emphasis
+### پاراگراف
 
-1. Did you come here for something in **particular** or just general
+آیا برای موضوع خاصی اینجا آمدید یا فقط برای انتقاد از رایکر؟ و با رفتن به حداکثر سرعت، برای لحظه‌ای در دو مکان همزمان ظاهر شدید. ما یک خرابکار در کشتی داریم. می‌دانیم که شما با سنگ معدن دزدیده شده معامله می‌کنید. اما می‌خواهم درباره تلاش برای ترور ستوان وورف صحبت کنم. آیا کسی می‌تواند ۷۵ سال در بافر ترنسپورتر زنده بماند؟ سرنوشت. از احمق‌ها، کودکان کوچک و کشتی‌ها محافظت می‌کند.
 
-2. Did you come here for something in <ins>particular</ins>
-
-3. _Did you come here_
-
-4. Did you come here for **something** in particular
-
-5. Did you come here for something in particular
-
-6. Did you come here for something in particular
-
-7. URLs and URLs in angle brackets will automatically get turned into links. [http://www.example.com](http://www.example.com) or
-
-8. [http://www.example.com](http://www.example.com) and sometimes example.com (but not on Github, for example).
+آیا برای موضوع خاصی اینجا آمدید یا فقط برای انتقاد از رایکر؟ و با رفتن به حداکثر سرعت، برای لحظه‌ای در دو مکان همزمان ظاهر شدید. ما یک خرابکار در کشتی داریم. می‌دانیم که شما با سنگ معدن دزدیده شده معامله می‌کنید. اما می‌خواهم درباره تلاش برای ترور ستوان وورف صحبت کنم. آیا کسی می‌تواند ۷۵ سال در بافر ترنسپورتر زنده بماند؟ سرنوشت. از احمق‌ها، کودکان کوچک و کشتی‌ها محافظت می‌کند.
 
 ---
 
-### Link
+### تاکید
 
-[I'm an inline-style link](https://www.google.com)
+1. آیا برای موضوعی **خاص** اینجا آمدید یا فقط به طور کلی
 
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+2. آیا برای موضوعی <ins>خاص</ins> اینجا آمدید
 
-[I'm a reference-style link][arbitrary case-insensitive reference text]
+3. _آیا برای موضوعی اینجا آمدید_
 
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
+4. آیا برای **چیزی** خاص اینجا آمدید
 
-[You can use numbers for reference-style link definitions][1]
+5. آیا برای موضوعی خاص اینجا آمدید
 
-Or leave it empty and use the [link text itself].
+6. آیا برای موضوعی خاص اینجا آمدید
 
-example.com (but not on Github, for example).
+7. آدرس‌ها و آدرس‌هایی که داخل &lt;&gt; باشند به طور خودکار به لینک تبدیل می‌شوند. [http://www.example.com](http://www.example.com) یا
 
-Some text to show that the reference links can follow later.
+8. [http://www.example.com](http://www.example.com) و گاهی example.com (اما نه در گیت‌هاب، برای مثال).
+
+---
+
+### لینک
+
+[من یک لینک به سبک خطی هستم](https://www.google.com)
+
+[من یک لینک به سبک خطی با عنوان هستم](https://www.google.com "صفحه اصلی گوگل")
+
+[من یک لینک به سبک ارجاعی هستم][arbitrary case-insensitive reference text]
+
+[من یک لینک ارجاعی نسبی به فایل مخزن هستم](../blob/master/LICENSE)
+
+[می‌توانید از اعداد برای تعریف لینک ارجاعی استفاده کنید][1]
+
+یا خالی بگذارید و از [متن لینک خودش] استفاده کنید.
+
+example.com (اما نه در گیت‌هاب، برای مثال).
+
+متنی برای نشان دادن اینکه لینک‌های ارجاعی می‌توانند بعداً بیایند.
 
 [arbitrary case-insensitive reference text]: https://www.themefisher.com
 [1]: https://gethugothemes.com
@@ -69,27 +69,27 @@ Some text to show that the reference links can follow later.
 
 ---
 
-### Ordered List
+### لیست مرتب
 
-1. List item
-2. List item
-3. List item
-4. List item
-5. List item
-
----
-
-### Unordered List
-
-- List item
-- List item
-- List item
-- List item
-- List item
+1. آیتم لیست
+2. آیتم لیست
+3. آیتم لیست
+4. آیتم لیست
+5. آیتم لیست
 
 ---
 
-### Code and Syntax Highlighting
+### لیست نامرتب
+
+- آیتم لیست
+- آیتم لیست
+- آیتم لیست
+- آیتم لیست
+- آیتم لیست
+
+---
+
+### کد و برجسته‌سازی نحوی
 
 #### HTML
 
@@ -119,7 +119,7 @@ Some text to show that the reference links can follow later.
 
 ---
 
-#### JavaScript
+#### جاوااسکریپت
 
 <Code language="javascript">
 {`window.addEventListener("load", (e) => {
@@ -129,36 +129,36 @@ Some text to show that the reference links can follow later.
 
 ---
 
-### Button
+### دکمه
 
 <Button href="#" type="solid">Button</Button>
 
 ---
 
-### Quote
+### نقل قول
 
-<Blockquote name="!Alexender Smith">
- Did you come here for something in particular or just general Riker-bashing? And blowing into maximum warp speed, you appeared for an instant to be in two places at once.
+<Blockquote name="!الکساندر اسمیت">
+ آیا برای موضوع خاصی اینجا آمدید یا فقط برای انتقاد از رایکر؟ و با رفتن به حداکثر سرعت، برای لحظه‌ای در دو مکان همزمان ظاهر شدید.
 </Blockquote>
 
 ---
 
-### Notice
+### اعلان
 
 <Notice type="note">
-  This is a simple note.
+  این یک یادداشت ساده است.
 </Notice>
 
 <Notice type="tip">
-  This is a simple note.
+  این یک یادداشت ساده است.
 </Notice>
 
 <Notice type="info">
-  This is a simple note.
+  این یک یادداشت ساده است.
 </Notice>
 
 <Notice type="warning">
-  This is a simple note.
+  این یک یادداشت ساده است.
 </Notice>
 
 ---
@@ -194,62 +194,62 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 ---
 
-### Table
+### جدول
 
-| #   |    First     |     Last     |       Handle |
+| #   |    اول       |     آخر      |     هندل     |
 | :-- | :----------: | :----------: | -----------: |
-| 1   | Row:1 Cell:1 | Row:1 Cell:2 | Row:1 Cell:3 |
-| 2   | Row:2 Cell:1 | Row:2 Cell:2 | Row:2 Cell:3 |
-| 3   | Row:3 Cell:1 | Row:3 Cell:2 | Row:3 Cell:3 |
+| 1   | سطر۱ سلول۱   | سطر۱ سلول۲   | سطر۱ سلول۳   |
+| 2   | سطر۲ سلول۱   | سطر۲ سلول۲   | سطر۲ سلول۳   |
+| 3   | سطر۳ سلول۱   | سطر۳ سلول۲   | سطر۳ سلول۳   |
 
 ---
 
-### Collapse
+### جمع‌شونده
 
-<Accordion title="Why should you need to do this?">
+<Accordion title="چرا باید این کار را انجام دهید؟">
 
-- This is a thing.
-- This is a thing.
-- This is a thing.
-- This is a thing.
-- This is a thing.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
 
 </Accordion>
 
-<Accordion title="How can I adjust Horizontal centering">
+<Accordion title="چطور می‌توانم مرکز افقی را تنظیم کنم؟">
 
-- This is a thing.
-- This is a thing.
-- This is a thing.
-- This is a thing.
-- This is a thing.
-
-</Accordion>
-
-<Accordion title="Should you use Negative margin?">
-
-- This is a thing.
-- This is a thing.
-- This is a thing.
-- This is a thing.
-- This is a thing.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
 
 </Accordion>
 
----
+<Accordion title="آیا باید از مارجین منفی استفاده کنید؟">
 
-### Image
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
+- این یک مورد است.
 
-![image](/images/flower.jpg)
-
----
-
-### Youtube video
-
-<Youtube id="ztVV54sPOns" title="Play:Youtube"/>
+</Accordion>
 
 ---
 
-### Custom video
+### تصویر
+
+![تصویر](/images/flower.jpg)
+
+---
+
+### ویدئوی یوتیوب
+
+<Youtube id="ztVV54sPOns" title="پخش:یوتیوب"/>
+
+---
+
+### ویدئوی سفارشی
 
 <Video width="100%" src="https://joy1.videvo.net/videvo_files/video/free/video0467/large_watermarked/_import_61516692993d77.04238324_preview.mp4" />

@@ -1,48 +1,48 @@
 ---
-title: "About"
+title: "درباره ما"
 layout: about
 draft: false
 
-## about us
+## درباره ما
 about_us:
-  subtitle: WHO WE ARE
-  title: Hello, We’re Andromeda Here For Your Help
-  content: Your online Health & Fitness companion that offers free assistance on its Facebook Group and provides quality paid guided personal training packages by and through website. We are the first ever, online manifesto in Bangladesh to make place you will select when you think of getting fit
+  subtitle: ما که هستیم
+  title: سلام، ما آندرومدا هستیم برای کمک به شما
+  content: همراه آنلاین سلامت و تناسب اندام شما که مشاوره رایگان در گروه فیسبوک خود ارائه می‌دهد و بسته‌های تمرینی شخصی با کیفیت را از طریق وبسایت به صورت پولی ارائه می‌کند. ما اولین مانیفست آنلاین در بنگلادش هستیم تا مکانی باشیم که هنگام فکر کردن به تناسب اندام انتخاب می‌کنید.
   image: /images/about/01.jpg
 
-## our works
+## کارهای ما
 works:
-  subtitle: OUR WORKS
-  title: What We Do
+  subtitle: کارهای ما
+  title: ما چه می‌کنیم
   list:
-    - title: Building A New Class
-      content: Decade of engineering under his belt, Jeremie is responsible for technical infrastructure and feature development. In Flow, wherever things just work is understanding developing complex systems
-    - title: Design For Anyone
-      content: Decade of engineering under his belt, Jeremie is responsible for technical infrastructure and feature development. In Flow, wherever things just work is understanding developing complex systems
-    - title: Creative Flair Design
-      content: Decade of engineering under his belt, Jeremie is responsible for technical infrastructure and feature development. In Flow, wherever things just work is understanding developing complex systems
-    - title: Building Products
-      content: Decade of engineering under his belt, Jeremie is responsible for technical infrastructure and feature development. In Flow, wherever things just work is understanding developing complex systems
+    - title: ساخت یک کلاس جدید
+      content: با یک دهه تجربه مهندسی، جرمی مسئول زیرساخت فنی و توسعه ویژگی‌هاست. در فلو، هر جا که همه چیز به خوبی کار می‌کند، حاصل درک و توسعه سیستم‌های پیچیده است.
+    - title: طراحی برای همه
+      content: با یک دهه تجربه مهندسی، جرمی مسئول زیرساخت فنی و توسعه ویژگی‌هاست. در فلو، هر جا که همه چیز به خوبی کار می‌کند، حاصل درک و توسعه سیستم‌های پیچیده است.
+    - title: طراحی خلاقانه
+      content: با یک دهه تجربه مهندسی، جرمی مسئول زیرساخت فنی و توسعه ویژگی‌هاست. در فلو، هر جا که همه چیز به خوبی کار می‌کند، حاصل درک و توسعه سیستم‌های پیچیده است.
+    - title: ساخت محصولات
+      content: با یک دهه تجربه مهندسی، جرمی مسئول زیرساخت فنی و توسعه ویژگی‌هاست. در فلو، هر جا که همه چیز به خوبی کار می‌کند، حاصل درک و توسعه سیستم‌های پیچیده است.
 
-## our mission
+## ماموریت ما
 mission:
-  subtitle: OUR MISSION
-  title: Main Vision And Mission Of Our Company
-  content: We were freelance designers and developers, constantly finding ourselve deep vague feedback. leaving a notes from the sticky note piece .
+  subtitle: ماموریت ما
+  title: چشم‌انداز و ماموریت اصلی شرکت ما
+  content: ما طراحان و توسعه‌دهندگان فریلنسری بودیم که همیشه با بازخوردهای مبهم و عمیق مواجه می‌شدیم. یادداشت‌هایی از تکه‌های برچسب چسبان باقی می‌گذاشتیم.
   image: /images/about/02.jpg
 
-## short video
+## ویدئوی کوتاه
 video:
-  subtitle: A SHORT VIDEO
-  title: You Take Care Of The Payments, We Take Care Of The Rest.
-  description: Protect your design vision and leave nothing up to interpretation with interaction recipes. Quickly share and access all your team members interactions by using libraries, ensuring consistcy throughout the.
+  subtitle: یک ویدئوی کوتاه
+  title: شما پرداخت‌ها را انجام دهید، ما بقیه را انجام می‌دهیم.
+  description: از دیدگاه طراحی خود محافظت کنید و هیچ چیز را به تفسیر واگذار نکنید با دستورالعمل‌های تعامل. به سرعت تعاملات همه اعضای تیم خود را با استفاده از کتابخانه‌ها به اشتراک بگذارید تا هماهنگی را در سراسر پروژه تضمین کنید.
   video_id: dyZcRRWiuuw
   thumbnail: /images/about/video-popup-2.jpg
 
-## clients
+## مشتریان
 clients:
-  subtitle: OUR CLIENTS
-  title: Trusted By Thousands Companies
+  subtitle: مشتریان ما
+  title: مورد اعتماد هزاران شرکت
   brands:
     - /images/brands/01-colored.png
     - /images/brands/02-colored.png
@@ -55,39 +55,39 @@ clients:
     - /images/brands/06-colored.png
 
 
-## members
+## اعضا
 our_member:
-  subtitle: OUR MEMBERS
-  title: The People Behind
-  content: We were freelance designers and developers, constantly finding </br> ourselves deep in vague feedback. This made every client and team
+  subtitle: اعضای ما
+  title: افراد پشت صحنه
+  content: ما طراحان و توسعه‌دهندگان فریلنسری بودیم که همیشه با بازخوردهای مبهم و عمیق مواجه می‌شدیم. این موضوع هر مشتری و تیمی را تحت تاثیر قرار می‌داد.
   list:
     - name: Valentin Staykov
-      field: Operations
+      field: عملیات
       image: /images/about/team/01.jpg
     - name: Bukiakta Bansalo
-      field: Product
+      field: محصول
       image: /images/about/team/02.jpg
     - name: Ortrin Okaster
-      field: Engineering
+      field: مهندسی
       image: /images/about/team/03.jpg
 
-## office
+## دفاتر
 our_office:
-  subtitle: OUR OFFICES
-  title: Made With Love Of Around The </br> World With Many Offices
-  content: We were freelance designers and developers, constantly finding </br> ourselves deep in vague feedback. This made every client and team
+  subtitle: دفاتر ما
+  title: ساخته شده با عشق در سراسر </br> جهان با دفاتر متعدد
+  content: ما طراحان و توسعه‌دهندگان فریلنسری بودیم که همیشه با بازخوردهای مبهم و عمیق مواجه می‌شدیم. این موضوع هر مشتری و تیمی را تحت تاثیر قرار می‌داد.
   countries:
     - flag: /images/about/flags/us.png
-      name: NewYork, USA
+      name: نیویورک، آمریکا
       location: 219 Bald Hill Drive Oakland Gardens, NY 11364
     - flag: /images/about/flags/au.png
-      name: Australia, Perth
+      name: استرالیا، پرت
       location: Flat 23 80 Anthony Circlet Port Guiseppe, TAS 2691
     - flag:  /images/about/flags/germany.png
-      name: Berlin, Germany
+      name: برلین، آلمان
       location: Jl Raya Dewi Sartika Ged Harapan Masa, Br Germeny
     - flag:  /images/about/flags/china.png
-      name: China, Wohan
+      name: چین، ووهان
       location: 1hao Wen Ti Huo Dong Zhong Xin 1ceng Jian Xing
 
 ---
