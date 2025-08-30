@@ -8,6 +8,7 @@ import ShortIntro from '../layouts/partials/ShortIntro';
 import SpecialFeatures from '../layouts/partials/SpecialFeatures';
 import StorySection from '../layouts/partials/StorySection';
 import Testimonial from '../layouts/partials/Testimonial';
+import YearOneStats from '../layouts/partials/YearOneStats';
 
 const Home = async () => {
   const homepage = await getListPage('src/content/_index.md');
@@ -30,6 +31,14 @@ const Home = async () => {
       <StorySection {...storySection} />
       <SpecialFeatures speciality={speciality} />
       <Testimonial testimonial={testimonial} />
+      <YearOneStats
+        title={frontmatter.yearOne.title}
+        year={frontmatter.yearOne.year}
+        stats={frontmatter.yearOne.stats}
+        gatherings={frontmatter.yearOne.gatherings}
+        conference={frontmatter.yearOne.conference}
+        images={frontmatter.yearOne.images}
+      />
       <Cta />
     </GSAPWrapper>
   );
