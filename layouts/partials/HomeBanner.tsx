@@ -186,7 +186,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({ banner: bannerData, brands }) =
                 spaceBetween={20}
                 modules={[Autoplay]}
                 autoplay={{ delay: 3000 }}
-                dir={isRTL ? "rtl" : "ltr"}
+                dir="ltr"
               >
                 {brands.map((brand: string, index: number) => (
                   <SwiperSlide

@@ -34,6 +34,7 @@ const Features: React.FC<FeaturesProps> = ({ features }) => {
         </div>
         <div className="animate from-right relative mt-10">
           <Swiper
+          dir="ltr"
             slidesPerView={1}
             pagination={{
               type: "bullets",

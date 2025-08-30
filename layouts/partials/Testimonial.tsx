@@ -48,6 +48,7 @@ const Testimonial: React.FC<TestimonialProps> = ({ testimonial }) => {
               </div>
               <div className="md:col-7 lg:col-6 xl:col-4">
                 <Swiper
+                dir="ltr"
                   modules={[Pagination, Autoplay]}
                   pagination={{
                     el: testimonialPaginationRef.current,

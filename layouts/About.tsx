@@ -323,6 +323,7 @@ const About: React.FC<AboutProps> = ({ data }) => {
               spaceBetween={20}
               modules={[Autoplay]}
               autoplay={{ delay: 3000 }}
+              dir="ltr"
             >
               {clients.brands.map((brand, index) => (
                 <SwiperSlide
