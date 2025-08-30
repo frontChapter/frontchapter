@@ -7,20 +7,19 @@ interface CircleProps extends React.HTMLAttributes<HTMLDivElement> {
   fill?: boolean;
 }
 
-function Circle({
-  className = '',
-  width,
-  height,
-  fill = true,
-  ...props
-}: CircleProps) {
-  return (
-    <div
-      className={`absolute ${className} ${fill ? 'bg-primary' : 'bg-[#ffe6db]'} rounded-full`}
-      style={{ width: `${width}px`, height: `${height}px` }}
-      {...props}
-    ></div>
-  );
-}
+const Circle = React.forwardRef<HTMLDivElement, CircleProps>(
+  ({ className = '', width, height, fill = true, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`absolute ${className} ${fill ? 'bg-primary' : 'bg-[#ffe6db]'} rounded-full`}
+        style={{ width: `${width}px`, height: `${height}px` }}
+        {...props}
+      ></div>
+    );
+  }
+);
+
+Circle.displayName = 'Circle';
 
 export default Circle;
