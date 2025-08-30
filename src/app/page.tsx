@@ -8,10 +8,10 @@ import ShortIntro from '../layouts/partials/ShortIntro';
 import SpecialFeatures from '../layouts/partials/SpecialFeatures';
 import StorySection from '../layouts/partials/StorySection';
 import Testimonial from '../layouts/partials/Testimonial';
+import YearFourStats from '../layouts/partials/YearFourStats';
 import YearOneStats from '../layouts/partials/YearOneStats';
 import YearThreeStats from '../layouts/partials/YearThreeStats';
 import YearTwoStats from '../layouts/partials/YearTwoStats';
-import YearFourStats from '../layouts/partials/YearFourStats';
 
 const Home = async () => {
   const homepage = await getListPage('src/content/_index.md');
