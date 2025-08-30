@@ -1,5 +1,6 @@
 import config from "@config/config.json";
 import menu from "@config/menu.json";
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
@@ -83,23 +84,65 @@ const Header: React.FC = () => {
     <>
       <div className="header-height-fix"></div>
       <header
-        className={`header${sticky ? " header-sticky" : ""}${
-          direction === 1 ? " unpinned" : ""
-        }`}
+        className={clsx(
+          "header",
+          sticky && "header-sticky",
+          direction === 1 && "unpinned"
+        )}
         ref={headerRef}
         dir={isRTL ? "rtl" : "ltr"}
       >
-        <nav className="navbar container-xl">
-          {/* logo */}
-          <div className={isRTL ? "order-2" : "order-0"}>
-            <Logo src={logo} />
-          </div>
+        <nav className={isRTL ? "navbar container-xl flex items-center justify-between" : "navbar container-xl flex items-center"}>
+          {/* RTL: hamburger far left, logo centered; LTR: logo left */}
+          {isRTL ? (
+            <>
+              <div className="flex items-center">
+                {/* Hamburger menu button */}
+                {showMenu ? (
+                  <button
+                    className="h-8 w-8 text-3xl text-dark lg:hidden mr-2"
+                    onClick={() => setShowMenu(false)}
+                  >
+                    <CgClose />
+                  </button>
+                ) : (
+                  <button
+                    className="text-dark lg:hidden mr-2"
+                    onClick={() => setShowMenu(true)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 32 32"
+                      width="32px"
+                      height="32px"
+                      style={{ transform: "scaleX(-1)" }}
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M 5 5 L 5 11 L 11 11 L 11 5 L 5 5 z M 13 5 L 13 11 L 19 11 L 19 5 L 13 5 z M 21 5 L 21 11 L 27 11 L 27 5 L 21 5 z M 7 7 L 9 7 L 9 9 L 7 9 L 7 7 z M 15 7 L 17 7 L 17 9 L 15 9 L 15 7 z M 23 7 L 25 7 L 25 9 L 23 9 L 23 7 z M 5 13 L 5 19 L 11 19 L 11 13 L 5 13 z M 13 13 L 13 19 L 19 19 L 19 13 L 13 13 z M 21 13 L 21 19 L 27 19 L 27 13 L 21 13 z M 7 15 L 9 15 L 9 17 L 7 17 L 7 15 z M 15 15 L 17 15 L 17 17 L 15 17 L 15 15 z M 23 15 L 25 15 L 25 17 L 23 17 L 23 15 z M 5 21 L 5 27 L 11 27 L 11 21 L 5 21 z M 13 21 L 13 27 L 19 27 L 19 21 L 13 21 z M 21 21 L 21 27 L 27 27 L 27 21 L 21 21 z M 7 23 L 9 23 L 9 25 L 7 25 L 7 23 z M 15 23 L 17 23 L 17 25 L 15 25 L 15 23 z"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              <div className="flex-1 flex justify-center">
+                <Logo src={logo} />
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center">
+              <Logo src={logo} />
+            </div>
+          )}
 
           <ul
             id="nav-menu"
-            className={`navbar-nav ${isRTL ? "order-0" : "order-2"} w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex${
-              !showMenu ? " hidden" : ""
-            }`}
+            className={clsx(
+              "navbar-nav",
+              isRTL ? "order-2" : "order-2",
+              "w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex",
+              !showMenu && "hidden"
+            )}
             style={isRTL ? { direction: "rtl" } : { direction: "ltr" }}
           >
             {main.map((menu, i) => (
@@ -123,9 +166,10 @@ const Header: React.FC = () => {
                         <li className="nav-dropdown-item" key={`children-${j}`}>
                           <Link
                             href={child.url}
-                            className={`nav-dropdown-link block transition-all${
-                              asPath === child.url ? " active" : ""
-                            }`}
+                            className={clsx(
+                              "nav-dropdown-link block transition-all",
+                              asPath === child.url && "active"
+                            )}
                           >
                             {child.name}
                           </Link>
@@ -137,9 +181,10 @@ const Header: React.FC = () => {
                   <li className="nav-item">
                     <Link
                       href={menu.url}
-                      className={`nav-link block${
-                        asPath === menu.url ? " active" : ""
-                      }`}
+                      className={clsx(
+                        "nav-link block",
+                        asPath === menu.url && "active"
+                      )}
                     >
                       {menu.name}
                     </Link>
@@ -158,27 +203,25 @@ const Header: React.FC = () => {
               </li>
             )}
           </ul>
-          <div className={isRTL ? "order-0 mr-auto flex items-center md:mr-0" : "order-1 ml-auto flex items-center md:ml-0"}>
-            {(config as Config).nav_button.enable && (
-              <Link
-                className="btn btn-primary hidden lg:flex"
-                href={(config as Config).nav_button.link}
-              >
-                {(config as Config).nav_button.label}
-              </Link>
-            )}
-
-            {/* navbar toggler */}
-            {showMenu ? (
+          <div
+            className={
+              isRTL
+                ? "order-2 ml-auto flex items-center md:ml-0 flex-row-reverse"
+                : "order-1 ml-auto flex items-center md:ml-0"
+            }
+          >
+            {/* Hamburger menu button for LTR and close button for RTL when menu is open */}
+            {!isRTL && showMenu && (
               <button
-                className="h-8 w-8 text-3xl text-dark lg:hidden"
+                className="h-8 w-8 text-3xl text-dark lg:hidden ml-2"
                 onClick={() => setShowMenu(!showMenu)}
               >
                 <CgClose />
               </button>
-            ) : (
+            )}
+            {!isRTL && !showMenu && (
               <button
-                className="text-dark lg:hidden"
+                className="text-dark lg:hidden ml-2"
                 onClick={() => setShowMenu(!showMenu)}
               >
                 <svg
@@ -186,7 +229,6 @@ const Header: React.FC = () => {
                   viewBox="0 0 32 32"
                   width="32px"
                   height="32px"
-                  style={isRTL ? { transform: "scaleX(-1)" } : {}}
                 >
                   <path
                     fill="currentColor"
@@ -196,6 +238,14 @@ const Header: React.FC = () => {
               </button>
             )}
             {/* /navbar toggler */}
+            {(config as Config).nav_button.enable && (
+              <Link
+                className="btn btn-primary hidden lg:flex"
+                href={(config as Config).nav_button.link}
+              >
+                {(config as Config).nav_button.label}
+              </Link>
+            )}
           </div>
         </nav>
       </header>
