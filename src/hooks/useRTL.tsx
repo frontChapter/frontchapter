@@ -8,7 +8,7 @@ interface RTLContextType {
 const RTLContext = createContext<RTLContextType | undefined>(undefined);
 
 export const RTLProvider = ({ children }: { children: ReactNode }) => {
-  const [isRTL, setIsRTL] = useState(false);
+  const [isRTL, setIsRTL] = useState(true);
   const toggleRTL = () => setIsRTL((prev) => !prev);
 
   return (

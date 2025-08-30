@@ -1,3 +1,5 @@
+'use client';
+import { useRTL } from '@/src/hooks/useRTL';
 import Link from 'next/link';
 import React from 'react';
 import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi';
@@ -12,6 +14,7 @@ const Pagination = ({ section, currentPage, totalPages }: PaginationProps) => {
   const indexPageLink = currentPage === 2;
   const hasPrevPage = currentPage > 1;
   const hasNextPage = totalPages > currentPage;
+  const { isRTL } = useRTL();
 
   let pageList = [];
   for (let i = 1; i <= totalPages; i++) {
@@ -35,7 +38,7 @@ const Pagination = ({ section, currentPage, totalPages }: PaginationProps) => {
               }
               className="inline-flex h-11 w-11 items-center justify-center rounded px-2 py-2 text-primary hover:bg-primary hover:text-body"
             >
-              <TfiAngleLeft />
+              {isRTL ? <TfiAngleRight /> : <TfiAngleLeft />}
             </Link>
           ) : (
             <span
@@ -43,7 +46,7 @@ const Pagination = ({ section, currentPage, totalPages }: PaginationProps) => {
                 !hasPrevPage && 'opacity-0'
               } inline-flex h-11 w-11 items-center justify-center rounded px-2 py-2 text-primary hover:bg-primary hover:text-body`}
             >
-              <TfiAngleLeft />
+              {isRTL ? <TfiAngleRight /> : <TfiAngleLeft />}
             </span>
           )}
 
@@ -80,7 +83,7 @@ const Pagination = ({ section, currentPage, totalPages }: PaginationProps) => {
               href={`${section ? '/' + section : ''}/page/${currentPage + 1}`}
               className="inline-flex h-11 w-11 items-center justify-center rounded px-2 py-2 text-primary hover:bg-primary hover:text-body"
             >
-              <TfiAngleRight />
+              {isRTL ? <TfiAngleLeft /> : <TfiAngleRight />}
             </Link>
           ) : (
             <span
@@ -88,7 +91,7 @@ const Pagination = ({ section, currentPage, totalPages }: PaginationProps) => {
                 !hasNextPage && 'opacity-0'
               } inline-flex h-11 w-11 items-center justify-center rounded px-2 py-2 text-primary hover:bg-primary hover:text-body`}
             >
-              <TfiAngleRight />
+              {isRTL ? <TfiAngleLeft /> : <TfiAngleRight />}
             </span>
           )}
         </nav>

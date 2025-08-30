@@ -14,7 +14,7 @@ interface RootLayoutProps {
 }
 
 function LayoutContent({ children }: RootLayoutProps) {
-  const { isRTL, toggleRTL } = useRTL();
+  const { isRTL } = useRTL();
 
   return (
     <html suppressHydrationWarning={true} lang="en" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -56,12 +56,6 @@ function LayoutContent({ children }: RootLayoutProps) {
       </head>
       <body suppressHydrationWarning={true}>
         <TwSizeIndicator />
-        <button
-          style={{ position: 'fixed', top: 10, left: 10, zIndex: 9999 }}
-          onClick={toggleRTL}
-        >
-          Switch to {isRTL ? 'LTR' : 'RTL'}
-        </button>
         <Header />
         {children}
         <Footer />
