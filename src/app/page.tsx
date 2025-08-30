@@ -11,6 +11,7 @@ import Testimonial from '../layouts/partials/Testimonial';
 import YearOneStats from '../layouts/partials/YearOneStats';
 import YearThreeStats from '../layouts/partials/YearThreeStats';
 import YearTwoStats from '../layouts/partials/YearTwoStats';
+import YearFourStats from '../layouts/partials/YearFourStats';
 
 const Home = async () => {
   const homepage = await getListPage('src/content/_index.md');
@@ -25,6 +26,7 @@ const Home = async () => {
     storySection,
     yearTwo,
     yearThree,
+    yearFour,
   } = frontmatter;
   return (
     <GSAPWrapper>
@@ -57,6 +59,13 @@ const Home = async () => {
         conference={yearThree.conference}
         magazine={yearThree.magazine}
         festival={yearThree.festival}
+      />
+      <YearFourStats
+        title={yearFour.title}
+        year={yearFour.year}
+        stats={yearFour.stats}
+        birthday={yearFour.birthday}
+        events={yearFour.events}
       />
       <Cta />
     </GSAPWrapper>
