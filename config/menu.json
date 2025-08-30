@@ -1,48 +1,48 @@
 {
   "main": [
     {
-      "name": "Home",
+      "name": "خانه",
       "url": "/"
     },
     {
-      "name": "About",
+      "name": "درباره ما",
       "url": "/about"
     },
     {
-      "name": "Blog",
+      "name": "وبلاگ",
       "url": "/posts"
     },
     {
-      "name": "Pages",
+      "name": "صفحات",
       "url": "",
       "hasChildren": true,
       "children": [
         {
-          "name": "Elements",
+          "name": "المان‌ها",
           "url": "/elements"
         },
         {
-          "name": "Terms & Conditions",
+          "name": "قوانین و مقررات",
           "url": "/terms-policy"
         }
       ]
     },
     {
-      "name": "Contact",
+      "name": "تماس با ما",
       "url": "/contact"
     }
   ],
   "footer": [
     {
-      "name": "About",
+      "name": "درباره ما",
       "url": "/about"
     },
     {
-      "name": "Blog",
+      "name": "وبلاگ",
       "url": "/blog"
     },
     {
-      "name": "Terms & Conditions",
+      "name": "قوانین و مقررات",
       "url": "/terms-policy"
     }
   ]
