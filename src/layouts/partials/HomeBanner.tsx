@@ -14,6 +14,7 @@ import ImageFallback from '../components/ImageFallback';
 
 interface BannerData {
   title: string;
+  subtitle: string;
   link: {
     href: string;
     label: string;
@@ -30,6 +31,115 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
   banner: bannerData,
   brands,
 }) => {
+  // دایره‌های متحرک و تعاملی
+  // فقط یکبار تعریف شود
+  const circlesRef = React.useRef<(HTMLDivElement | null)[]>([]);
+
+  React.useEffect(() => {
+    // انیمیشن شناوری و حرکت تصادفی اولیه
+    circlesRef.current.forEach((circle) => {
+      if (!circle) return;
+      gsap.to(circle, {
+        x: `+=${Math.random() * 18 - 9}`,
+        y: `+=${Math.random() * 12 - 6}`,
+        repeat: -1,
+        yoyo: true,
+        duration: 3 + Math.random() * 2.5,
+        ease: 'power2.inOut',
+        delay: Math.random() * 1.2,
+      });
+    });
+
+    // واکنش به موس
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const mx = e.clientX / innerWidth - 0.5;
+      const my = e.clientY / innerHeight - 0.5;
+      circlesRef.current.forEach((circle, i) => {
+        if (!circle) return;
+        gsap.to(circle, {
+          x: mx * (20 + i * 2),
+          y: my * (10 + i * 2),
+          duration: 1.2,
+          ease: 'power2.out',
+        });
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // واکنش به اسکرول
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      circlesRef.current.forEach((circle, i) => {
+        if (!circle) return;
+        gsap.to(circle, {
+          y: `+=${Math.sin(scrollY / 100 + i) * 10}`,
+          duration: 0.8,
+          ease: 'power1.out',
+        });
+      });
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  // دایره‌های متحرک و تعاملی
+  // حذف تعریف تکراری
+
+  useEffect(() => {
+    // انیمیشن شناوری و حرکت تصادفی اولیه
+    circlesRef.current.forEach((circle) => {
+      if (!circle) return;
+      gsap.to(circle, {
+        x: `+=${Math.random() * 40 - 20}`,
+        y: `+=${Math.random() * 30 - 15}`,
+        repeat: -1,
+        yoyo: true,
+        duration: 2 + Math.random() * 2,
+        ease: 'power1.inOut',
+        delay: Math.random() * 2,
+      });
+    });
+
+    // واکنش به موس
+    const handleMouseMove = (e: MouseEvent) => {
+      const { innerWidth, innerHeight } = window;
+      const mx = e.clientX / innerWidth - 0.5;
+      const my = e.clientY / innerHeight - 0.5;
+      circlesRef.current.forEach((circle, i) => {
+        if (!circle) return;
+        gsap.to(circle, {
+          x: mx * (20 + i * 2),
+          y: my * (10 + i * 2),
+          duration: 1.2,
+          ease: 'power2.out',
+        });
+      });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // واکنش به اسکرول
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      circlesRef.current.forEach((circle, i) => {
+        if (!circle) return;
+        gsap.to(circle, {
+          y: `+=${Math.sin(scrollY / 100 + i) * 10}`,
+          duration: 0.8,
+          ease: 'power1.out',
+        });
+      });
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   useEffect(() => {
     const ctx2 = gsap.context(() => {
       const banner = document.querySelector('.banner') as HTMLElement | null;
@@ -122,123 +232,131 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
           <div
             className={`bg-theme banner-bg col-12 absolute top-0 ${isRTL ? 'right-0' : 'left-0'}`}
           >
-            {isRTL ? (
-              <>
-                <Circle
-                  className="circle right-[10%] top-12"
-                  width={32}
-                  height={32}
-                  fill={false}
-                />
-                <Circle
-                  className="circle right-[2.5%] top-[29%]"
-                  width={85}
-                  height={85}
-                />
-                <Circle
-                  className="circle bottom-[48%] right-[22%]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="circle bottom-[37%] right-[15%]"
-                  width={47}
-                  height={47}
-                  fill={false}
-                />
-                <Circle
-                  className="circle bottom-[13%] right-[6%]"
-                  width={62}
-                  height={62}
-                  fill={false}
-                />
-                <Circle
-                  className="circle left-[12%] top-[15%]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="circle left-[2%] top-[30%]"
-                  width={73}
-                  height={73}
-                  fill={false}
-                />
-                <Circle
-                  className="circle left-[19%] top-[48%]"
-                  width={37}
-                  height={37}
-                  fill={false}
-                />
-                <Circle
-                  className="circle left-[33%] top-[54%]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="circle bottom-[20%] left-[3%]"
-                  width={65}
-                  height={65}
-                />
-              </>
-            ) : (
-              <>
-                <Circle
-                  className="circle left-[10%] top-12"
-                  width={32}
-                  height={32}
-                  fill={false}
-                />
-                <Circle
-                  className="circle left-[2.5%] top-[29%]"
-                  width={85}
-                  height={85}
-                />
-                <Circle
-                  className="circle bottom-[48%] left-[22%]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="circle bottom-[37%] left-[15%]"
-                  width={47}
-                  height={47}
-                  fill={false}
-                />
-                <Circle
-                  className="circle bottom-[13%] left-[6%]"
-                  width={62}
-                  height={62}
-                  fill={false}
-                />
-                <Circle
-                  className="circle right-[12%] top-[15%]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="circle right-[2%] top-[30%]"
-                  width={73}
-                  height={73}
-                  fill={false}
-                />
-                <Circle
-                  className="circle right-[19%] top-[48%]"
-                  width={37}
-                  height={37}
-                  fill={false}
-                />
-                <Circle
-                  className="circle right-[33%] top-[54%]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="circle bottom-[20%] right-[3%]"
-                  width={65}
-                  height={65}
-                />
-              </>
-            )}
+            {(isRTL
+              ? [
+                  {
+                    className: 'circle right-[10%] top-12',
+                    width: 32,
+                    height: 32,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle right-[2.5%] top-[29%]',
+                    width: 85,
+                    height: 85,
+                  },
+                  {
+                    className: 'circle bottom-[48%] right-[22%]',
+                    width: 20,
+                    height: 20,
+                  },
+                  {
+                    className: 'circle bottom-[37%] right-[15%]',
+                    width: 47,
+                    height: 47,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle bottom-[13%] right-[6%]',
+                    width: 62,
+                    height: 62,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle left-[12%] top-[15%]',
+                    width: 20,
+                    height: 20,
+                  },
+                  {
+                    className: 'circle left-[2%] top-[30%]',
+                    width: 73,
+                    height: 73,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle left-[19%] top-[48%]',
+                    width: 37,
+                    height: 37,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle left-[33%] top-[54%]',
+                    width: 20,
+                    height: 20,
+                  },
+                  {
+                    className: 'circle bottom-[20%] left-[3%]',
+                    width: 65,
+                    height: 65,
+                  },
+                ]
+              : [
+                  {
+                    className: 'circle left-[10%] top-12',
+                    width: 32,
+                    height: 32,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle left-[2.5%] top-[29%]',
+                    width: 85,
+                    height: 85,
+                  },
+                  {
+                    className: 'circle bottom-[48%] left-[22%]',
+                    width: 20,
+                    height: 20,
+                  },
+                  {
+                    className: 'circle bottom-[37%] left-[15%]',
+                    width: 47,
+                    height: 47,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle bottom-[13%] left-[6%]',
+                    width: 62,
+                    height: 62,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle right-[12%] top-[15%]',
+                    width: 20,
+                    height: 20,
+                  },
+                  {
+                    className: 'circle right-[2%] top-[30%]',
+                    width: 73,
+                    height: 73,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle right-[19%] top-[48%]',
+                    width: 37,
+                    height: 37,
+                    fill: false,
+                  },
+                  {
+                    className: 'circle right-[33%] top-[54%]',
+                    width: 20,
+                    height: 20,
+                  },
+                  {
+                    className: 'circle bottom-[20%] right-[3%]',
+                    width: 65,
+                    height: 65,
+                  },
+                ]
+            ).map((props, i) => (
+              <Circle
+                key={i}
+                {...props}
+                // @ts-ignore
+                ref={(el: HTMLDivElement | null) =>
+                  (circlesRef.current[i] = el)
+                }
+              />
+            ))}
           </div>
           <div className="row overflow-hidden rounded-2xl">
             <div className="col-12">
@@ -249,6 +367,13 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                     tag: 'h1',
                     className: 'mb-8 banner-title opacity-0',
                   })}
+                  <div className="banner-subtitle opacity-0">
+                    {markdownify({
+                      content: bannerData.subtitle,
+                      tag: 'h5',
+                      className: 'mb-4 banner-subtitle',
+                    })}
+                  </div>
                   <div className="banner-btn opacity-0">
                     <Link
                       className="btn btn-primary"

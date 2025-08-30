@@ -1,10 +1,11 @@
 ---
 banner:
-  title: "آندرومدا شهودی‌ترین </br> راه برای نمونه‌سازی طراحی‌هاست"
+  title: 'جامعه‌ی فرانت‌اند <strong>فرانت‌چپتر</strong>'
+  subtitle: 'محلی صمیمی برای گفت‌وگوی تخصصی'
   image: /images/banner-app.png
   link:
     label: دریافت نسخه پرمیوم
-    href: "https://themefisher.com/products/andromeda-nextjs"
+    href: 'https://themefisher.com/products/andromeda-nextjs'
 
 ##brands
 brands:
@@ -48,7 +49,7 @@ intro:
   title: ساخته شده فقط برای شما
   subtitle: معرفی کوتاه ویدئویی
   description: لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </br> و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه.
-  thumbnail: "/images/video-popup.jpg"
+  thumbnail: '/images/video-popup.jpg'
   video_id: dyZcRRWiuuw
 
 #speciality
@@ -63,7 +64,6 @@ speciality:
     subtitle: ویژگی ثانویه
     description: از ساده‌ترین تعاملات تا آن‌هایی که از فرمول‌های سطح اکسل استفاده می‌کنند، پروتوپای همه را پشتیبانی می‌کند. هر روز تعاملات جدید و شگفت‌انگیز بسازید بدون اینکه حتی یک خط کد جدید بنویسید.
     image: /images/features-02.png
-
 
 #Testimonial
 testimonial:
