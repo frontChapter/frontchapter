@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,21 +16,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@lib/*": [
-        "lib/*"
-      ],
-      "@config/*": [
-        "config/*"
-      ],
-      "@layouts/*": ["layouts/*"],
-      "@components/*": ["layouts/components/*"],
-      "@partials/*": ["layouts/partials/*"],
-      "@shortcodes/*": ["layouts/shortcodes/*"],
-      "@json/*": ["json/*"],
-      "@hooks/*": ["hooks/*"]
+      "@/*": ["./*"],
+      "@lib/*": ["src/lib/*"],
+      "@config/*": ["src/config/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@components/*": ["src/layouts/components/*"],
+      "@partials/*": ["src/layouts/partials/*"],
+      "@shortcodes/*": ["src/layouts/shortcodes/*"],
+      "@json/*": ["src/json/*"],
+      "@hooks/*": ["src/hooks/*"]
     },
     "plugins": [
       {
@@ -44,14 +34,12 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "layouts/partials/SeoMeta.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/layouts/partials/SeoMeta.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
