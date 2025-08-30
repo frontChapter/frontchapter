@@ -100,14 +100,14 @@ const Header: React.FC = () => {
                 {/* Hamburger menu button */}
                 {showMenu ? (
                   <button
-                    className="h-8 w-8 text-3xl text-dark lg:hidden mr-2"
+                    className="h-8 w-8 text-3xl text-dark lg:hidden me-2"
                     onClick={() => setShowMenu(false)}
                   >
                     <CgClose />
                   </button>
                 ) : (
                   <button
-                    className="text-dark lg:hidden mr-2"
+                    className="text-dark lg:hidden me-2"
                     onClick={() => setShowMenu(true)}
                   >
                     <svg
@@ -206,14 +206,14 @@ const Header: React.FC = () => {
           <div
             className={
               isRTL
-                ? "order-2 ml-auto flex items-center md:ml-0 flex-row-reverse"
-                : "order-1 ml-auto flex items-center md:ml-0"
+                ? "order-2 ms-auto flex items-center md:ms-0 flex-row-reverse"
+                : "order-1 ms-auto flex items-center md:ms-0"
             }
           >
             {/* Hamburger menu button for LTR and close button for RTL when menu is open */}
             {!isRTL && showMenu && (
               <button
-                className="h-8 w-8 text-3xl text-dark lg:hidden ml-2"
+                className="h-8 w-8 text-3xl text-dark lg:hidden ms-2"
                 onClick={() => setShowMenu(!showMenu)}
               >
                 <CgClose />
@@ -221,7 +221,7 @@ const Header: React.FC = () => {
             )}
             {!isRTL && !showMenu && (
               <button
-                className="text-dark lg:hidden ml-2"
+                className="text-dark lg:hidden ms-2"
                 onClick={() => setShowMenu(!showMenu)}
               >
                 <svg
