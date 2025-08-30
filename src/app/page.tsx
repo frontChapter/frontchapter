@@ -9,6 +9,7 @@ import SpecialFeatures from '../layouts/partials/SpecialFeatures';
 import StorySection from '../layouts/partials/StorySection';
 import Testimonial from '../layouts/partials/Testimonial';
 import YearOneStats from '../layouts/partials/YearOneStats';
+import YearTwoStats from '../layouts/partials/YearTwoStats';
 
 const Home = async () => {
   const homepage = await getListPage('src/content/_index.md');
@@ -21,6 +22,7 @@ const Home = async () => {
     speciality,
     testimonial,
     storySection,
+    yearTwo,
   } = frontmatter;
   return (
     <GSAPWrapper>
@@ -38,6 +40,13 @@ const Home = async () => {
         gatherings={frontmatter.yearOne.gatherings}
         conference={frontmatter.yearOne.conference}
         images={frontmatter.yearOne.images}
+      />
+      <YearTwoStats
+        title={yearTwo.title}
+        year={yearTwo.year}
+        stats={yearTwo.stats}
+        memories={yearTwo.memories}
+        images={yearTwo.images}
       />
       <Cta />
     </GSAPWrapper>
