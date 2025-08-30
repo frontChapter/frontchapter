@@ -1,5 +1,5 @@
 ---
-title: "المان‌ها"
+title: 'المان‌ها'
 draft: false
 ---
 
@@ -49,7 +49,7 @@ draft: false
 
 [من یک لینک به سبک خطی هستم](https://www.google.com)
 
-[من یک لینک به سبک خطی با عنوان هستم](https://www.google.com "صفحه اصلی گوگل")
+[من یک لینک به سبک خطی با عنوان هستم](https://www.google.com 'صفحه اصلی گوگل')
 
 [من یک لینک به سبک ارجاعی هستم][arbitrary case-insensitive reference text]
 
@@ -96,10 +96,10 @@ example.com (اما نه در گیت‌هاب، برای مثال).
 <Code language="html">
 {`<ul>
   <li class="nav-item">
-    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/">خانه</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="about/">About</a>
+    <a class="nav-link" href="about/">درباره‌ما</a>
   </li>
 </ul>`}
 </Code>
@@ -196,11 +196,11 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 
 ### جدول
 
-| #   |    اول       |     آخر      |     هندل     |
-| :-- | :----------: | :----------: | -----------: |
-| 1   | سطر۱ سلول۱   | سطر۱ سلول۲   | سطر۱ سلول۳   |
-| 2   | سطر۲ سلول۱   | سطر۲ سلول۲   | سطر۲ سلول۳   |
-| 3   | سطر۳ سلول۱   | سطر۳ سلول۲   | سطر۳ سلول۳   |
+| #   |    اول     |    آخر     |       هندل |
+| :-- | :--------: | :--------: | ---------: |
+| 1   | سطر۱ سلول۱ | سطر۱ سلول۲ | سطر۱ سلول۳ |
+| 2   | سطر۲ سلول۱ | سطر۲ سلول۲ | سطر۲ سلول۳ |
+| 3   | سطر۳ سلول۱ | سطر۳ سلول۲ | سطر۳ سلول۳ |
 
 ---
 

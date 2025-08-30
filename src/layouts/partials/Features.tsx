@@ -89,7 +89,7 @@ const Features: React.FC<FeaturesProps> = ({ features }) => {
             ))}
           </Swiper>
           <div className="relative mt-9 flex justify-center">
-            <div className="pagination " ref={paginationRef}></div>
+            <div dir="ltr" className="pagination" ref={paginationRef}></div>
           </div>
         </div>
       </div>

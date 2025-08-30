@@ -174,7 +174,12 @@ const Header: React.FC = () => {
                       )}
                     </span>
                     <ul
-                      className={`nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500 group-hover:block group-hover:max-h-[106px] group-hover:py-2 lg:invisible lg:absolute lg:${isRTL ? 'right-1/2' : 'left-1/2'} lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100`}
+                      className={clsx(
+                        'nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500',
+                        'group-hover:block group-hover:max-h-[106px] group-hover:py-2',
+                        'lg:invisible lg:absolute lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100',
+                        isRTL ? 'lg:left-1/2' : 'lg:right-1/2'
+                      )}
                     >
                       {menu.children.map((child, j) => (
                         <li className="nav-dropdown-item" key={`children-${j}`}>
@@ -182,7 +187,8 @@ const Header: React.FC = () => {
                             href={child.url}
                             className={clsx(
                               'nav-dropdown-link block transition-all',
-                              asPath === child.url && 'active'
+                              asPath === child.url && 'active',
+                              isRTL && 'lg:text-right'
                             )}
                           >
                             {child.name}

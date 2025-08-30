@@ -79,7 +79,7 @@ const Banner = ({ title }: BannerProps) => {
           <ul className="breadcrumb flex items-center justify-center opacity-0">
             <li>
               <Link className="text-primary" href="/">
-                Home
+                خانه
               </Link>
             </li>
             <li className="mx-2">/</li>

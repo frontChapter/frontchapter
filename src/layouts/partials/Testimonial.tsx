@@ -1,6 +1,7 @@
 'use client';
 
 import { markdownify } from '@lib/utils/textConverter';
+import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { TbQuote } from 'react-icons/tb';
 import { Autoplay, Pagination } from 'swiper';
@@ -25,6 +26,7 @@ interface TestimonialProps {
 
 const Testimonial: React.FC<TestimonialProps> = ({ testimonial }) => {
   const testimonialPaginationRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <section className="section pt-0">
       <div className="container">
@@ -103,7 +105,8 @@ const Testimonial: React.FC<TestimonialProps> = ({ testimonial }) => {
                 </Swiper>
                 <div className="relative h-8">
                   <div
-                    className="pagination absolute left-1/2 -translate-x-1/2"
+                    dir="ltr"
+                    className={clsx('pagination absolute -translate-x-1/2')}
                     ref={testimonialPaginationRef}
                   ></div>
                 </div>
