@@ -3,6 +3,7 @@ import menu from "@config/menu.json";
 import social from "@config/social.json";
 import { markdownify } from "@lib/utils/textConverter";
 import Link from "next/link";
+import { useRTL } from "../../hooks/useRTL";
 import Logo from "../components/Logo";
 import Social from "../components/Social";
 
@@ -72,15 +73,17 @@ export interface SocialSource {
 const Footer: React.FC = () => {
   const { copyright, footer_content } = (config as Config).params;
   const { email, phone, location } = (config as Config).contact_info;
+  const { isRTL } = useRTL();
   return (
-    <footer className="">
+    <footer className="" dir={isRTL ? "rtl" : "ltr"}>
       <div className="container">
-        <div className="row border-y border-border py-12">
-          <div className="animate md:col-6 lg:col-3">
+        <div className={`row border-y border-border py-12${isRTL ? " flex-row-reverse" : ""}`}
+          style={isRTL ? { direction: "rtl", textAlign: "right" } : {}}>
+          <div className={`animate md:col-6 lg:col-3${isRTL ? " text-right" : ""}`}>
             <Logo />
             {markdownify({ content: footer_content, tag: "p", className: "mt-3" })}
           </div>
-          <div className="animate mt-8 md:col-6 lg:col-3 lg:mt-0">
+          <div className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? " text-right" : ""}`}>
             <h3 className="h5">Socials</h3>
             <div className="mt-5">
               {email && <Link href={`mailto:${email}`}>{email}</Link>}
@@ -88,7 +91,7 @@ const Footer: React.FC = () => {
               <Social source={social as SocialSource} className="social-icons mt-5" />
             </div>
           </div>
-          <div className="animate mt-8 md:col-6 lg:col-3 lg:mt-0">
+          <div className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? " text-right" : ""}`}>
             <h3 className="h5">Quick Links</h3>
             {/* footer menu */}
             <ul className="mt-5 leading-10">
@@ -104,7 +107,7 @@ const Footer: React.FC = () => {
               ))}
             </ul>
           </div>
-          <div className="animate mt-8 md:col-6 lg:col-3 lg:mt-0">
+          <div className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? " text-right" : ""}`}>
             <h3 className="h5">Location & Contact</h3>
             <ul className="mt-5 leading-10">
               <li>{location && markdownify({ content: location })}</li>

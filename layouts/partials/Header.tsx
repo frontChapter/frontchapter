@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { CgClose } from "react-icons/cg";
+import { useRTL } from "../../hooks/useRTL";
 import Logo from "../components/Logo";
 
 
@@ -77,6 +78,7 @@ const Header: React.FC = () => {
   // logo source
   const { logo } = (config as Config).site;
 
+  const { isRTL } = useRTL();
   return (
     <>
       <div className="header-height-fix"></div>
@@ -85,18 +87,20 @@ const Header: React.FC = () => {
           direction === 1 ? " unpinned" : ""
         }`}
         ref={headerRef}
+        dir={isRTL ? "rtl" : "ltr"}
       >
         <nav className="navbar container-xl">
           {/* logo */}
-          <div className="order-0">
+          <div className={isRTL ? "order-2" : "order-0"}>
             <Logo src={logo} />
           </div>
 
           <ul
             id="nav-menu"
-            className={`navbar-nav order-2 w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex${
+            className={`navbar-nav ${isRTL ? "order-0" : "order-2"} w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex${
               !showMenu ? " hidden" : ""
             }`}
+            style={isRTL ? { direction: "rtl" } : { direction: "ltr" }}
           >
             {main.map((menu, i) => (
               <React.Fragment key={`menu-${i}`}>
@@ -104,11 +108,17 @@ const Header: React.FC = () => {
                   <li className="nav-item nav-dropdown group relative">
                     <span className="nav-link inline-flex items-center">
                       {menu.name}
-                      <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
+                      {isRTL ? (
+                        <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20" style={{ transform: "scaleX(-1)" }}>
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                      ) : (
+                        <svg className="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                      )}
                     </span>
-                    <ul className="nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500 group-hover:block group-hover:max-h-[106px] group-hover:py-2 lg:invisible lg:absolute lg:left-1/2 lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100">
+                    <ul className={`nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500 group-hover:block group-hover:max-h-[106px] group-hover:py-2 lg:invisible lg:absolute lg:${isRTL ? "right-1/2" : "left-1/2"} lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100`}>
                       {menu.children.map((child, j) => (
                         <li className="nav-dropdown-item" key={`children-${j}`}>
                           <Link
@@ -148,7 +158,7 @@ const Header: React.FC = () => {
               </li>
             )}
           </ul>
-          <div className="order-1 ml-auto flex items-center md:ml-0">
+          <div className={isRTL ? "order-0 mr-auto flex items-center md:mr-0" : "order-1 ml-auto flex items-center md:ml-0"}>
             {(config as Config).nav_button.enable && (
               <Link
                 className="btn btn-primary hidden lg:flex"
@@ -176,6 +186,7 @@ const Header: React.FC = () => {
                   viewBox="0 0 32 32"
                   width="32px"
                   height="32px"
+                  style={isRTL ? { transform: "scaleX(-1)" } : {}}
                 >
                   <path
                     fill="currentColor"

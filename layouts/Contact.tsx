@@ -28,7 +28,7 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
         <div className="section row items-center justify-center">
           <div className="animate lg:col-5">
             <ImageFallback
-              className="mx-auto lg:pr-10"
+              className="mx-auto lg:pe-10"
               src="/images/vectors/contact.png"
               fallback="/images/vectors/contact.png"
               width={497}

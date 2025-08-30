@@ -2,8 +2,10 @@
 .header-height-fix {
   @apply h-[116px];
 }
+
 .header {
-  @apply fixed left-0 w-full  top-0 z-50 bg-white py-[29px] transition-all duration-500 ;
+  @apply fixed w-full top-0 z-50 bg-white py-[29px] transition-all duration-500 ;
+  inset-inline-start: 0;
 
   &-sticky {
     @apply py-[18px] shadow-[0_2px_8px_rgba(32,45,73,0.1)];
@@ -27,7 +29,15 @@
 }
 
 .navbar-nav {
-  @apply text-center md:text-left flex-[0_0_100%] lg:flex-auto;
+  @apply text-center flex-[0_0_100%] lg:flex-auto;
+  @media (min-width: 768px) {
+    text-align: start;
+  }
+  &:dir(rtl) {
+    @media (min-width: 768px) {
+      text-align: end;
+    }
+  }
 }
 
 .nav-item {
@@ -56,7 +66,7 @@
 
 .nav-dropdown-link {
   @apply min-w-[150px] py-2.5 text-sm font-medium text-dark transition lg:hover:text-primary whitespace-nowrap lg:hover:bg-[#ffece4] px-4 rounded-lg;
-  
+
   &.active {
     @apply lg:bg-[#ffece4] text-primary;
   }
@@ -67,12 +77,15 @@
   @apply cursor-pointer p-2 text-xl text-dark hover:text-primary;
 }
 .search-modal {
-  @apply invisible absolute top-0 left-0 right-0 z-10 h-10 bg-white opacity-0 transition md:h-full;
+  @apply invisible absolute top-0 z-10 h-10 bg-white opacity-0 transition md:h-full;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   .form-input {
     @apply h-full w-full border-0 text-lg;
   }
   .search-close {
-    @apply absolute top-1/2 right-2 -translate-y-1/2 p-3 text-h4;
+    @apply absolute top-1/2 -translate-y-1/2 p-3 text-h4;
+    inset-inline-end: 0.5rem;
   }
   &.open {
     @apply visible opacity-100;

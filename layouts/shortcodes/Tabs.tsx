@@ -36,7 +36,7 @@ function Tabs({ children }: TabsProps) {
 
   return (
     <div className="relative">
-      <ul className="mb-0 flex list-none items-center space-x-4 pl-0">
+      <ul className="mb-0 flex list-none items-center space-x-4 ps-0">
         {Array.isArray(children) && children.map((item, index) => (
           <li
             key={index}

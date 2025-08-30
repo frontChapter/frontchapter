@@ -65,7 +65,7 @@ const Post: React.FC<PostProps> = ({ post, i }) => {
               height={50}
               alt="author" fallback={""}            />
           </div>
-          <div className="pl-5">
+          <div className="ps-5">
             <p className="font-medium text-dark">
               {post.frontmatter.author.name}
             </p>

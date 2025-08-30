@@ -8,6 +8,7 @@ import { Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import React from "react";
+import { useRTL } from "../../hooks/useRTL";
 import Circle from "../components/Circle";
 import ImageFallback from "../components/ImageFallback";
 
@@ -107,66 +108,39 @@ const HomeBanner: React.FC<HomeBannerProps> = ({ banner: bannerData, brands }) =
     return () => ctx2.revert();
   }, []);
 
+  const { isRTL } = useRTL();
   return (
-    <section className="section banner pt-0">
+    <section className="section banner pt-0" dir={isRTL ? "rtl" : "ltr"}>
       <div className="container-xl">
         <div className="relative">
-          <div className="bg-theme banner-bg col-12 absolute left-0 top-0">
-            <Circle
-              className="circle left-[10%] top-12"
-              width={32}
-              height={32}
-              fill={false}
-            />
-            <Circle
-              className="circle left-[2.5%] top-[29%]"
-              width={85}
-              height={85}
-            />
-            <Circle
-              className="circle bottom-[48%] left-[22%]"
-              width={20}
-              height={20}
-            />
-            <Circle
-              className="circle bottom-[37%] left-[15%]"
-              width={47}
-              height={47}
-              fill={false}
-            />
-            <Circle
-              className="circle bottom-[13%] left-[6%]"
-              width={62}
-              height={62}
-              fill={false}
-            />
-            <Circle
-              className="circle right-[12%] top-[15%]"
-              width={20}
-              height={20}
-            />
-            <Circle
-              className="circle right-[2%] top-[30%]"
-              width={73}
-              height={73}
-              fill={false}
-            />
-            <Circle
-              className="circle right-[19%] top-[48%]"
-              width={37}
-              height={37}
-              fill={false}
-            />
-            <Circle
-              className="circle right-[33%] top-[54%]"
-              width={20}
-              height={20}
-            />
-            <Circle
-              className="circle bottom-[20%] right-[3%]"
-              width={65}
-              height={65}
-            />
+          <div className={`bg-theme banner-bg col-12 absolute top-0 ${isRTL ? "right-0" : "left-0"}`}>
+            {isRTL ? (
+              <>
+                <Circle className="circle right-[10%] top-12" width={32} height={32} fill={false} />
+                <Circle className="circle right-[2.5%] top-[29%]" width={85} height={85} />
+                <Circle className="circle bottom-[48%] right-[22%]" width={20} height={20} />
+                <Circle className="circle bottom-[37%] right-[15%]" width={47} height={47} fill={false} />
+                <Circle className="circle bottom-[13%] right-[6%]" width={62} height={62} fill={false} />
+                <Circle className="circle left-[12%] top-[15%]" width={20} height={20} />
+                <Circle className="circle left-[2%] top-[30%]" width={73} height={73} fill={false} />
+                <Circle className="circle left-[19%] top-[48%]" width={37} height={37} fill={false} />
+                <Circle className="circle left-[33%] top-[54%]" width={20} height={20} />
+                <Circle className="circle bottom-[20%] left-[3%]" width={65} height={65} />
+              </>
+            ) : (
+              <>
+                <Circle className="circle left-[10%] top-12" width={32} height={32} fill={false} />
+                <Circle className="circle left-[2.5%] top-[29%]" width={85} height={85} />
+                <Circle className="circle bottom-[48%] left-[22%]" width={20} height={20} />
+                <Circle className="circle bottom-[37%] left-[15%]" width={47} height={47} fill={false} />
+                <Circle className="circle bottom-[13%] left-[6%]" width={62} height={62} fill={false} />
+                <Circle className="circle right-[12%] top-[15%]" width={20} height={20} />
+                <Circle className="circle right-[2%] top-[30%]" width={73} height={73} fill={false} />
+                <Circle className="circle right-[19%] top-[48%]" width={37} height={37} fill={false} />
+                <Circle className="circle right-[33%] top-[54%]" width={20} height={20} />
+                <Circle className="circle bottom-[20%] right-[3%]" width={65} height={65} />
+              </>
+            )}
           </div>
           <div className="row overflow-hidden rounded-2xl">
             <div className="col-12">
@@ -200,7 +174,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({ banner: bannerData, brands }) =
             </div>
           </div>
           <div className="row border-y border-border py-5">
-            <div className="animate from-right col-12">
+            <div className={`animate ${isRTL ? "from-left" : "from-right"} col-12`}>
               <Swiper
                 loop={true}
                 slidesPerView={3}
@@ -212,6 +186,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({ banner: bannerData, brands }) =
                 spaceBetween={20}
                 modules={[Autoplay]}
                 autoplay={{ delay: 3000 }}
+                dir={isRTL ? "rtl" : "ltr"}
               >
                 {brands.map((brand: string, index: number) => (
                   <SwiperSlide

@@ -9,18 +9,19 @@ import Header from "../layouts/partials/Header";
 import "../styles/style.scss";
 
 import type { ReactNode } from "react";
+import { RTLProvider, useRTL } from "../hooks/useRTL";
 
 interface RootLayoutProps {
   children: ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  // import google font css
+function LayoutContent({ children }: RootLayoutProps) {
   const pf = theme.fonts.font_family.primary;
   const sf = theme.fonts.font_family.secondary;
+  const { isRTL, toggleRTL } = useRTL();
 
   return (
-    <html suppressHydrationWarning={true} lang="en">
+    <html suppressHydrationWarning={true} lang="en" dir={isRTL ? "rtl" : "ltr"}>
       <head>
         {/* responsive meta */}
         <meta
@@ -62,10 +63,24 @@ export default function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body suppressHydrationWarning={true}>
         <TwSizeIndicator />
+        <button
+          style={{position: "fixed", top: 10, left: 10, zIndex: 9999}}
+          onClick={toggleRTL}
+        >
+          Switch to {isRTL ? "LTR" : "RTL"}
+        </button>
         <Header />
         {children}
         <Footer />
       </body>
     </html>
+  );
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
+  return (
+    <RTLProvider>
+      <LayoutContent>{children}</LayoutContent>
+    </RTLProvider>
   );
 }

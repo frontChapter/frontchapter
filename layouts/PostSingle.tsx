@@ -72,7 +72,7 @@ const PostSingle: React.FC<PostSingleProps> = ({ frontmatter, content, recentPos
                       fallback="/images/author/abdullah.jpg"
                     />
                   </div>
-                  <div className="pl-5">
+                  <div className="ps-5">
                     <p className="font-medium text-dark">{author.name}</p>
                     <p>
                       {dateFormat(date)} - {readingTime(content)}
