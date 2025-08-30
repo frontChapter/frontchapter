@@ -1,5 +1,7 @@
 "use client";
 
+import { useRTL } from "@/hooks/useRTL";
+import clsx from "clsx";
 import { useState } from "react";
 
 interface AccordionProps {
@@ -10,20 +12,28 @@ interface AccordionProps {
 
 const Accordion: React.FC<AccordionProps> = ({ title, children, className }) => {
   const [show, setShow] = useState(false);
+  const { isRTL } = useRTL();
 
   return (
     <div
       className={`mb-2 overflow-hidden rounded-xl border border-border ${className}`}
     >
       <button
-        className="relative block w-full bg-theme-light px-4 py-3 text-left text-dark"
+        className={clsx("relative block w-full bg-theme-light px-4 py-3 text-dark", {
+          "text-right": isRTL,
+          "text-left": !isRTL,
+        })}
         onClick={() => setShow(!show)}
       >
         {title}
         <svg
-          className={`absolute right-4 top-1/2 m-0 h-4 w-4 -translate-y-1/2 ${
-            show && "rotate-180"
-          }`}
+          className={clsx(
+            "absolute top-1/2 m-0 h-4 w-4 -translate-y-1/2",
+            {
+              "rotate-180": show,
+            },
+            { "right-4": !isRTL, "left-4": isRTL }
+          )}
           x="0px"
           y="0px"
           viewBox="0 0 512.011 512.011"

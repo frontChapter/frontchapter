@@ -11,6 +11,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "disqus-react": "^1.1.5",
     "feather-icons-react": "^0.7.0",
     "github-slugger": "^2.0.0",
