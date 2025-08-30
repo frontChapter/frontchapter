@@ -15,6 +15,9 @@ if (theme.fonts.font_family.primary) {
     .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
   fontPrimaryType = theme.fonts.font_family.primary_type;
 }
+// Override fontPrimary to DanaVF
+fontPrimary = "DanaVF";
+fontPrimaryType = "sans-serif";
 if (theme.fonts.font_family.secondary) {
   fontSecondary = theme.fonts.font_family.secondary
     .replace(/\+/g, " ")

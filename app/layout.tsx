@@ -35,17 +35,14 @@ function LayoutContent({ children }: RootLayoutProps) {
         <meta name="theme-name" content="andromeda-light-nextjs" />
 
         {/* google font css */}
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href={`https://fonts.googleapis.com/css2?family=${pf}${
-            sf ? "&family=" + sf : ""
-          }&display=swap`}
-          rel="stylesheet"
-        />
+          {/* DanaVF local font */}
+          <link
+            rel="preload"
+            href="/fonts/DanaVF.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
 
         {/* theme meta */}
         <meta name="theme-name" content="andromeda-light-nextjs" />
