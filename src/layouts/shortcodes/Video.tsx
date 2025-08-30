@@ -1,9 +1,10 @@
-interface VideoProps {
+import React from 'react';
+
+interface VideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   title: string;
   width?: number;
   height?: string;
   src: string;
-  [key: string]: any;
 }
 
 function Video({
@@ -18,7 +19,9 @@ function Video({
       className="overflow-hidden rounded-xl"
       width={width}
       height={height}
-      controls
+      controls={false}
+      autoPlay
+      muted
       {...rest}
     >
       <source

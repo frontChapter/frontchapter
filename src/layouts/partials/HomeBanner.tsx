@@ -11,6 +11,7 @@ import React from 'react';
 import { useRTL } from '../../hooks/useRTL';
 import Circle from '../components/Circle';
 import ImageFallback from '../components/ImageFallback';
+import Video from '../shortcodes/Video';
 
 interface BannerData {
   title: string;
@@ -20,6 +21,7 @@ interface BannerData {
     label: string;
   };
   image: string;
+  video: string;
 }
 
 interface HomeBannerProps {
@@ -367,11 +369,11 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                     tag: 'h1',
                     className: 'mb-8 banner-title opacity-0',
                   })}
-                  <div className="banner-subtitle opacity-0">
+                  <div className="banner-subtitle pb-6">
                     {markdownify({
                       content: bannerData.subtitle,
                       tag: 'h5',
-                      className: 'mb-4 banner-subtitle',
+                      className: 'mb-4 font-light banner-title opacity-0',
                     })}
                   </div>
                   <div className="banner-btn opacity-0">
@@ -384,14 +386,14 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                   </div>
                 </div>
                 <div className="col-10">
-                  <ImageFallback
-                    className="banner-img opacity-0"
-                    src={bannerData.image}
-                    width={1170}
-                    height={666}
-                    priority={true}
-                    alt=""
-                    fallback={''}
+                  <Video
+                    className="banner-video mx-auto border-[20px] border-white shadow-lg rounded-3xl"
+                    src={bannerData.video}
+                    width={1070}
+                    height={'666'}
+                    title={''}
+                    autoPlay
+                    loop
                   />
                 </div>
               </div>

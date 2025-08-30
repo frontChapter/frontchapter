@@ -3,9 +3,10 @@ banner:
   title: 'جامعه‌ی فرانت‌اند <strong>فرانت‌چپتر</strong>'
   subtitle: 'محلی صمیمی برای گفت‌وگوی تخصصی'
   image: /images/banner-app.png
+  video: frontchapter-banner.mp4
   link:
-    label: دریافت نسخه پرمیوم
-    href: 'https://themefisher.com/products/andromeda-nextjs'
+    label: به جامعه بپیوندید!
+    href: '#'
 
 ##brands
 brands:
