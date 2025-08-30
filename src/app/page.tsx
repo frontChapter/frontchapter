@@ -1,6 +1,7 @@
 import { getListPage } from '@lib/contentParser';
 import Cta from '../layouts/components/Cta';
 import GSAPWrapper from '../layouts/components/GSAPWrapper';
+import ContinuedStory from '../layouts/partials/ContinuedStory';
 import Features from '../layouts/partials/Features';
 import HomeBanner from '../layouts/partials/HomeBanner';
 import SeoMeta from '../layouts/partials/SeoMeta';
@@ -27,6 +28,7 @@ const Home = async () => {
     yearTwo,
     yearThree,
     yearFour,
+    continuedStory,
   } = frontmatter;
   return (
     <GSAPWrapper>
@@ -66,6 +68,11 @@ const Home = async () => {
         stats={yearFour.stats}
         birthday={yearFour.birthday}
         events={yearFour.events}
+      />
+      <ContinuedStory
+        subtitle={continuedStory.subtitle}
+        title={continuedStory.title}
+        description={continuedStory.description}
       />
       <Cta />
     </GSAPWrapper>
