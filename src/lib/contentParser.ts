@@ -18,7 +18,7 @@ export interface PageData {
 export const getListPage = async (filePath: string): Promise<PageData> => {
   const pageData = fs.readFileSync(filePath, 'utf-8');
   const pageDataParsed = matter(pageData);
-  const notFoundPage = fs.readFileSync('content/404.md', 'utf-8');
+  const notFoundPage = fs.readFileSync('src/content/404.md', 'utf-8');
   const notFoundDataParsed = matter(notFoundPage);
   let frontmatter: Frontmatter, content: string;
 
@@ -94,11 +94,11 @@ export interface RegularPageData {
 export const getRegularPage = async (
   slug: string
 ): Promise<RegularPageData> => {
-  const publishedPages: SinglePageData[] = getSinglePage('content');
+  const publishedPages: SinglePageData[] = getSinglePage('src/content');
   const pageData: SinglePageData[] = publishedPages.filter(
     (data: SinglePageData) => data.slug === slug
   );
-  const notFoundPage: string = fs.readFileSync('content/404.md', 'utf-8');
+  const notFoundPage: string = fs.readFileSync('src/content/404.md', 'utf-8');
   const notFoundDataParsed = matter(notFoundPage);
 
   let frontmatter: Frontmatter, content: string;

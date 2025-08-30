@@ -75,7 +75,7 @@ const RegularPages = async ({
 export default RegularPages;
 
 export async function generateStaticParams(): Promise<{ regular: string }[]> {
-  const slugs: SinglePageData[] = getSinglePage('content');
+  const slugs: SinglePageData[] = getSinglePage('src/content');
   return slugs.map((item) => ({
     regular: item.slug,
   }));

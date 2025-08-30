@@ -9,7 +9,7 @@ import SpecialFeatures from '../layouts/partials/SpecialFeatures';
 import Testimonial from '../layouts/partials/Testimonial';
 
 const Home = async () => {
-  const homepage = await getListPage('content/_index.md');
+  const homepage = await getListPage('src/content/_index.md');
   const { frontmatter } = homepage;
   const { banner, brands, features, intro, speciality, testimonial } =
     frontmatter;

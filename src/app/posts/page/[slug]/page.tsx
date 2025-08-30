@@ -1,9 +1,9 @@
-import Banner from '@/layouts/components/Banner';
-import Cta from '@/layouts/components/Cta';
-import GSAPWrapper from '@/layouts/components/GSAPWrapper';
-import Pagination from '@/layouts/components/Pagination';
-import Post from '@/layouts/partials/Post';
-import SeoMeta from '@/layouts/partials/SeoMeta';
+import Banner from '@/src/layouts/components/Banner';
+import Cta from '@/src/layouts/components/Cta';
+import GSAPWrapper from '@/src/layouts/components/GSAPWrapper';
+import Pagination from '@/src/layouts/components/Pagination';
+import Post from '@/src/layouts/partials/Post';
+import SeoMeta from '@/src/layouts/partials/SeoMeta';
 import config from '@config/config.json';
 import { getListPage, getSinglePage } from '@lib/contentParser';
 import { JSX } from 'react';
@@ -49,7 +49,7 @@ const BlogPagination = async ({
   const currentPage = parseInt(params?.slug ?? '1', 10);
   const { pagination } = config.settings as { pagination: number };
   // getSinglePage returns SinglePageData[], need to map to PostType
-  const rawPosts = await getSinglePage(`content/${blog_folder}`);
+  const rawPosts = await getSinglePage(`src/content/${blog_folder}`);
   const posts: PostType[] = rawPosts
     .map((post): PostType | null => {
       // Type guard: ensure required fields exist
@@ -79,7 +79,7 @@ const BlogPagination = async ({
     })
     .filter((p): p is PostType => p !== null);
   const postIndex: ListPageType = await getListPage(
-    `content/${blog_folder}/_index.md`
+    `src/content/${blog_folder}/_index.md`
   );
   const indexOfLastPost = currentPage * pagination;
   const indexOfFirstPost = indexOfLastPost - pagination;
@@ -97,7 +97,7 @@ const BlogPagination = async ({
           <div className="row justify-center pb-16 pt-20 ">
             {currentPosts.map((post, i) => (
               <div key={`key-${i}`} className="mb-8 lg:col-5">
-                <Post post={post} i={i} />
+                <Post post={post} />
               </div>
             ))}
           </div>
@@ -117,7 +117,7 @@ const BlogPagination = async ({
 export default BlogPagination;
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const rawPosts = await getSinglePage(`content/${blog_folder}`);
+  const rawPosts = await getSinglePage(`src/content/${blog_folder}`);
   const posts: PostType[] = rawPosts
     .map((post): PostType | null => {
       if (
