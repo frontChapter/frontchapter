@@ -6,19 +6,28 @@ import HomeBanner from '../layouts/partials/HomeBanner';
 import SeoMeta from '../layouts/partials/SeoMeta';
 import ShortIntro from '../layouts/partials/ShortIntro';
 import SpecialFeatures from '../layouts/partials/SpecialFeatures';
+import StorySection from '../layouts/partials/StorySection';
 import Testimonial from '../layouts/partials/Testimonial';
 
 const Home = async () => {
   const homepage = await getListPage('src/content/_index.md');
   const { frontmatter } = homepage;
-  const { banner, brands, features, intro, speciality, testimonial } =
-    frontmatter;
+  const {
+    banner,
+    brands,
+    features,
+    intro,
+    speciality,
+    testimonial,
+    storySection,
+  } = frontmatter;
   return (
     <GSAPWrapper>
       <SeoMeta title="خانه" />
       <HomeBanner banner={banner} brands={brands} />
       <Features features={features} />
       <ShortIntro intro={intro} />
+      <StorySection {...storySection} />
       <SpecialFeatures speciality={speciality} />
       <Testimonial testimonial={testimonial} />
       <Cta />
