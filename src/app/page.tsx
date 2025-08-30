@@ -9,8 +9,8 @@ import SpecialFeatures from '../layouts/partials/SpecialFeatures';
 import StorySection from '../layouts/partials/StorySection';
 import Testimonial from '../layouts/partials/Testimonial';
 import YearOneStats from '../layouts/partials/YearOneStats';
-import YearTwoStats from '../layouts/partials/YearTwoStats';
 import YearThreeStats from '../layouts/partials/YearThreeStats';
+import YearTwoStats from '../layouts/partials/YearTwoStats';
 
 const Home = async () => {
   const homepage = await getListPage('src/content/_index.md');
