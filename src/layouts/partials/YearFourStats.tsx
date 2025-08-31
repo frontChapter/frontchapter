@@ -187,7 +187,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
               </span>
               {birthday.title}
             </h2>
-            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
+            <p className="text-slate-600 leading-relaxed text-base md:text-lg py-4">
               {birthday.description}
             </p>
           </div>
@@ -236,7 +236,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       >
         <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 gap-y-12">
             {events.map((event, idx) => (
               <React.Fragment key={idx}>
                 {idx % 2 === 0 ? (
