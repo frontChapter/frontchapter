@@ -134,7 +134,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="w-full flex flex-col items-center justify-center gap-8 md:gap-14 py-10 md:py-20 relative overflow-visible px-4 md:px-6"
+      className="w-full flex flex-col items-center justify-center gap-5 md:gap-8 py-6 md:py-12 relative overflow-visible px-4 md:px-6"
     >
       {/* Gradient Background Elements */}
       <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
@@ -142,8 +142,8 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       <div className="absolute left-1/4 top-1/3 w-36 sm:w-48 h-36 sm:h-48 rounded-full bg-gradient-to-r from-primary/5 to-primary/10 opacity-30 blur-3xl -z-10"></div>
 
       {/* Header */}
-      <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-3 md:gap-4 text-center">
-        <p className="uppercase font-medium text-sm sm:text-base text-primary mb-1 sm:mb-2 tracking-wider">
+      <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-2 md:gap-3 text-center">
+        <p className="uppercase font-medium text-sm sm:text-base text-primary mb-1 tracking-wider">
           {title}
         </p>
         <h1
@@ -157,7 +157,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       {/* Stats */}
       <div
         ref={statsRef}
-        className="w-full max-w-4xl flex flex-col md:flex-row items-stretch justify-start gap-6 md:gap-10 py-6 md:py-10"
+        className="w-full max-w-4xl flex flex-col md:flex-row items-stretch justify-start gap-4 md:gap-6 py-4 md:py-8"
       >
         {stats.map((stat, idx) => (
           <div
@@ -176,12 +176,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       {/* Birthday Section */}
       <div
         ref={birthdayRef}
-        className="w-full py-12 md:py-24 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm"
+        className="w-full py-8 md:py-14 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm"
       >
-        <div className="flex flex-col max-w-5xl mx-auto gap-12">
+        <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Title and Description */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
+            <h2 className="font-bold text-2xl md:text-3xl text-primary mb-3 inline-flex items-center flex-wrap justify-center">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✯
               </span>
@@ -193,15 +193,15 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           </div>
 
           {/* Birthday Image */}
-          <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 w-full">
-            <div className="relative w-full h-full">
+          <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 w-full max-w-4xl mx-auto">
+            <div className="relative w-full h-full aspect-[16/9]">
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
               <Image
                 src={birthday.image}
                 alt={birthday.title}
-                width={1200}
-                height={450}
-                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                width={900}
+                height={506}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />
               <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
@@ -232,11 +232,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       {/* Events Section */}
       <div
         ref={eventsRef}
-        className="w-full py-12 md:py-24 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-8"
+        className="w-full py-8 md:py-14 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-5"
       >
-        <div className="flex flex-col max-w-5xl mx-auto gap-12">
+        <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {events.map((event, idx) => (
               <React.Fragment key={idx}>
                 {idx % 2 === 0 ? (
@@ -281,7 +281,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       </div>
                     </figure>
                     {/* Content (Right) */}
-                    <div className="flex flex-col justify-center gap-8 px-0 md:px-8">
+                    <div className="flex flex-col justify-center gap-5 px-0 md:px-8">
                       <div className="text-right">
                         <h3 className="font-bold text-xl md:text-2xl text-primary mb-5">
                           {event.title}
@@ -303,7 +303,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 ) : (
                   <>
                     {/* Content (Left) */}
-                    <div className="flex flex-col justify-center gap-8 px-0 md:px-8">
+                    <div className="flex flex-col justify-center gap-5 px-0 md:px-8">
                       <div className="text-right">
                         <h3 className="font-bold text-xl md:text-2xl text-primary mb-5">
                           {event.title}
