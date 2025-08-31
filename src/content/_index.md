@@ -108,13 +108,13 @@ yearThree:
       video: '/videos/frontchapter-banner.mp4'
       video_label: 'ویدیو'
       gallery:
-        - src: '/images/about/01.jpg'
-          label: 'همایش زمستانی'
-        - src: '/images/about/02.jpg'
-          label: 'برنامه‌نویسان برتر'
-        - src: '/images/about/video-popup-2.jpg'
-          label: 'پنل تخصصی'
-        - src: '/images/about/01.jpg'
+        - src: '/images/1402/01.JPG'
+          label: 'دورهمی قبل از همایش'
+        - src: '/images/1402/02.JPG'
+          label: 'سخنرانی‌های همایش'
+        - src: '/images/1402/03.JPG'
+          label: 'پشت صحنه‌ی همایش'
+        - src: '/images/1402/04.JPG'
           label: 'لحظات همایش'
   magazine:
     title: 'هویج‌تایمز'
@@ -124,9 +124,9 @@ yearThree:
       label: 'آرشیو هویج‌تایمز'
       href: 'https://frontchapter.ir/havijtimes/'
     images:
-      - src: '/images/blog/01.jpg'
+      - src: '/images/1402/mag01.jpeg'
         label: 'شماره اول هویج‌تایمز'
-      - src: '/images/blog/02.jpg'
+      - src: '/images/1402/mag02.jpeg'
         label: 'شماره دوم هویج‌تایمز'
   festival:
     title: 'من قهرمانم!'
