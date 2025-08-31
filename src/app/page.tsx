@@ -42,6 +42,7 @@ const Home = async () => {
         gatherings={frontmatter.yearOne.gatherings}
         conference={frontmatter.yearOne.conference}
         images={frontmatter.yearOne.images}
+        video={frontmatter.yearOne.video}
       />
       <YearTwoStats
         title={yearTwo.title}

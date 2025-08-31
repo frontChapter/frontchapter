@@ -35,7 +35,8 @@ yearOne:
     - '/images/about/01.jpg'
     - '/images/about/02.jpg'
     - '/images/about/video-popup-2.jpg'
-    - '/images/about/flags/'
+    - '/images/testimonials-01.png'
+  video: '/videos/FrontChapter1400.mp4'
 
 yearTwo:
   title: 'سال دوم'
