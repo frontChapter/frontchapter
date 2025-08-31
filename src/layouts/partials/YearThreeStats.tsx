@@ -312,7 +312,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
       >
         <div className="flex flex-col md:flex-row items-center justify-between max-w-5xl mx-auto gap-12">
           {/* Images */}
-          <div className="flex flex-1 gap-6">
+          <div className="flex flex-1 gap-4 md:gap-6">
             {magazine.images.map((image, idx) => (
               <figure
                 key={idx}
@@ -320,7 +320,8 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                   'image-container group relative rounded-xl overflow-hidden',
                   'shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
                   'transition-all duration-300',
-                  idx === 1 ? 'mt-12' : ''
+                  'min-h-[420px] md:min-h-[500px]',
+                  idx === 1 ? 'mt-12 md:mt-16' : ''
                 )}
               >
                 <div className="relative w-full h-full">
@@ -328,9 +329,9 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                   <Image
                     src={image.src}
                     alt={magazine.title}
-                    width={320}
-                    height={420}
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    width={400}
+                    height={550}
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20">
