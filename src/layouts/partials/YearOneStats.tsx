@@ -22,14 +22,16 @@ export interface YearOneStatsProps {
   };
   images: Array<{
     src: string;
+    jpgSrc?: string;
     alt: string;
     label: string;
   }>;
   video?: {
     src: string;
     label: string;
+    poster?: string;
   };
-  galleryTitle?: string; // عنوان بخش گالری تصاویر
+  galleryTitle?: string;
 }
 
 const YearOneStats: React.FC<YearOneStatsProps> = ({
@@ -184,10 +186,10 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                   <video
                     src={video.src}
                     controls
-                    poster={video.src.replace('.mp4', '.jpg')}
                     className="w-full h-full object-cover"
                     playsInline
                     preload="metadata"
+                    poster={video.poster}
                   >
                     <source src={video.src} type="video/mp4" />
                     مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند
@@ -209,18 +211,41 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                 >
                   <div className="relative w-full h-32 sm:h-36 md:h-56">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                    <Image
-                      src={img.src}
-                      alt={img.alt}
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      width={600}
-                      height={400}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
-                    />
+                    {img.jpgSrc ? (
+                      <picture>
+                        <source srcSet={img.src} type="image/webp" />
+                        <source srcSet={img.jpgSrc} type="image/jpeg" />
+                        <Image
+                          src={img.jpgSrc}
+                          alt={img.alt}
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          width={600}
+                          height={400}
+                          loading="lazy"
+                          sizes="(max-width: 640px) 300px, (max-width: 1024px) 400px, 600px"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
+                        />
+                      </picture>
+                    ) : (
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        width={600}
+                        height={400}
+                        loading="lazy"
+                        sizes="(max-width: 640px) 300px, (max-width: 1024px) 400px, 600px"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20">
                       <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
                         {img.label}
