@@ -40,7 +40,7 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
   conference,
   images,
   video,
-  galleryTitle = 'تصاویر لحظات ماندگار', // مقدار پیش‌فرض برای سازگاری با کد قبلی
+  galleryTitle = 'تصاویر لحظات ماندگار',
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -48,11 +48,9 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
   const detailsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // مطمئن شویم که GSAP و ScrollTrigger فقط در سمت کلاینت اجرا شوند
     if (typeof window !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
 
-      // انیمیشن سال به هنگام اسکرول
       gsap.fromTo(
         yearRef.current,
         { scale: 0.9, opacity: 0 },
@@ -68,7 +66,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         }
       );
 
-      // انیمیشن آیتم‌های آمار یکی پس از دیگری
       const statItems = statsRef.current?.querySelectorAll('.stat-item');
       if (statItems && statItems.length) {
         gsap.fromTo(
@@ -86,8 +83,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
           }
         );
       }
-
-      // انیمیشن بخش جزئیات
       gsap.fromTo(
         detailsRef.current,
         { y: 20, opacity: 0 },
@@ -102,7 +97,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         }
       );
 
-      // انیمیشن گالری تصاویر
       const imageContainers =
         detailsRef.current?.querySelectorAll('.image-container');
       if (imageContainers && imageContainers.length) {
@@ -129,12 +123,10 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center gap-8 md:gap-14 py-10 md:py-20 relative overflow-visible px-4 md:px-6"
     >
-      {/* Background decorations */}
       <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
       <div className="absolute -right-12 sm:-right-24 bottom-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-t from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
       <div className="absolute left-1/4 top-1/3 w-36 sm:w-48 h-36 sm:h-48 rounded-full bg-gradient-to-r from-primary/5 to-primary/10 opacity-30 blur-3xl -z-10"></div>
 
-      {/* Header */}
       <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-3 md:gap-4 text-center relative">
         <p className="uppercase font-medium text-sm sm:text-base text-primary mb-1 sm:mb-2 tracking-wider">
           {title}
@@ -147,7 +139,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         </h1>
       </div>
 
-      {/* Stats */}
       <div
         ref={statsRef}
         className="w-full max-w-4xl flex flex-col md:flex-row items-stretch justify-start gap-6 md:gap-10 py-6 md:py-10"
@@ -166,12 +157,10 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         ))}
       </div>
 
-      {/* Details */}
       <div
         ref={detailsRef}
         className="w-full max-w-4xl flex flex-col items-stretch justify-center gap-8 md:gap-10 py-6 md:py-8"
       >
-        {/* Conference Gallery */}
         <div>
           <h3 className="text-lg md:text-xl font-bold text-primary mb-4 md:mb-5">
             {galleryTitle}
@@ -192,7 +181,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                     {video.label}
                   </div>
 
-                  {/* نمایش مستقیم ویدیو */}
                   <video
                     src={video.src}
                     controls
@@ -220,7 +208,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                   )}
                 >
                   <div className="relative w-full h-32 sm:h-36 md:h-56">
-                    {/* Always show overlay on mobile, show on hover for desktop */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                     <Image
                       src={img.src}
@@ -234,7 +221,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                         objectFit: 'cover',
                       }}
                     />
-                    {/* Always show label on mobile, show on hover for desktop */}
                     <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20">
                       <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
                         {img.label}
@@ -267,7 +253,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
           </div>
         </div>
 
-        {/* Text Content Row */}
         <div className="flex flex-col gap-8 md:gap-10 w-full mt-4 md:mt-6">
           <div className="relative bg-white/40 p-4 sm:p-6 rounded-xl md:bg-transparent md:p-0">
             <h4 className="font-bold text-lg sm:text-xl md:text-2xl text-primary mb-2 md:mb-3 inline-flex items-center flex-wrap">
