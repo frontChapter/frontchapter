@@ -20,8 +20,16 @@ export interface YearOneStatsProps {
     title: string;
     description: string;
   };
-  images: string[];
-  video?: string;
+  images: Array<{
+    src: string;
+    alt: string;
+    label: string;
+  }>;
+  video?: {
+    src: string;
+    label: string;
+  };
+  galleryTitle?: string; // عنوان بخش گالری تصاویر
 }
 
 const YearOneStats: React.FC<YearOneStatsProps> = ({
@@ -32,6 +40,7 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
   conference,
   images,
   video,
+  galleryTitle = 'تصاویر لحظات ماندگار', // مقدار پیش‌فرض برای سازگاری با کد قبلی
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
@@ -162,7 +171,7 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         {/* Conference Gallery */}
         <div>
           <h3 className="text-xl font-bold text-primary mb-5">
-            تصاویر لحظات ماندگار
+            {galleryTitle}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-4 md:gap-5 w-full">
             {/* Video Item */}
@@ -174,22 +183,22 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                   'transition-all duration-300 md:col-span-2 md:row-span-2'
                 )}
               >
-                <div className="relative w-full h-full md:h-[450px]">
+                <div className="relative w-full h-full">
                   <div className="absolute top-3 right-3 bg-primary rounded-full px-2 py-1 text-xs font-bold text-white z-20 flex items-center">
-                    <span className="mr-1 inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                    ویدیو
+                    <span className="me-1 inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                    {video.label}
                   </div>
 
                   {/* نمایش مستقیم ویدیو */}
                   <video
-                    src={video}
+                    src={video.src}
                     controls
-                    poster={video.replace('.mp4', '.jpg')}
+                    poster={video.src.replace('.mp4', '.jpg')}
                     className="w-full h-full object-cover"
                     playsInline
                     preload="metadata"
                   >
-                    <source src={video} type="video/mp4" />
+                    <source src={video.src} type="video/mp4" />
                     مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند
                   </video>
                 </div>
@@ -210,8 +219,8 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                   <div className="relative w-full h-44 md:h-56">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                     <Image
-                      src={img}
-                      alt="تصویر همایش فرانت‌چپتر"
+                      src={img.src}
+                      alt={img.alt}
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       width={1200}
                       height={800}
@@ -223,25 +232,26 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
                     />
                     <div className="absolute bottom-0 left-0 right-0 p-3 text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 z-20">
                       <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-3 py-1 rounded-full inline-block">
-                        بزرگنمایی تصویر
+                        {img.label}
                       </span>
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
-                      <span className="w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
+                      <span className="w-12 h-12 p-2 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
+                          width="256"
+                          height="256"
+                          viewBox="0 0 256 256"
                           fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="text-white"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          <path d="M8 3h8l4 4-8 11H8L2 7l6-4Z"></path>
-                          <path d="m9 13 6-6"></path>
+                          <path
+                            d="M151.14 72H102.86C72.3666 72 57.12 72 50.6194 82.2645C44.1187 92.529 50.3074 106.831 62.685 135.435L92.8515 205.149C107.521 239.05 114.855 256 127 256C132.269 256 136.632 252.81 141.082 246.43C143.496 242.968 143.502 238.377 141.58 234.604L131.217 214.257C128.961 209.83 127.834 207.616 128.796 205.985C129.758 204.354 132.192 204.354 137.06 204.354H153.635C158.413 204.354 162.743 201.465 164.683 196.982L175.788 171.318C178.493 165.067 175.759 157.748 169.676 154.955L128.787 136.182C123.376 133.697 125.103 125.393 131.031 125.393H187.731C192.535 125.393 196.906 122.478 198.759 117.929C205.86 100.5 208.394 90.1812 203.381 82.2645C196.88 72 181.633 72 151.14 72Z"
+                            fill="#FAFAFA"
+                          />
+                          <path
+                            d="M128.075 63.9808C116.95 64.0307 107.637 61.5 99.3718 55.2065C92.264 49.7941 88.0122 42.4149 85.6601 33.7213C84.5315 29.5505 83.7994 25.3028 84.0488 20.917C84.1246 19.5817 84.5379 18.8738 85.896 18.9084C94.5134 19.1222 102.673 20.9438 109.749 26.4512C110.534 27.063 110.716 26.6816 110.901 26.0735C111.245 24.9521 111.497 23.7999 111.823 22.6721C113.621 16.4709 117.097 11.3016 120.964 6.37032C122.624 4.25418 124.441 2.29552 126.33 0.403418C126.864 -0.131696 127.207 -0.138099 127.734 0.405976C134.215 7.11538 139.978 14.3177 142.516 23.7603C142.599 24.0688 142.652 24.385 142.714 24.6986C143.155 27.0004 143.39 27.0657 145.159 25.7151C148.885 22.8705 153.161 21.342 157.592 20.259C161.065 19.4089 164.558 18.6754 168.171 18.8904C169.4 18.9634 169.993 19.4409 169.999 20.7531C170.065 33.0096 166.479 43.8297 157.923 52.371C152.203 58.0817 145.239 61.5446 137.381 62.9799C133.947 63.6097 130.524 64.1051 128.075 63.9808Z"
+                            fill="#FAFAFA"
+                          />
                         </svg>
                       </span>
                     </div>

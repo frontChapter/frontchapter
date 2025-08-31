@@ -43,6 +43,7 @@ const Home = async () => {
         conference={frontmatter.yearOne.conference}
         images={frontmatter.yearOne.images}
         video={frontmatter.yearOne.video}
+        galleryTitle={frontmatter.yearOne.galleryTitle}
       />
       <YearTwoStats
         title={yearTwo.title}
