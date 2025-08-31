@@ -76,14 +76,18 @@ yearTwo:
       label: 'آرشیو جلسات هفتگی'
       href: '/archive'
   images:
-    - src: '/images/about/01.jpg'
+    - src: '/images/1401/01.jpeg'
       alt: 'معرفی و آشنایی با Svelte'
-    - src: '/images/about/02.jpg'
+      label: 'جلسه Svelte'
+    - src: '/images/1401/02.jpeg'
       alt: 'سحر دهینی - اولین دوره‌ی انتخابات راهبری فرانت‌چپتر'
-    - src: '/images/about/01.jpg'
+      label: 'انتخابات راهبری'
+    - src: '/images/1401/03.jpeg'
       alt: 'علی اکبر نبی زاده فرانت چپتر'
-    - src: '/images/about/02.jpg'
+      label: 'انتخابات راهبری'
+    - src: '/images/1401/04.jpeg'
       alt: 'الگوریتم و ساختار داده برای آمادگی در مصاحبه ارفع مددی در فرانت‌چپتر'
+      label: 'جلسه الگوریتم'
 
 yearThree:
   title: 'سال سوم'
