@@ -168,7 +168,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
             {galleryTitle}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-3 sm:gap-4 md:gap-5 w-full">
-            {/* Video Item */}
             {video && (
               <figure
                 className={clsx(
@@ -198,7 +197,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
               </figure>
             )}
 
-            {/* Image Items */}
             {images.map((img, idx) => {
               return (
                 <figure
