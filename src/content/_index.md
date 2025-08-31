@@ -124,9 +124,9 @@ yearThree:
       label: 'آرشیو هویج‌تایمز'
       href: 'https://frontchapter.ir/havijtimes/'
     images:
-      - src: '/images/1402/mag01.jpeg'
-        label: 'شماره اول هویج‌تایمز'
       - src: '/images/1402/mag02.jpeg'
+        label: 'شماره اول هویج‌تایمز'
+      - src: '/images/1402/mag01.jpeg'
         label: 'شماره دوم هویج‌تایمز'
   festival:
     title: 'من قهرمانم!'

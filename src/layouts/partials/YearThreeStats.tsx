@@ -309,11 +309,11 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
       {/* Magazine Section */}
       <div
         ref={magazineRef}
-        className="w-full py-12 md:py-24 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-8"
+        className="w-full py-6 md:py-12 px-3 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-8"
       >
-        <div className="flex flex-col md:flex-row items-center justify-between max-w-5xl mx-auto gap-12">
+        <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto gap-12">
           {/* Images */}
-          <div className="flex flex-1 gap-4 md:gap-6">
+          <div className="flex flex-1 gap-3 md:gap-5 w-full md:w-3/5">
             {magazine.images.map((image, idx) => (
               <figure
                 key={idx}
@@ -321,7 +321,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                   'image-container group relative rounded-xl overflow-hidden',
                   'shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
                   'transition-all duration-300',
-                  'min-h-[450px] md:min-h-[550px]',
+                  'min-h-[450px] md:min-h-[600px] w-full',
                   idx === 1 ? 'mt-12 md:mt-16' : ''
                 )}
               >
@@ -330,8 +330,8 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                   <Image
                     src={image.src}
                     alt={magazine.title}
-                    width={420}
-                    height={600}
+                    width={480}
+                    height={700}
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
@@ -366,7 +366,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
           </div>
 
           {/* Content */}
-          <div className="flex-1 text-right">
+          <div className="flex-1 md:w-2/5 text-right">
             <p className="uppercase font-medium text-base text-primary mb-6 tracking-wider">
               {magazine.subtitle}
             </p>
