@@ -46,7 +46,7 @@ yearOne:
       alt: 'تصویر همایش فرانت‌چپتر'
       label: 'تصویر ۴'
   video:
-    src: '/videos/1400-cropped.mp4'
+    src: '/videos/FrontChapter1400.mp4'
     label: 'ویدیو'
 
 yearTwo:
