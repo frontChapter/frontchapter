@@ -34,6 +34,7 @@ module.exports = {
   ],
   theme: {
     screens: {
+      xs: '480px',
       sm: '540px',
       md: '768px',
       lg: '992px',
@@ -57,6 +58,7 @@ module.exports = {
         'theme-dark': theme.colors.default.theme_color.theme_dark,
       },
       fontSize: {
+        '2xs': '0.625rem',
         base: font_base + 'px',
         h1: h1 + 'rem',
         'h1-sm': h1 * 0.8 + 'rem',
