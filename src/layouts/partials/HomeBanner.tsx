@@ -363,31 +363,33 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
           <div className="row overflow-hidden rounded-2xl">
             <div className="col-12">
               <div className="row relative justify-center pb-10">
-                <div className="banner-content col-10 pb-10 pt-20 text-center">
+                <div className="banner-content col-12 col-md-11 col-lg-10 pb-6 pb-md-8 pb-lg-10 pt-10 pt-md-16 pt-lg-20 text-center">
                   {markdownify({
                     content: bannerData.title,
                     tag: 'h1',
-                    className: 'mb-8 banner-title opacity-0',
+                    className:
+                      'mb-4 mb-md-6 mb-lg-8 banner-title opacity-0 text-2xl md:text-3xl lg:text-4xl',
                   })}
-                  <div className="banner-subtitle pb-6">
+                  <div className="banner-subtitle pb-4 pb-md-5 pb-lg-6">
                     {markdownify({
                       content: bannerData.subtitle,
                       tag: 'h5',
-                      className: 'mb-4 font-light banner-title opacity-0',
+                      className:
+                        'mb-3 mb-md-4 font-light banner-title opacity-0 text-sm md:text-base',
                     })}
                   </div>
                   <div className="banner-btn opacity-0">
                     <Link
-                      className="btn btn-primary"
+                      className="btn btn-primary text-sm md:text-base"
                       href={bannerData.link.href}
                     >
                       {bannerData.link.label}
                     </Link>
                   </div>
                 </div>
-                <div className="col-10">
+                <div className="col-12 col-md-11 col-lg-10 px-2 md:px-4">
                   <Video
-                    className="banner-video mx-auto border-[20px] border-white shadow-lg rounded-3xl"
+                    className="banner-video mx-auto border-[8px] md:border-[15px] lg:border-[20px] border-white shadow-lg rounded-2xl md:rounded-3xl"
                     src={bannerData.video}
                     width={1070}
                     height={'666'}
