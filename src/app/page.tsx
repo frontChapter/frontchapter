@@ -65,7 +65,9 @@ const Home = async () => {
         year={yearFour.year}
         stats={yearFour.stats}
         birthday={yearFour.birthday}
+        conference={yearFour.conference}
         events={yearFour.events}
+        communityCollaboration={yearFour.communityCollaboration}
       />
       <ContinuedStory
         subtitle={continuedStory.subtitle}
