@@ -7,16 +7,16 @@
     "type": "git",
     "url": "https://github.com/frontChapter/frontchapter.git"
   },
-  "homepage": "https://frontchapter.com",
-  "author": "FrontChapter Community <info@frontchapter.com>",
+  "homepage": "https://frontchapter.ir",
+  "author": "FrontChapter Community <info@frontchapter.ir>",
   "scripts": {
-  "dev": "next dev",
-  "build": "next build",
-  "export": "next build",
-  "postexport": "echo 'frontchapter.ir' > out/CNAME",
-  "deploy": "gh-pages -d out",
-  "lint": "next lint",
-  "start": "next start"
+    "dev": "next dev",
+    "build": "next build",
+    "export": "next build",
+    "postexport": "echo 'frontchapter.ir' > out/CNAME",
+    "deploy": "gh-pages -d out",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
     "clsx": "^2.1.1",

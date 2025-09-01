@@ -95,10 +95,10 @@ Released under the [MIT License](LICENSE).
 
 ## 🌐 Community & Contact
 
-- [FrontChapter Website](https://frontchapter.com)
-- [Contact Us](https://frontchapter.com/contact)
+- [FrontChapter Website](https://frontchapter.ir)
+- [Contact Us](https://frontchapter.ir/contact)
 - [Telegram Channel](https://t.me/frontchapter)
-- [Instagram](https://instagram.com/frontchapter)
+- [Instagram](https://instagram.com/frontchapter.ir)
 - [Twitter](https://twitter.com/frontchapter)
 
 ---
