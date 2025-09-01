@@ -18,7 +18,11 @@ function Cta() {
               tag: 'h2',
               className: 'section-title',
             })}
-            {markdownify({ content: content, tag: 'p', className: 'mt-10' })}
+            {markdownify({
+              content: content,
+              tag: 'p',
+              className: 'mt-10 max-w-lg mx-auto',
+            })}
             <Link href={button.link} className="btn btn-primary mt-10">
               {button.label}
             </Link>

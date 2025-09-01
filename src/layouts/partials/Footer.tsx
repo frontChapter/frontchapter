@@ -90,7 +90,7 @@ const Footer: React.FC = () => {
           <div
             className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? ' text-right' : ''}`}
           >
-            <h3 className="h5">Socials</h3>
+            <h3 className="h5">شبکه‌های اجتماعی</h3>
             <div className="mt-5">
               {email && <Link href={`mailto:${email}`}>{email}</Link>}
               {/* social icons */}
@@ -103,7 +103,7 @@ const Footer: React.FC = () => {
           <div
             className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? ' text-right' : ''}`}
           >
-            <h3 className="h5">Quick Links</h3>
+            <h3 className="h5">لینک‌های سریع</h3>
             {/* footer menu */}
             <ul className="mt-5 leading-10">
               {(menu as FooterMenu).footer.map((menu) => (
@@ -121,7 +121,7 @@ const Footer: React.FC = () => {
           <div
             className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? ' text-right' : ''}`}
           >
-            <h3 className="h5">Location & Contact</h3>
+            <h3 className="h5">ارتباط با ما</h3>
             <ul className="mt-5 leading-10">
               <li>{location && markdownify({ content: location })}</li>
               {phone && (

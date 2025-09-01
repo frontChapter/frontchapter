@@ -33,3 +33,8 @@
   @import 'swiper/scss/pagination';
   @import './swiper.scss';
 }
+
+html,
+body {
+  overflow-x: hidden;
+}
