@@ -12,7 +12,7 @@ function Cta() {
     <section className="cta section pt-0">
       <div className="container-xl">
         <div className="section relative px-4 text-center">
-          <div className="animate">
+          <div className="animate relative z-10">
             {markdownify({
               content: title,
               tag: 'h2',
@@ -27,7 +27,7 @@ function Cta() {
               {button.label}
             </Link>
           </div>
-          <div className="bg-theme animated-bg absolute top-0 left-0 w-full after:hidden">
+          <div className="bg-theme animated-bg absolute top-0 left-0 w-full h-full md:h-auto after:hidden">
             <ImageFallback
               src="/images/wave.svg"
               fill={true}
@@ -36,28 +36,36 @@ function Cta() {
               fallback={''}
             />
             <Circle
-              className="left-[10%] top-12"
+              className="left-[10%] top-12 hidden md:block"
               width={32}
               height={32}
               fill={false}
             />
-            <Circle className="left-[3%] bottom-[13%]" width={85} height={85} />
             <Circle
-              className="left-[15%] bottom-[35%]"
+              className="left-[3%] bottom-[13%] hidden md:block"
+              width={85}
+              height={85}
+            />
+            <Circle
+              className="left-[15%] bottom-[35%] hidden md:block"
               width={47}
               height={47}
               fill={false}
             />
 
-            <Circle className="right-[12%] top-[12%]" width={20} height={20} />
             <Circle
-              className="right-[2%] bottom-[30%]"
+              className="right-[12%] top-[12%] hidden md:block"
+              width={20}
+              height={20}
+            />
+            <Circle
+              className="right-[2%] bottom-[30%] hidden md:block"
               width={73}
               height={73}
               fill={false}
             />
             <Circle
-              className="right-[19%] bottom-[16%]"
+              className="right-[19%] bottom-[16%] hidden md:block"
               width={37}
               height={37}
               fill={false}
