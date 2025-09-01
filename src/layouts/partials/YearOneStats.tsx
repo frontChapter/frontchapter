@@ -145,18 +145,22 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         ref={statsRef}
         className="w-full max-w-4xl flex flex-col md:flex-row items-stretch justify-start gap-6 md:gap-10 py-6 md:py-10"
       >
-        {stats.map((stat, idx) => (
-          <div
-            key={idx}
-            className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
-          >
-            <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
-            <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
-              {stat.value}
-            </h2>
-            <p className="text-slate-600 text-base md:text-lg">{stat.label}</p>
-          </div>
-        ))}
+        <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row w-full gap-4 md:gap-10">
+          {stats.map((stat, idx) => (
+            <div
+              key={idx}
+              className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
+            >
+              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
+              <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
+                {stat.value}
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base md:text-lg">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div
