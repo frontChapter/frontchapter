@@ -201,7 +201,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
         {stats.map((stat, idx) => (
           <div
             key={idx}
-            className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl shadow-sm md:bg-transparent md:shadow-none"
+            className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
           >
             <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
             <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
