@@ -226,7 +226,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
               </span>
               {conference.title}
             </h2>
-            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
+            <p className="text-slate-600 !leading-loose text-base md:text-lg">
               {conference.description}
             </p>
           </div>
