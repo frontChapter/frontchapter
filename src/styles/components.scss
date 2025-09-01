@@ -19,9 +19,8 @@
 
 // social icon style
 .social-icons {
-  @apply space-x-4;
+  // Using flex with gap instead of space-x for better RTL support
   li {
-    @apply inline-block;
     a {
       @apply block h-11 w-11 rounded-full border text-center transition-all duration-300 hover:border-primary hover:text-primary;
 
@@ -30,9 +29,7 @@
       }
     }
   }
-}
-
-// notice
+} // notice
 .notice {
   .notice-body {
     p {

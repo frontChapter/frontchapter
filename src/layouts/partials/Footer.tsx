@@ -6,7 +6,7 @@ import Link from 'next/link';
 import React from 'react';
 import { useRTL } from '../../hooks/useRTL';
 import Logo from '../components/Logo';
-import Social from '../components/Social';
+import SocialFixed from '../components/SocialFixed';
 
 interface MenuItem {
   name: string;
@@ -92,9 +92,13 @@ const Footer: React.FC = () => {
           >
             <h3 className="h5">شبکه‌های اجتماعی</h3>
             <div className="mt-5">
-              {email && <Link href={`mailto:${email}`}>{email}</Link>}
+              {email && (
+                <div className="mb-3">
+                  <Link href={`mailto:${email}`}>{email}</Link>
+                </div>
+              )}
               {/* social icons */}
-              <Social
+              <SocialFixed
                 source={social as SocialSource}
                 className="social-icons mt-5"
               />
