@@ -14,7 +14,8 @@
     "build": "next build",
     "export": "next build",
     "postexport": "echo 'frontchapter.ir' > out/CNAME",
-    "deploy": "gh-pages -d out",
+    "predeploy": "npm run export && touch out/.nojekyll",
+    "deploy": "gh-pages -d out --dotfiles",
     "lint": "next lint",
     "start": "next start"
   },
