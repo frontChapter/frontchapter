@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import ImageLightbox from '../components/ImageLightbox';
+import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearFourStatsProps {
   title: string;
@@ -68,6 +70,33 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   const birthdayRef = useRef<HTMLDivElement>(null);
   const conferenceRef = useRef<HTMLDivElement>(null);
   const eventsRef = useRef<HTMLDivElement>(null);
+
+  // Create lightbox for conference images
+  const conferenceImages =
+    conference?.images.gallery.map((img) => ({
+      src: img.src,
+      alt: `همایش ${year} فرانت‌چپتر`,
+      label: img.label,
+    })) || [];
+  const conferenceLightbox = useImageLightbox(conferenceImages);
+
+  // Create lightbox for birthday image
+  const birthdayImages = [
+    {
+      src: birthday.image,
+      alt: birthday.title,
+      label: birthday.title,
+    },
+  ];
+  const birthdayLightbox = useImageLightbox(birthdayImages);
+
+  // Create lightbox for events images
+  const eventsImages = events.map((event) => ({
+    src: event.image,
+    alt: event.title,
+    label: event.title,
+  }));
+  const eventsLightbox = useImageLightbox(eventsImages);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -266,9 +295,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                     key={idx}
                     className={`image-container group relative rounded-xl overflow-hidden
                       shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20
-                      transition-all duration-300
+                      transition-all duration-300 cursor-pointer
                       aspect-square w-full
                       ${idx % 2 !== 0 ? 'mt-6' : ''}`}
+                    onClick={() => conferenceLightbox.openLightbox(idx)}
                   >
                     <div className="relative w-full h-full">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -443,7 +473,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           </div>
 
           {/* Birthday Image */}
-          <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 w-full max-w-4xl mx-auto">
+          <figure
+            className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer w-full max-w-4xl mx-auto"
+            onClick={() => birthdayLightbox.openLightbox(0)}
+          >
             <div className="relative w-full h-full aspect-[16/9]">
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
               <Image
@@ -491,7 +524,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 {idx % 2 === 0 ? (
                   <>
                     {/* Image (Left) */}
-                    <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 aspect-video w-full">
+                    <figure
+                      className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full"
+                      onClick={() => eventsLightbox.openLightbox(idx)}
+                    >
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                         <Image
@@ -571,7 +607,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       </div>
                     </div>
                     {/* Image (Right) */}
-                    <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 aspect-video w-full">
+                    <figure
+                      className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full"
+                      onClick={() => eventsLightbox.openLightbox(idx)}
+                    >
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                         <Image
@@ -616,6 +655,38 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           </div>
         </div>
       </div>
+
+      {conference && conferenceImages.length > 0 && (
+        <ImageLightbox
+          images={conferenceImages}
+          currentIndex={conferenceLightbox.currentIndex}
+          isOpen={conferenceLightbox.isOpen}
+          onClose={conferenceLightbox.closeLightbox}
+          onPrevious={conferenceLightbox.goToPrevious}
+          onNext={conferenceLightbox.goToNext}
+          onGoToImage={conferenceLightbox.goToImage}
+        />
+      )}
+
+      <ImageLightbox
+        images={birthdayImages}
+        currentIndex={birthdayLightbox.currentIndex}
+        isOpen={birthdayLightbox.isOpen}
+        onClose={birthdayLightbox.closeLightbox}
+        onPrevious={birthdayLightbox.goToPrevious}
+        onNext={birthdayLightbox.goToNext}
+        onGoToImage={birthdayLightbox.goToImage}
+      />
+
+      <ImageLightbox
+        images={eventsImages}
+        currentIndex={eventsLightbox.currentIndex}
+        isOpen={eventsLightbox.isOpen}
+        onClose={eventsLightbox.closeLightbox}
+        onPrevious={eventsLightbox.goToPrevious}
+        onNext={eventsLightbox.goToNext}
+        onGoToImage={eventsLightbox.goToImage}
+      />
     </section>
   );
 };

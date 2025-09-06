@@ -5,6 +5,8 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import ImageLightbox from '../components/ImageLightbox';
+import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearTwoStatsProps {
   title: string;
@@ -41,6 +43,8 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
   const statsRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLHeadingElement>(null);
   const imagesRef = useRef<HTMLDivElement>(null);
+
+  const lightbox = useImageLightbox(images);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -160,8 +164,9 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
                     className={clsx(
                       'image-container group relative rounded-lg sm:rounded-xl overflow-hidden',
                       'shadow-md shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
-                      'transition-all duration-300'
+                      'transition-all duration-300 cursor-pointer'
                     )}
+                    onClick={() => lightbox.openLightbox(idx)}
                   >
                     <div className="relative w-full aspect-square xs:aspect-[4/3] sm:h-36 md:h-56">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 sm:opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -284,6 +289,16 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
           </div>
         </div>
       </div>
+
+      <ImageLightbox
+        images={images}
+        currentIndex={lightbox.currentIndex}
+        isOpen={lightbox.isOpen}
+        onClose={lightbox.closeLightbox}
+        onPrevious={lightbox.goToPrevious}
+        onNext={lightbox.goToNext}
+        onGoToImage={lightbox.goToImage}
+      />
     </section>
   );
 };

@@ -5,6 +5,8 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import ImageLightbox from '../components/ImageLightbox';
+import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearThreeStatsProps {
   title: string;
@@ -66,6 +68,22 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
   const conferenceRef = useRef<HTMLDivElement>(null);
   const magazineRef = useRef<HTMLDivElement>(null);
   const festivalRef = useRef<HTMLDivElement>(null);
+
+  // Create lightbox for conference images
+  const conferenceImages = conference.images.gallery.map((img) => ({
+    src: img.src,
+    alt: `همایش ${year} فرانت‌چپتر`,
+    label: img.label,
+  }));
+  const conferenceLightbox = useImageLightbox(conferenceImages);
+
+  // Create lightbox for magazine images
+  const magazineImages = magazine.images.map((img) => ({
+    src: img.src,
+    alt: magazine.title,
+    label: img.label,
+  }));
+  const magazineLightbox = useImageLightbox(magazineImages);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -263,10 +281,11 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                   className={clsx(
                     'image-container group relative rounded-xl overflow-hidden',
                     'shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
-                    'transition-all duration-300',
+                    'transition-all duration-300 cursor-pointer',
                     'aspect-square w-full',
                     idx % 2 !== 0 ? 'mt-6' : ''
                   )}
+                  onClick={() => conferenceLightbox.openLightbox(idx)}
                 >
                   <div className="relative w-full h-full">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -324,10 +343,11 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                 className={clsx(
                   'image-container group relative rounded-xl overflow-hidden',
                   'shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
-                  'transition-all duration-300',
+                  'transition-all duration-300 cursor-pointer',
                   'min-h-[450px] md:min-h-[600px] w-full',
                   idx === 1 ? 'mt-12 md:mt-16' : ''
                 )}
+                onClick={() => magazineLightbox.openLightbox(idx)}
               >
                 <div className="relative w-full h-full">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
@@ -528,6 +548,30 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
           </div>
         </div>
       </div>
+
+      {conferenceImages.length > 0 && (
+        <ImageLightbox
+          images={conferenceImages}
+          currentIndex={conferenceLightbox.currentIndex}
+          isOpen={conferenceLightbox.isOpen}
+          onClose={conferenceLightbox.closeLightbox}
+          onPrevious={conferenceLightbox.goToPrevious}
+          onNext={conferenceLightbox.goToNext}
+          onGoToImage={conferenceLightbox.goToImage}
+        />
+      )}
+
+      {magazineImages.length > 0 && (
+        <ImageLightbox
+          images={magazineImages}
+          currentIndex={magazineLightbox.currentIndex}
+          isOpen={magazineLightbox.isOpen}
+          onClose={magazineLightbox.closeLightbox}
+          onPrevious={magazineLightbox.goToPrevious}
+          onNext={magazineLightbox.goToNext}
+          onGoToImage={magazineLightbox.goToImage}
+        />
+      )}
     </section>
   );
 };
