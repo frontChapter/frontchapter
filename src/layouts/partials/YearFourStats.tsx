@@ -208,7 +208,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="w-full flex flex-col items-center justify-center gap-5 md:gap-8 py-6 md:py-12 relative overflow-visible px-4 md:px-6"
+      className="w-full flex flex-col items-center justify-center gap-5 md:gap-8 py-6 md:py-12 relative overflow-hidden px-4 md:px-6"
     >
       {/* Gradient Background Elements */}
       <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
@@ -301,7 +301,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                     onClick={() => conferenceLightbox.openLightbox(idx)}
                   >
                     <div className="relative w-full h-full">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                       <Image
                         src={image.src}
                         alt={`همایش ${year} فرانت‌چپتر`}
@@ -478,7 +478,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
             onClick={() => birthdayLightbox.openLightbox(0)}
           >
             <div className="relative w-full h-full aspect-[16/9]">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
               <Image
                 src={birthday.image}
                 alt={birthday.title}
@@ -529,7 +529,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       onClick={() => eventsLightbox.openLightbox(idx)}
                     >
                       <div className="relative w-full h-full">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                         <Image
                           src={event.image}
                           alt={event.title}
@@ -612,7 +612,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       onClick={() => eventsLightbox.openLightbox(idx)}
                     >
                       <div className="relative w-full h-full">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                         <Image
                           src={event.image}
                           alt={event.title}

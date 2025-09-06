@@ -36,6 +36,26 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
     setMounted(true);
   }, []);
 
+  // Prevent body scroll when lightbox is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [isOpen]);
+
   const goToPrevious = useCallback(() => {
     onPrevious();
   }, [onPrevious]);
@@ -73,12 +93,21 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
     } else {
       document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+      document.body.style.width = 'unset';
+      document.body.style.height = 'unset';
     }
 
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.style.position = 'unset';
+      document.body.style.width = 'unset';
+      document.body.style.height = 'unset';
     };
   }, [isOpen]);
 
@@ -88,11 +117,14 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
   const currentImage = images[currentIndex];
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
+    <div
+      className="lightbox-container fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm overflow-hidden"
+      style={{ width: '100vw', height: '100vh' }}
+    >
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-60 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 z-60 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
         aria-label="بستن گالری"
       >
         <svg
@@ -118,7 +150,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-60 p-3 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-60 p-2 sm:p-3 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
             aria-label="تصویر قبلی"
           >
             <svg
@@ -140,7 +172,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-60 p-3 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-60 p-2 sm:p-3 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
             aria-label="تصویر بعدی"
           >
             <svg
@@ -164,7 +196,10 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
       )}
 
       {/* Main Image */}
-      <div className="relative max-w-[90vw] max-h-[90vh] mx-4">
+      <div
+        className="relative max-w-[95vw] max-h-[90vh] mx-2 sm:mx-4 w-full h-full flex items-center justify-center"
+        style={{ maxWidth: '95vw', maxHeight: '90vh' }}
+      >
         <div className="relative">
           {currentImage.jpgSrc ? (
             <picture>
@@ -177,6 +212,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
                 height={800}
                 className="max-w-full max-h-full object-contain rounded-lg"
                 priority
+                style={{ maxWidth: '100%', maxHeight: '100%' }}
               />
             </picture>
           ) : (
@@ -187,6 +223,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
               height={800}
               className="max-w-full max-h-full object-contain rounded-lg"
               priority
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
             />
           )}
         </div>
@@ -208,12 +245,15 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
 
       {/* Thumbnail Navigation */}
       {images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 max-w-[90vw] overflow-x-auto">
+        <div
+          className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-1 sm:gap-2 max-w-[95vw] overflow-x-auto px-2 sm:px-4"
+          style={{ maxWidth: '95vw' }}
+        >
           {images.map((img, index) => (
             <button
               key={index}
               onClick={() => onGoToImage(index)}
-              className={`relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 transition-opacity ${
+              className={`relative w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 transition-opacity ${
                 index === currentIndex
                   ? 'opacity-100 ring-2 ring-white'
                   : 'opacity-60 hover:opacity-80'
@@ -229,6 +269,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
                     width={64}
                     height={64}
                     className="w-full h-full object-cover"
+                    sizes="48px"
                   />
                 </picture>
               ) : (
@@ -238,6 +279,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
                   width={64}
                   height={64}
                   className="w-full h-full object-cover"
+                  sizes="48px"
                 />
               )}
             </button>

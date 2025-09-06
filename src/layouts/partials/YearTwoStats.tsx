@@ -107,7 +107,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="w-full flex flex-col items-center justify-center gap-6 py-8 md:py-16 relative overflow-visible px-4 md:px-6"
+      className="w-full flex flex-col items-center justify-center gap-6 py-8 md:py-16 relative overflow-hidden px-4 md:px-6"
     >
       <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
       <div className="absolute -right-12 sm:-right-24 bottom-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-t from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
@@ -169,7 +169,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
                     onClick={() => lightbox.openLightbox(idx)}
                   >
                     <div className="relative w-full aspect-square xs:aspect-[4/3] sm:h-36 md:h-56">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 sm:opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 sm:opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                       {img.jpgSrc ? (
                         <picture>
                           <source srcSet={img.src} type="image/webp" />
