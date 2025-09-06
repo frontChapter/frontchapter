@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 export interface ImageItem {
@@ -31,21 +31,39 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
   onGoToImage,
 }) => {
   const [mounted, setMounted] = useState(false);
+  const scrollPositionRef = useRef<number>(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Prevent body scroll when lightbox is open
+  // Prevent body scroll when lightbox is open while preserving scroll position
   useEffect(() => {
     if (isOpen) {
+      // Store current scroll position in ref
+      scrollPositionRef.current = window.scrollY;
+
+      // Apply styles to prevent scrolling
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
       document.body.style.width = '100%';
+      document.body.style.top = `-${scrollPositionRef.current}px`;
     } else {
+      // Restore body styles
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.width = '';
+      document.body.style.top = '';
+
+      // Restore scroll position using the ref value
+      if (scrollPositionRef.current > 0) {
+        // Use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+          window.scrollTo(0, scrollPositionRef.current);
+        }, 0);
+      }
     }
 
     // Cleanup on unmount
@@ -53,6 +71,7 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
       document.body.style.overflow = '';
       document.body.style.position = '';
       document.body.style.width = '';
+      document.body.style.top = '';
     };
   }, [isOpen]);
 
@@ -90,6 +109,31 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
     }
   }, [isOpen, handleKeyDown]);
 
+  // Touch handling for swipe gestures
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && images.length > 1) {
+      goToNext();
+    }
+    if (isRightSwipe && images.length > 1) {
+      goToPrevious();
+    }
+  };
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -120,6 +164,9 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
     <div
       className="lightbox-container fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm overflow-hidden"
       style={{ width: '100vw', height: '100vh' }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Close Button */}
       <button
