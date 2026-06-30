@@ -2,6 +2,7 @@ import { getListPage } from '@lib/contentParser';
 import Cta from '../layouts/components/Cta';
 import GSAPWrapper from '../layouts/components/GSAPWrapper';
 import ContinuedStory from '../layouts/partials/ContinuedStory';
+import ExecutiveTeam from '../layouts/partials/ExecutiveTeam';
 import HomeBanner from '../layouts/partials/HomeBanner';
 import SeoMeta from '../layouts/partials/SeoMeta';
 import StorySection from '../layouts/partials/StorySection';
@@ -21,6 +22,7 @@ const Home = async () => {
     yearThree,
     yearFour,
     continuedStory,
+    executiveTeam,
   } = frontmatter;
   return (
     <GSAPWrapper>
@@ -37,7 +39,6 @@ const Home = async () => {
         video={frontmatter.yearOne.video}
         galleryTitle={frontmatter.yearOne.galleryTitle}
         speakers={frontmatter.yearOne.speakers}
-        team={frontmatter.yearOne.team}
       />
       <YearTwoStats
         title={yearTwo.title}
@@ -65,6 +66,7 @@ const Home = async () => {
         events={yearFour.events}
         communityCollaboration={yearFour.communityCollaboration}
       />
+      <ExecutiveTeam title={executiveTeam.title} list={executiveTeam.list} />
       <ContinuedStory
         subtitle={continuedStory.subtitle}
         title={continuedStory.title}
