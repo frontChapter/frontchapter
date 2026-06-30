@@ -153,8 +153,26 @@
 
 //banner
 .banner {
+  .banner-content {
+    @apply relative z-[1];
+  }
+
+  .banner-video-frame {
+    box-shadow:
+      0 24px 48px -12px rgb(254 96 25 / 0.12),
+      0 12px 24px -8px rgb(0 0 0 / 0.08);
+  }
+
   .bg-theme {
-    @apply h-[calc(50%_+_160px)];
+    height: clamp(360px, 58%, 560px);
+
+    @media (min-width: 768px) {
+      height: clamp(420px, 64%, 620px);
+    }
+
+    @media (min-width: 992px) {
+      height: clamp(480px, 68%, 680px);
+    }
 
     &::before {
       @apply h-[95%] scale-100 bg-theme-light bg-[0_50px];
