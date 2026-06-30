@@ -3,8 +3,11 @@ import clsx from 'clsx';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import { IoLogoLinkedin } from 'react-icons/io5';
 import ImageLightbox from '../components/ImageLightbox';
+import SpeakersShowcase from '../components/SpeakersShowcase';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearOneStatsProps {
@@ -34,6 +37,28 @@ export interface YearOneStatsProps {
     poster?: string;
   };
   galleryTitle?: string;
+  speakers?: {
+    title: string;
+    list: Array<{
+      name: string;
+      talk?: string;
+      talkSubtitle?: string;
+      role: string;
+      company?: string;
+      companyLogo?: string;
+      image: string;
+      linkedin?: string;
+    }>;
+  };
+  team?: {
+    title: string;
+    list: Array<{
+      name: string;
+      role: string;
+      image: string;
+      linkedin?: string;
+    }>;
+  };
 }
 
 const YearOneStats: React.FC<YearOneStatsProps> = ({
@@ -45,11 +70,15 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
   images,
   video,
   galleryTitle = 'تصاویر لحظات ماندگار',
+  speakers,
+  team,
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLHeadingElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
+  const speakersRef = useRef<HTMLDivElement>(null);
+  const teamRef = useRef<HTMLDivElement>(null);
 
   const lightbox = useImageLightbox(images);
 
@@ -116,6 +145,43 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
             duration: 0.6,
             scrollTrigger: {
               trigger: imageContainers[0],
+              start: 'top bottom',
+            },
+          }
+        );
+      }
+
+      const speakerCards =
+        speakersRef.current?.querySelectorAll('.speaker-card');
+      if (speakerCards && speakerCards.length) {
+        gsap.fromTo(
+          speakerCards,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: speakersRef.current,
+              start: 'top bottom',
+            },
+          }
+        );
+      }
+
+      const teamCards = teamRef.current?.querySelectorAll('.team-card');
+      if (teamCards && teamCards.length) {
+        gsap.fromTo(
+          teamCards,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: teamRef.current,
               start: 'top bottom',
             },
           }
@@ -309,6 +375,60 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
               {conference.description}
             </p>
           </div>
+
+          {speakers && speakers.list.length > 0 && (
+            <SpeakersShowcase
+              title={speakers.title}
+              speakers={speakers.list}
+              containerRef={speakersRef}
+            />
+          )}
+
+          {team && team.list.length > 0 && (
+            <div ref={teamRef} className="relative w-full">
+              <h4 className="font-bold text-lg sm:text-xl md:text-2xl text-primary mb-5 md:mb-6 inline-flex items-center flex-wrap">
+                <span className="text-2xl md:text-3xl text-primary/40 me-2">
+                  ✫
+                </span>
+                {team.title}
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+                {team.list.map((member, idx) => (
+                  <div
+                    key={idx}
+                    className="team-card group flex flex-col items-center text-center bg-white/50 rounded-xl p-3 sm:p-4 shadow-sm shadow-primary/5 hover:shadow-md hover:shadow-primary/10 transition-shadow duration-300"
+                  >
+                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 mb-3 rounded-full overflow-hidden ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all duration-300">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="(max-width: 640px) 80px, 112px"
+                      />
+                    </div>
+                    <h5 className="font-bold text-sm sm:text-base text-slate-800 mb-1">
+                      {member.name}
+                    </h5>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      {member.role}
+                    </p>
+                    {member.linkedin && (
+                      <Link
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        aria-label={`لینکدین ${member.name}`}
+                        className="mt-2 text-primary/60 hover:text-primary transition-colors duration-200"
+                      >
+                        <IoLogoLinkedin className="w-5 h-5" />
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

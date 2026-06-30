@@ -9,6 +9,14 @@
   },
   "homepage": "https://frontchapter.ir",
   "author": "FrontChapter Community <info@frontchapter.ir>",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "sharp",
+      "swiper",
+      "unrs-resolver"
+    ]
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

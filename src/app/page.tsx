@@ -36,6 +36,8 @@ const Home = async () => {
         images={frontmatter.yearOne.images}
         video={frontmatter.yearOne.video}
         galleryTitle={frontmatter.yearOne.galleryTitle}
+        speakers={frontmatter.yearOne.speakers}
+        team={frontmatter.yearOne.team}
       />
       <YearTwoStats
         title={yearTwo.title}
@@ -49,6 +51,7 @@ const Home = async () => {
         year={yearThree.year}
         stats={yearThree.stats}
         conference={yearThree.conference}
+        speakers={yearThree.speakers}
         magazine={yearThree.magazine}
         festival={yearThree.festival}
       />

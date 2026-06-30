@@ -1,5 +1,2 @@
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - sharp
-  - swiper
-  - unrs-resolver
+packages:
+  - '.'
