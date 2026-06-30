@@ -120,7 +120,8 @@
 .bg-theme {
   @apply relative -z-[1] h-full rounded-2xl bg-contain bg-[50%];
   &::before {
-    @apply absolute top-0 -z-[1] h-full w-full scale-[.3] rounded-[30px] bg-[#fff7f3] bg-contain bg-no-repeat transition-transform duration-[1500ms] ease-[cubic-bezier(.105,.84,.44,1)] content-[''];
+    @apply absolute top-0 -z-[1] h-full w-full scale-[.3] rounded-[30px] bg-contain bg-no-repeat transition-transform duration-[1500ms] ease-[cubic-bezier(.105,.84,.44,1)] content-[''];
+    background-color: var(--color-theme-accent);
     inset-inline-start: 0;
   }
   &::after {

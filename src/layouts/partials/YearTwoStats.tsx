@@ -119,7 +119,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
         </p>
         <h1
           ref={yearRef}
-          className="font-bold text-4xl sm:text-5xl md:text-7xl text-slate-800 leading-tight bg-gradient-to-r from-slate-800 to-primary bg-clip-text text-transparent"
+          className="font-bold text-4xl sm:text-5xl md:text-7xl text-dark leading-tight bg-gradient-to-r from-slate-800 dark:from-slate-200 to-primary bg-clip-text text-transparent"
         >
           {year}
         </h1>
@@ -134,13 +134,13 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
+              className="stat-item flex-1 text-center md:text-right p-4 relative bg-surface rounded-xl md:bg-transparent"
             >
               <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
               <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
                 {stat.value}
               </h2>
-              <p className="text-slate-600 text-sm sm:text-base md:text-lg">
+              <p className="text-text text-sm sm:text-base md:text-lg">
                 {stat.label}
               </p>
             </div>
@@ -149,7 +149,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
       </div>
 
       {/* Memories Section */}
-      <div className="w-full py-12 px-6 bg-white/50 rounded-xl shadow-sm">
+      <div className="w-full py-12 px-6 bg-surface rounded-xl shadow-sm">
         <div className="flex flex-col md:flex-row items-start justify-between max-w-5xl mx-auto gap-6 md:gap-12">
           {/* Images Grid */}
           <div className="flex-1 md:w-1/2">
@@ -262,7 +262,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
             <p className="text-uppercase text-sm font-bold text-primary mb-4 md:mb-6 tracking-wider">
               {memories.subtitle}
             </p>
-            <h2 className="font-bold text-2xl md:text-3xl text-slate-800 mb-6 inline-flex items-center flex-wrap">
+            <h2 className="font-bold text-2xl md:text-3xl text-dark mb-6 inline-flex items-center flex-wrap">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✫
               </span>
@@ -272,7 +272,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
             {memories.description.map((paragraph, idx) => (
               <p
                 key={idx}
-                className="text-slate-600 mb-4 leading-relaxed text-base md:text-lg"
+                className="text-text mb-4 leading-relaxed text-base md:text-lg"
               >
                 {paragraph}
               </p>

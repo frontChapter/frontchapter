@@ -51,7 +51,7 @@ function LayoutContent({ children }: RootLayoutProps) {
         <meta
           name="theme-color"
           media="(prefers-color-scheme: dark)"
-          content="#000"
+          content="#0f1419"
         />
       </head>
       <body suppressHydrationWarning={true}>

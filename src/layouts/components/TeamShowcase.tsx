@@ -45,7 +45,7 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
         {members.map((member, idx) => (
           <div
             key={idx}
-            className="team-card group flex flex-col items-center text-center bg-white/50 rounded-xl p-3 sm:p-4 shadow-sm shadow-primary/5 hover:shadow-md hover:shadow-primary/10 transition-shadow duration-300"
+            className="team-card group flex flex-col items-center text-center bg-surface rounded-xl p-3 sm:p-4 shadow-sm shadow-primary/5 hover:shadow-md hover:shadow-primary/10 transition-shadow duration-300"
           >
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 mb-3 rounded-full overflow-hidden ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all duration-300">
               <Image
@@ -56,10 +56,10 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
                 sizes="(max-width: 640px) 80px, 112px"
               />
             </div>
-            <h5 className="font-bold text-sm sm:text-base text-slate-800 mb-1">
+            <h5 className="font-bold text-sm sm:text-base text-dark mb-1">
               {member.name}
             </h5>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p className="text-xs sm:text-sm text-text leading-relaxed">
               {member.role}
             </p>
             {member.linkedin && (

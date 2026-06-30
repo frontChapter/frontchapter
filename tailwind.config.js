@@ -27,6 +27,7 @@ if (theme.fonts.font_family.secondary) {
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'media',
   content: [
     './src/app/**/*.{js,ts,jsx,tsx}',
     './src/layouts/**/*.{js,ts,jsx,tsx}',
@@ -47,15 +48,21 @@ module.exports = {
     },
     extend: {
       colors: {
-        text: theme.colors.default.text_color.default,
+        text: 'var(--color-text)',
         light: theme.colors.default.text_color.light,
-        dark: theme.colors.default.text_color.dark,
+        dark: 'var(--color-heading)',
+        muted: 'var(--color-muted)',
+        subtle: 'var(--color-subtle)',
         primary: theme.colors.default.theme_color.primary,
-        body: theme.colors.default.theme_color.body,
-        border: theme.colors.default.theme_color.border,
-        'border-secondary': theme.colors.default.theme_color.border_secondary,
-        'theme-light': theme.colors.default.theme_color.theme_light,
+        body: 'var(--color-body)',
+        border: 'var(--color-border)',
+        'border-secondary': 'var(--color-border-secondary)',
+        'theme-light': 'var(--color-theme-light)',
         'theme-dark': theme.colors.default.theme_color.theme_dark,
+        surface: 'var(--color-surface)',
+        'surface-solid': 'var(--color-surface-solid)',
+        'surface-muted': 'var(--color-surface-muted)',
+        header: 'var(--color-header)',
       },
       fontSize: {
         '2xs': '0.625rem',

@@ -238,7 +238,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
         </p>
         <h1
           ref={yearRef}
-          className="font-bold text-4xl sm:text-5xl md:text-7xl text-slate-800 leading-tight bg-gradient-to-r from-slate-800 to-primary bg-clip-text text-transparent"
+          className="font-bold text-4xl sm:text-5xl md:text-7xl text-dark leading-tight bg-gradient-to-r from-slate-800 dark:from-slate-200 to-primary bg-clip-text text-transparent"
         >
           {year}
         </h1>
@@ -253,13 +253,13 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
+              className="stat-item flex-1 text-center md:text-right p-4 relative bg-surface rounded-xl md:bg-transparent"
             >
               <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
               <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
                 {stat.value}
               </h2>
-              <p className="text-slate-600 text-sm sm:text-base md:text-lg">
+              <p className="text-text text-sm sm:text-base md:text-lg">
                 {stat.label}
               </p>
             </div>
@@ -270,7 +270,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
       {/* Conference Section */}
       <div
         ref={conferenceRef}
-        className="w-full py-12 md:py-24 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm"
+        className="w-full py-12 md:py-24 px-6 md:px-10 bg-surface rounded-2xl backdrop-blur-sm shadow-sm"
       >
         <div className="flex flex-col max-w-5xl mx-auto gap-12">
           {/* Title and Description */}
@@ -281,7 +281,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
               </span>
               {conference.title}
             </h2>
-            <p className="text-slate-600 !leading-loose text-base md:text-lg">
+            <p className="text-text !leading-loose text-base md:text-lg">
               {conference.description}
             </p>
           </div>
@@ -375,7 +375,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
       {/* Magazine Section */}
       <div
         ref={magazineRef}
-        className="w-full py-6 md:py-12 px-3 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-8"
+        className="w-full py-6 md:py-12 px-3 md:px-10 bg-surface rounded-2xl backdrop-blur-sm shadow-sm mt-8"
       >
         <div className="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto gap-12">
           {/* Images */}
@@ -443,7 +443,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
               </span>
               {magazine.title}
             </h2>
-            <p className="text-slate-600 mb-8 leading-relaxed text-base md:text-lg">
+            <p className="text-text mb-8 leading-relaxed text-base md:text-lg">
               {magazine.description}
             </p>
             <Link
@@ -459,7 +459,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
       {/* Festival Section */}
       <div
         ref={festivalRef}
-        className="w-full py-12 md:py-24 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-8"
+        className="w-full py-12 md:py-24 px-6 md:px-10 bg-surface rounded-2xl backdrop-blur-sm shadow-sm mt-8"
       >
         <div className="flex flex-col max-w-5xl mx-auto gap-8">
           {/* Title and Description */}
@@ -473,7 +473,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                 ✯
               </span>
             </h2>
-            <p className="text-slate-600 leading-relaxed mb-8 text-base md:text-lg">
+            <p className="text-text leading-relaxed mb-8 text-base md:text-lg">
               {festival.description}
             </p>
             <Link

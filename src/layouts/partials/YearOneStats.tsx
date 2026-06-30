@@ -174,7 +174,7 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         </p>
         <h1
           ref={yearRef}
-          className="font-bold text-4xl sm:text-5xl md:text-7xl text-slate-800 leading-tight bg-gradient-to-r from-slate-800 to-primary bg-clip-text text-transparent"
+          className="font-bold text-4xl sm:text-5xl md:text-7xl text-dark leading-tight bg-gradient-to-r from-slate-800 dark:from-slate-200 to-primary bg-clip-text text-transparent"
         >
           {year}
         </h1>
@@ -188,13 +188,13 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
+              className="stat-item flex-1 text-center md:text-right p-4 relative bg-surface rounded-xl md:bg-transparent"
             >
               <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
               <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
                 {stat.value}
               </h2>
-              <p className="text-slate-600 text-sm sm:text-base md:text-lg">
+              <p className="text-text text-sm sm:text-base md:text-lg">
                 {stat.label}
               </p>
             </div>
@@ -321,26 +321,26 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
         </div>
 
         <div className="flex flex-col gap-8 md:gap-10 w-full mt-4 md:mt-6">
-          <div className="relative bg-white/40 p-4 sm:p-6 rounded-xl md:bg-transparent md:p-0">
+          <div className="relative bg-surface-muted p-4 sm:p-6 rounded-xl md:bg-transparent md:p-0">
             <h4 className="font-bold text-lg sm:text-xl md:text-2xl text-primary mb-2 md:mb-3 inline-flex items-center flex-wrap">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✫
               </span>
               {gatherings.title}
             </h4>
-            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
+            <p className="text-text leading-relaxed text-base md:text-lg">
               {gatherings.description}
             </p>
             <div className="border-t border-[#ffece4]/30 mt-6 mb-6 md:mt-8 md:mb-8" />
           </div>
-          <div className="relative bg-white/40 p-4 sm:p-6 rounded-xl md:bg-transparent md:p-0">
+          <div className="relative bg-surface-muted p-4 sm:p-6 rounded-xl md:bg-transparent md:p-0">
             <h4 className="font-bold text-lg sm:text-xl md:text-2xl text-primary mb-2 md:mb-3 inline-flex items-center flex-wrap">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✫
               </span>
               {conference.title}
             </h4>
-            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
+            <p className="text-text leading-relaxed text-base md:text-lg">
               {conference.description}
             </p>
           </div>
@@ -352,7 +352,6 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
               containerRef={speakersRef}
             />
           )}
-
         </div>
       </div>
 

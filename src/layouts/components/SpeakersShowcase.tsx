@@ -69,7 +69,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                 </div>
                 {speaker.companyLogo ? (
                   <div
-                    className="absolute bottom-0 left-1/2 z-10 flex h-5 min-w-[1.5rem] max-w-[2.5rem] -translate-x-1/2 translate-y-[35%] items-center justify-center rounded-full bg-white px-1.5 shadow-sm ring-2 ring-white sm:h-6 sm:max-w-[2.75rem]"
+                    className="absolute bottom-0 left-1/2 z-10 flex h-5 min-w-[1.5rem] max-w-[2.5rem] -translate-x-1/2 translate-y-[35%] items-center justify-center rounded-full bg-surface-solid px-1.5 shadow-sm ring-2 ring-surface-solid sm:h-6 sm:max-w-[2.75rem]"
                     title={speaker.company}
                   >
                     <Image
@@ -82,7 +82,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                   </div>
                 ) : speaker.company ? (
                   <span
-                    className="absolute bottom-0 left-1/2 z-10 max-w-[5rem] -translate-x-1/2 translate-y-[35%] truncate rounded-full bg-white px-2 py-0.5 text-[8px] font-medium text-slate-600 shadow-sm ring-2 ring-white sm:max-w-[5.5rem] sm:text-[9px]"
+                    className="absolute bottom-0 left-1/2 z-10 max-w-[5rem] -translate-x-1/2 translate-y-[35%] truncate rounded-full bg-surface-solid px-2 py-0.5 text-[8px] font-medium text-text shadow-sm ring-2 ring-surface-solid sm:max-w-[5.5rem] sm:text-[9px]"
                     title={speaker.company}
                   >
                     {speaker.company}
@@ -92,7 +92,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
 
               <div className="flex w-full min-h-[5.5rem] flex-col items-center justify-start gap-1 sm:min-h-[6rem]">
                 <div className="flex items-center justify-center gap-1.5">
-                  <p className="text-balance text-sm font-semibold leading-snug text-slate-800 sm:text-base">
+                  <p className="text-balance text-sm font-semibold leading-snug text-dark sm:text-base">
                     {speaker.name}
                   </p>
                   {speaker.linkedin && (
@@ -101,7 +101,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                       target="_blank"
                       rel="noopener noreferrer nofollow"
                       aria-label={`لینکدین ${speaker.name}`}
-                      className="shrink-0 text-slate-300 transition-colors hover:text-primary"
+                      className="shrink-0 text-subtle transition-colors hover:text-primary"
                     >
                       <IoLogoLinkedin className="h-3.5 w-3.5" />
                     </Link>
@@ -109,7 +109,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                 </div>
 
                 <p
-                  className="text-balance line-clamp-2 min-h-[2.25rem] w-full text-xs leading-snug text-slate-500 sm:min-h-[2.5rem] sm:text-sm"
+                  className="text-balance line-clamp-2 min-h-[2.25rem] w-full text-xs leading-snug text-muted sm:min-h-[2.5rem] sm:text-sm"
                   style={{ textWrap: 'balance' }}
                   title={
                     speaker.company && !speaker.companyLogo
@@ -119,7 +119,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                 >
                   {speaker.role}
                   {!speaker.companyLogo && speaker.company && (
-                    <span className="text-slate-400"> · {speaker.company}</span>
+                    <span className="text-subtle"> · {speaker.company}</span>
                   )}
                 </p>
 

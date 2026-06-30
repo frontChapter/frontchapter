@@ -247,7 +247,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
         </p>
         <h1
           ref={yearRef}
-          className="font-bold text-4xl sm:text-5xl md:text-7xl text-slate-800 leading-tight bg-gradient-to-r from-slate-800 to-primary bg-clip-text text-transparent"
+          className="font-bold text-4xl sm:text-5xl md:text-7xl text-dark leading-tight bg-gradient-to-r from-slate-800 dark:from-slate-200 to-primary bg-clip-text text-transparent"
         >
           {year}
         </h1>
@@ -261,13 +261,13 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="stat-item flex-1 text-center md:text-right p-4 relative bg-white/50 rounded-xl md:bg-transparent"
+              className="stat-item flex-1 text-center md:text-right p-4 relative bg-surface rounded-xl md:bg-transparent"
             >
               <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
               <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
                 {stat.value}
               </h2>
-              <p className="text-slate-600 text-sm sm:text-base md:text-lg">
+              <p className="text-text text-sm sm:text-base md:text-lg">
                 {stat.label}
               </p>
             </div>
@@ -278,7 +278,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       {conference && (
         <div
           ref={conferenceRef}
-          className="w-full py-12 md:py-24 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm"
+          className="w-full py-12 md:py-24 px-6 md:px-10 bg-surface rounded-2xl backdrop-blur-sm shadow-sm"
         >
           <div className="flex flex-col max-w-5xl mx-auto gap-12">
             {/* Title and Description */}
@@ -289,7 +289,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 </span>
                 {conference.title}
               </h2>
-              <p className="text-slate-600 leading-relaxed text-base md:text-lg">
+              <p className="text-text leading-relaxed text-base md:text-lg">
                 {conference.description}
               </p>
             </div>
@@ -387,7 +387,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
               <h2 className="font-bold text-2xl md:text-3xl text-[#FF5C39]">
                 {communityCollaboration.title}
               </h2>
-              <p className="text-slate-600 text-sm md:text-base max-w-2xl mx-auto mt-5 leading-loose">
+              <p className="text-text text-sm md:text-base max-w-2xl mx-auto mt-5 leading-loose">
                 {communityCollaboration.description}
               </p>
             </div>
@@ -397,7 +397,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
               {communityCollaboration.collaborations.map((collab, index) => (
                 <div
                   key={index}
-                  className="group bg-white rounded-2xl overflow-hidden shadow hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-1"
+                  className="group bg-surface-solid rounded-2xl overflow-hidden shadow hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-1"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
@@ -422,7 +422,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                   </div>
 
                   <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="font-bold text-xl text-right mb-4 text-slate-800 group-hover:text-[#FF5C39] transition-colors">
+                    <h3 className="font-bold text-xl text-right mb-4 text-dark group-hover:text-[#FF5C39] transition-colors">
                       <span className="ml-2" style={{ color: collab.color }}>
                         ◆
                       </span>
@@ -431,14 +431,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
 
                     <div className="flex items-center mt-auto mb-4">
                       <div className="mr-3 text-right flex-grow">
-                        <span className="text-slate-500 text-sm">
-                          ارائه‌دهنده
-                        </span>
-                        <p className="font-medium text-slate-700">
+                        <span className="text-muted text-sm">ارائه‌دهنده</span>
+                        <p className="font-medium text-dark">
                           {collab.presenter}
                         </p>
                       </div>
-                      <div className="bg-slate-100 p-2 rounded-full">
+                      <div className="bg-theme-light p-2 rounded-full">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -492,7 +490,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       {/* Birthday Section */}
       <div
         ref={birthdayRef}
-        className="w-full py-8 md:py-14 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm"
+        className="w-full py-8 md:py-14 px-6 md:px-10 bg-surface rounded-2xl backdrop-blur-sm shadow-sm"
       >
         <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Title and Description */}
@@ -503,7 +501,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
               </span>
               {birthday.title}
             </h2>
-            <p className="text-slate-600 leading-relaxed text-base md:text-lg py-4">
+            <p className="text-text leading-relaxed text-base md:text-lg py-4">
               {birthday.description}
             </p>
           </div>
@@ -550,7 +548,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       {/* Events Section */}
       <div
         ref={eventsRef}
-        className="w-full py-8 md:py-14 px-6 md:px-10 bg-white/50 rounded-2xl backdrop-blur-sm shadow-sm mt-5"
+        className="w-full py-8 md:py-14 px-6 md:px-10 bg-surface rounded-2xl backdrop-blur-sm shadow-sm mt-5"
       >
         <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Events Grid */}
@@ -607,7 +605,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         <h3 className="font-bold text-xl md:text-2xl text-primary mb-5">
                           {event.title}
                         </h3>
-                        <p className="text-slate-600 text-base md:text-lg">
+                        <p className="text-text text-base md:text-lg">
                           {event.description}
                         </p>
                       </div>
@@ -629,7 +627,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         <h3 className="font-bold text-xl md:text-2xl text-primary mb-5">
                           {event.title}
                         </h3>
-                        <p className="text-slate-600 text-base md:text-lg">
+                        <p className="text-text text-base md:text-lg">
                           {event.description}
                         </p>
                       </div>
