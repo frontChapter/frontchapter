@@ -69,20 +69,20 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                 </div>
                 {speaker.companyLogo ? (
                   <div
-                    className="absolute -bottom-1 left-1/2 z-10 flex h-7 min-w-[1.75rem] max-w-[2.75rem] -translate-x-1/2 items-center justify-center rounded-full bg-white px-1.5 shadow ring-2 ring-white sm:h-8 sm:max-w-[3rem]"
+                    className="absolute bottom-0 left-1/2 z-10 flex h-5 min-w-[1.5rem] max-w-[2.5rem] -translate-x-1/2 translate-y-[35%] items-center justify-center rounded-full bg-white px-1.5 shadow-sm ring-2 ring-white sm:h-6 sm:max-w-[2.75rem]"
                     title={speaker.company}
                   >
                     <Image
                       src={speaker.companyLogo}
                       alt={speaker.company ?? ''}
-                      width={32}
-                      height={32}
-                      className="h-4 w-auto max-h-4 max-w-[2rem] object-contain sm:max-h-[1.125rem] sm:max-w-[2.25rem]"
+                      width={28}
+                      height={28}
+                      className="h-3 w-auto max-w-[2rem] object-contain sm:h-3.5 sm:max-w-[2.25rem]"
                     />
                   </div>
                 ) : speaker.company ? (
                   <span
-                    className="absolute -bottom-1 left-1/2 z-10 max-w-[5.5rem] -translate-x-1/2 truncate rounded-full bg-white px-2 py-0.5 text-[9px] font-medium text-slate-600 shadow ring-2 ring-white sm:max-w-[6rem] sm:text-[10px]"
+                    className="absolute bottom-0 left-1/2 z-10 max-w-[5rem] -translate-x-1/2 translate-y-[35%] truncate rounded-full bg-white px-2 py-0.5 text-[8px] font-medium text-slate-600 shadow-sm ring-2 ring-white sm:max-w-[5.5rem] sm:text-[9px]"
                     title={speaker.company}
                   >
                     {speaker.company}

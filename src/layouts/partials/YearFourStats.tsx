@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
 import ImageLightbox from '../components/ImageLightbox';
+import SpeakersShowcase, { Speaker } from '../components/SpeakersShowcase';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearFourStatsProps {
@@ -53,6 +54,10 @@ export interface YearFourStatsProps {
       href: string;
     };
   }>;
+  speakers?: {
+    title: string;
+    list: Speaker[];
+  };
 }
 
 const YearFourStats: React.FC<YearFourStatsProps> = ({
@@ -63,12 +68,14 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   communityCollaboration,
   conference,
   events,
+  speakers,
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLHeadingElement>(null);
   const birthdayRef = useRef<HTMLDivElement>(null);
   const conferenceRef = useRef<HTMLDivElement>(null);
+  const speakersRef = useRef<HTMLDivElement>(null);
   const eventsRef = useRef<HTMLDivElement>(null);
 
   // Create lightbox for conference images
@@ -163,6 +170,25 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
             duration: 0.8,
             scrollTrigger: {
               trigger: conferenceRef.current,
+              start: 'top bottom',
+            },
+          }
+        );
+      }
+
+      const speakerCards =
+        speakersRef.current?.querySelectorAll('.speaker-card');
+      if (speakerCards && speakerCards.length) {
+        gsap.fromTo(
+          speakerCards,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: speakersRef.current,
               start: 'top bottom',
             },
           }
@@ -339,6 +365,16 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 ))}
               </div>
             </div>
+
+            {speakers && speakers.list.length > 0 && (
+              <SpeakersShowcase
+                title={speakers.title}
+                speakers={speakers.list}
+                containerRef={speakersRef}
+                titleIcon="✯"
+                centered
+              />
+            )}
           </div>
         </div>
       )}
