@@ -11,6 +11,13 @@ import {
 } from './constants';
 import { plainifySync } from './plainify';
 
+export interface ArticleSeoInput {
+  publishedTime?: string;
+  modifiedTime?: string;
+  authors?: string[];
+  tags?: string[];
+}
+
 export interface PageSeoInput {
   title?: string;
   meta_title?: string;
@@ -18,6 +25,9 @@ export interface PageSeoInput {
   image?: string;
   canonical?: string;
   noindex?: boolean;
+  authors?: { name: string; url?: string }[];
+  type?: 'website' | 'article';
+  article?: ArticleSeoInput;
 }
 
 const resolveAbsoluteUrl = (path: string) => {
@@ -36,6 +46,9 @@ export const buildPageMetadata = ({
   image,
   canonical,
   noindex,
+  authors,
+  type = 'website',
+  article,
 }: PageSeoInput = {}): Metadata => {
   const { meta_description } = config.metadata as { meta_description: string };
 
@@ -45,11 +58,37 @@ export const buildPageMetadata = ({
   );
   const ogImage = resolveAbsoluteUrl(image || DEFAULT_OG_IMAGE);
   const canonicalUrl = canonical ? resolveAbsoluteUrl(canonical) : SITE_URL;
+  const pageAuthors = authors ?? [{ name: SITE_NAME }];
+
+  const openGraph: Metadata['openGraph'] = {
+    title: pageTitle,
+    description: pageDescription,
+    url: canonicalUrl,
+    siteName: SITE_NAME,
+    locale: 'fa_IR',
+    type,
+    images: [
+      {
+        url: ogImage,
+        width: OG_IMAGE_WIDTH,
+        height: OG_IMAGE_HEIGHT,
+        alt: pageTitle,
+      },
+    ],
+    ...(type === 'article' && article
+      ? {
+          publishedTime: article.publishedTime,
+          modifiedTime: article.modifiedTime,
+          authors: article.authors,
+          tags: article.tags,
+        }
+      : {}),
+  };
 
   return {
     title: pageTitle,
     description: pageDescription,
-    authors: [{ name: SITE_NAME }],
+    authors: pageAuthors,
     metadataBase: new URL(SITE_URL),
     alternates: {
       canonical: canonicalUrl,
@@ -57,22 +96,7 @@ export const buildPageMetadata = ({
     robots: noindex
       ? { index: false, follow: false }
       : { index: true, follow: true },
-    openGraph: {
-      title: pageTitle,
-      description: pageDescription,
-      url: canonicalUrl,
-      siteName: SITE_NAME,
-      locale: 'fa_IR',
-      type: 'website',
-      images: [
-        {
-          url: ogImage,
-          width: OG_IMAGE_WIDTH,
-          height: OG_IMAGE_HEIGHT,
-          alt: pageTitle,
-        },
-      ],
-    },
+    openGraph,
     twitter: {
       card: 'summary_large_image',
       title: pageTitle,

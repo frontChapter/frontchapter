@@ -17,6 +17,146 @@ export interface CommunityEventInput {
 const organizationId = `${SITE_URL}/#organization`;
 const websiteId = `${SITE_URL}/#website`;
 
+const resolveAbsoluteUrl = (path: string) => {
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${SITE_URL}${normalizedPath}`;
+};
+
+export interface BlogPostInput {
+  title: string;
+  description: string;
+  slug: string;
+  image?: string;
+  date: string;
+  author: { name: string; avatar?: string };
+}
+
+export interface BlogListInput {
+  title: string;
+  page?: number;
+}
+
+export const buildBlogPostJsonLd = ({
+  title,
+  description,
+  slug,
+  image,
+  date,
+  author,
+}: BlogPostInput) => {
+  const postUrl = `${SITE_URL}/posts/${slug}/`;
+  const blogUrl = `${SITE_URL}/posts/`;
+  const imageUrl = image ? resolveAbsoluteUrl(image) : undefined;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${postUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'بلاگ',
+            item: blogUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: plainifySync(title),
+            item: postUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'BlogPosting',
+        '@id': `${postUrl}#article`,
+        headline: plainifySync(title),
+        description: plainifySync(description),
+        url: postUrl,
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': postUrl,
+        },
+        datePublished: date,
+        dateModified: date,
+        inLanguage: 'fa-IR',
+        author: {
+          '@type': 'Person',
+          name: author.name,
+          ...(author.avatar
+            ? { image: resolveAbsoluteUrl(author.avatar) }
+            : {}),
+        },
+        publisher: {
+          '@id': organizationId,
+        },
+        ...(imageUrl
+          ? {
+              image: {
+                '@type': 'ImageObject',
+                url: imageUrl,
+              },
+            }
+          : {}),
+      },
+    ],
+  };
+};
+
+export const buildBlogListJsonLd = ({ title, page = 1 }: BlogListInput) => {
+  const listUrl =
+    page <= 1 ? `${SITE_URL}/posts/` : `${SITE_URL}/posts/page/${page}/`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${listUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: plainifySync(title),
+            item: listUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'CollectionPage',
+        '@id': `${listUrl}#webpage`,
+        name: plainifySync(title),
+        url: listUrl,
+        inLanguage: 'fa-IR',
+        isPartOf: {
+          '@id': websiteId,
+        },
+        publisher: {
+          '@id': organizationId,
+        },
+      },
+    ],
+  };
+};
+
 export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
   const { logo } = config.site as { logo: string };
   const { email, location } = config.contact_info as {

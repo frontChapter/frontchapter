@@ -2,11 +2,15 @@ import Banner from '@/src/layouts/components/Banner';
 import Cta from '@/src/layouts/components/Cta';
 import GSAPWrapper from '@/src/layouts/components/GSAPWrapper';
 import Pagination from '@/src/layouts/components/Pagination';
+import JsonLd from '@/src/layouts/partials/JsonLd';
 import Post from '@/src/layouts/partials/Post';
 import config from '@config/config.json';
 import { getListPage, getSinglePage } from '@lib/contentParser';
+import {
+  buildBlogIndexJsonLd,
+  buildBlogListPageMetadata,
+} from '@lib/seo/blogSeo';
 import { sortByDate } from '@lib/utils/sortFunctions';
-import { buildPageMetadata } from '@lib/seo/metadata';
 import type { Metadata } from 'next';
 import { JSX } from 'react';
 
@@ -45,14 +49,20 @@ interface ListPageType {
   };
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const postIndex: ListPageType = await getListPage(
     `src/content/${blog_folder}/_index.md`
   );
+  const currentPage = parseInt(params.slug, 10);
 
-  return buildPageMetadata({
-    title: postIndex.frontmatter.title,
-  });
+  return buildBlogListPageMetadata(
+    postIndex.frontmatter.title || 'بلاگ',
+    currentPage
+  );
 }
 
 const BlogPagination = async ({
@@ -100,27 +110,31 @@ const BlogPagination = async ({
   const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
   const { frontmatter } = postIndex;
   const { title } = frontmatter;
+  const jsonLd = buildBlogIndexJsonLd(title || 'بلاگ', currentPage);
 
   return (
-    <GSAPWrapper>
-      <section className="section pt-0">
-        <Banner title={title || 'Blog'} />
-        <div className="container">
-          <div className="grid grid-cols-1 gap-4 pb-12 pt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
-            {currentPosts.map((post, i) => (
-              <Post key={`key-${i}`} post={post} />
-            ))}
+    <>
+      <JsonLd data={jsonLd} />
+      <GSAPWrapper>
+        <section className="section pt-0">
+          <Banner title={title || 'Blog'} />
+          <div className="container">
+            <div className="grid grid-cols-1 gap-4 pb-12 pt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+              {currentPosts.map((post, i) => (
+                <Post key={`key-${i}`} post={post} />
+              ))}
+            </div>
+            <Pagination
+              section={blog_folder}
+              totalPages={totalPages}
+              currentPage={currentPage}
+            />
           </div>
-          <Pagination
-            section={blog_folder}
-            totalPages={totalPages}
-            currentPage={currentPage}
-          />
-        </div>
-      </section>
-      {/* CTA */}
-      <Cta />
-    </GSAPWrapper>
+        </section>
+        {/* CTA */}
+        <Cta />
+      </GSAPWrapper>
+    </>
   );
 };
 
