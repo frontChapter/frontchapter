@@ -24,10 +24,30 @@ interface BannerData {
   video: string;
 }
 
+interface Sponsor {
+  name: string;
+  url: string;
+  logo: string;
+}
+
+interface SponsorsData {
+  title: string;
+  list: Sponsor[];
+}
+
 interface HomeBannerProps {
   banner: BannerData;
-  brands: string[];
+  sponsors: SponsorsData;
 }
+
+const withFrontChapterReferral = (url: string) => {
+  const parsed = new URL(url);
+  parsed.searchParams.set('utm_source', 'frontchapter');
+  parsed.searchParams.set('utm_medium', 'referral');
+  parsed.searchParams.set('utm_campaign', 'sponsors');
+  parsed.searchParams.set('ref', 'frontchapter');
+  return parsed.toString();
+};
 
 const RTL_CIRCLES = [
   {
@@ -107,7 +127,7 @@ const LTR_CIRCLES = [
 
 const HomeBanner: React.FC<HomeBannerProps> = ({
   banner: bannerData,
-  brands,
+  sponsors,
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const circlesRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -322,11 +342,20 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
             <div
               className={`animate ${isRTL ? 'from-left' : 'from-right'} col-12`}
             >
+              <p className="mb-5 text-center text-sm font-medium text-muted md:text-base">
+                {sponsors.title}
+              </p>
               <Swiper
-                loop={true}
-                slidesPerView={3}
+                loop={sponsors.list.length > 4}
+                slidesPerView={2}
                 breakpoints={{
+                  576: {
+                    slidesPerView: 3,
+                  },
                   992: {
+                    slidesPerView: 4,
+                  },
+                  1200: {
                     slidesPerView: 5,
                   },
                 }}
@@ -335,24 +364,52 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                 autoplay={{ delay: 3000 }}
                 dir="ltr"
               >
-                {brands.map((brand: string, index: number) => (
-                  <SwiperSlide
-                    className=" h-20 cursor-pointer px-6 py-6 grayscale  transition hover:grayscale-0 lg:px-10"
-                    key={'brand-' + index}
-                  >
-                    <div className="relative h-full">
-                      <ImageFallback
-                        className="object-contain"
-                        src={brand}
-                        sizes="100vw"
-                        alt=""
-                        fill={true}
-                        priority={true}
-                        fallback={''}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
+                {sponsors.list.map((sponsor, index) => {
+                  const sponsorUrl = withFrontChapterReferral(sponsor.url);
+                  const isRoundedLogo =
+                    sponsor.url.includes('liara.ir') ||
+                    sponsor.url.includes('winatalent.com');
+                  const showName = sponsor.name !== 'XWORK';
+
+                  return (
+                    <SwiperSlide
+                      className="cursor-pointer px-4 py-4 lg:px-6"
+                      key={'sponsor-' + index}
+                    >
+                      <a
+                        href={sponsorUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex h-full items-center justify-center gap-2.5"
+                        dir={isRTL ? 'rtl' : 'ltr'}
+                        aria-label={`${sponsor.name} - ${sponsorUrl}`}
+                      >
+                        <div
+                          className={`relative h-10 w-12 shrink-0 md:h-11 md:w-14${
+                            isRoundedLogo ? ' overflow-hidden rounded-xl' : ''
+                          }`}
+                        >
+                          <ImageFallback
+                            className={`object-contain${
+                              isRoundedLogo ? ' rounded-xl' : ''
+                            }`}
+                            src={sponsor.logo}
+                            sizes="56px"
+                            alt={`لوگوی ${sponsor.name} - ${sponsorUrl}`}
+                            fill={true}
+                            priority={index < 5}
+                            fallback=""
+                          />
+                        </div>
+                        {showName && (
+                          <span className="max-w-[5rem] text-center text-xs font-medium leading-tight text-text sm:max-w-none sm:text-sm">
+                            {sponsor.name}
+                          </span>
+                        )}
+                      </a>
+                    </SwiperSlide>
+                  );
+                })}
               </Swiper>
             </div>
           </div>

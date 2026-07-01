@@ -16,7 +16,7 @@ const Home = async () => {
   const { frontmatter } = homepage;
   const {
     banner,
-    brands,
+    sponsors,
     storySection,
     yearTwo,
     yearThree,
@@ -27,7 +27,7 @@ const Home = async () => {
   return (
     <GSAPWrapper>
       <SeoMeta title="فرانت‌چپتر | جامعه توسعه‌دهندگان فرانت‌اند ایران" />
-      <HomeBanner banner={banner} brands={brands} />
+      <HomeBanner banner={banner} sponsors={sponsors} />
       <StorySection {...storySection} />
       <YearOneStats
         title={frontmatter.yearOne.title}

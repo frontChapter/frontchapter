@@ -378,17 +378,52 @@ yearFour:
         label: 'اطلاعات بیشتر'
         href: '#'
 
-##brands
-brands:
-  - /images/brands/01-colored.png
-  - /images/brands/02-colored.png
-  - /images/brands/03-colored.png
-  - /images/brands/04-colored.png
-  - /images/brands/05-colored.png
-  - /images/brands/06-colored.png
-  - /images/brands/04-colored.png
-  - /images/brands/05-colored.png
-  - /images/brands/06-colored.png
+##sponsors
+sponsors:
+  title: 'حامیان فرانت‌چپتر تا به امروز'
+  list:
+    - name: 'شب'
+      url: 'https://shab.ir'
+      logo: '/images/sponsors/shab.png'
+    - name: 'لیارا'
+      url: 'https://liara.ir'
+      logo: '/images/sponsors/liara.png'
+    - name: 'دریا سرور'
+      url: 'https://daryaserver.ir'
+      logo: '/images/sponsors/daryaserver.png'
+    - name: 'مرکز نوآوری درخت آبی'
+      url: 'https://bluetree.ic'
+      logo: '/images/sponsors/bluetree.png'
+    - name: 'کوئرا'
+      url: 'https://quera.org'
+      logo: '/images/sponsors/quera.png'
+    - name: 'رکلا'
+      url: 'https://rokla.ir'
+      logo: '/images/sponsors/rokla.png'
+    - name: 'یکتانت'
+      url: 'https://www.yektanet.com'
+      logo: '/images/sponsors/yektanet.png'
+    - name: 'پارس‌کدرز'
+      url: 'https://parscoders.com'
+      logo: '/images/sponsors/parscoders.png'
+    - name: 'گیکتوری'
+      url: 'https://geektori.ir'
+      logo: '/images/sponsors/geektori.png'
+    - name: 'WINaTALENT'
+      url: 'https://winatalent.com'
+      logo: '/images/sponsors/winatalent.jpg'
+    - name: 'XWORK'
+      url: 'https://xwork.ir'
+      logo: '/images/sponsors/xwork.png'
+    - name: 'رانفلر'
+      url: 'https://runflare.com'
+      logo: '/images/sponsors/runflare.png'
+    - name: 'منتینو'
+      url: 'https://menteeno.app'
+      logo: '/images/sponsors/menteeno.png'
+    - name: 'پیام‌رسان'
+      url: 'https://payam-resan.com'
+      logo: '/images/sponsors/payam-resan.png'
 
 #features
 features:
