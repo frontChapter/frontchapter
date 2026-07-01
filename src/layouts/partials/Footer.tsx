@@ -4,6 +4,7 @@ import social from '@config/social.json';
 import { markdownify } from '@lib/utils/textConverter';
 import Link from 'next/link';
 import React from 'react';
+import { IoLocationOutline, IoMailOutline, IoCallOutline } from 'react-icons/io5';
 import { useRTL } from '../../hooks/useRTL';
 import Logo from '../components/Logo';
 import SocialFixed from '../components/SocialFixed';
@@ -31,8 +32,8 @@ interface ContactInfo {
 interface Config {
   params: ConfigParams;
   contact_info: ContactInfo;
-  // Social expects an object, not array
 }
+
 export interface SocialSource {
   facebook?: string;
   twitter?: string;
@@ -70,78 +71,90 @@ const Footer: React.FC = () => {
   const { copyright, footer_content } = (config as Config).params;
   const { email, phone, location } = (config as Config).contact_info;
   const { isRTL } = useRTL();
+
   return (
-    <footer className="" dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="container">
-        <div
-          className={`row border-y border-border py-12${isRTL ? ' flex-row-reverse' : ''}`}
-          style={isRTL ? { direction: 'rtl', textAlign: 'right' } : {}}
-        >
-          <div
-            className={`animate md:col-6 lg:col-3${isRTL ? ' text-right' : ''}`}
-          >
-            <Logo />
-            {markdownify({
-              content: footer_content,
-              tag: 'p',
-              className: 'mt-3',
-            })}
-          </div>
-          <div
-            className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? ' text-right' : ''}`}
-          >
-            <h3 className="h5">شبکه‌های اجتماعی</h3>
-            <div className="mt-5">
-              {email && (
-                <div className="mb-3">
-                  <Link href={`mailto:${email}`}>{email}</Link>
-                </div>
-              )}
-              {/* social icons */}
-              <SocialFixed
-                source={social as SocialSource}
-                className="social-icons mt-5"
-              />
+    <footer className="site-footer" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="site-footer__main">
+        <div className="container">
+          <div className="row g-4 g-lg-5 py-12 lg:py-16">
+            {/* Brand + social */}
+            <div className="animate col-12 lg:col-5">
+              <Logo />
+              {markdownify({
+                content: footer_content,
+                tag: 'p',
+                className: 'mt-4 max-w-sm leading-relaxed text-muted',
+              })}
+              <div className="mt-8">
+                <p className="footer-section-title">شبکه‌های اجتماعی</p>
+                <SocialFixed
+                  source={social as SocialSource}
+                  className="social-icons mt-4"
+                />
+              </div>
+            </div>
+
+            {/* Quick links */}
+            <div className="animate col-6 lg:col-3 lg:mt-0 mt-8">
+              <p className="footer-section-title">لینک‌های سریع</p>
+              <ul className="footer-links mt-4">
+                {(menu as FooterMenu).footer.map((item) => (
+                  <li key={item.name}>
+                    <Link href={item.url} className="footer-link">
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div className="animate col-6 lg:col-4 lg:mt-0 mt-8">
+              <p className="footer-section-title">ارتباط با ما</p>
+              <ul className="footer-contact mt-4">
+                {location && (
+                  <li className="footer-contact__item">
+                    <IoLocationOutline
+                      className="footer-contact__icon"
+                      aria-hidden
+                    />
+                    <span>{markdownify({ content: location })}</span>
+                  </li>
+                )}
+                {email && (
+                  <li className="footer-contact__item">
+                    <IoMailOutline
+                      className="footer-contact__icon"
+                      aria-hidden
+                    />
+                    <Link href={`mailto:${email}`} className="footer-link">
+                      {email}
+                    </Link>
+                  </li>
+                )}
+                {phone && (
+                  <li className="footer-contact__item">
+                    <IoCallOutline
+                      className="footer-contact__icon"
+                      aria-hidden
+                    />
+                    <Link href={`tel:${phone}`} className="footer-link">
+                      {phone}
+                    </Link>
+                  </li>
+                )}
+              </ul>
             </div>
           </div>
-          <div
-            className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? ' text-right' : ''}`}
-          >
-            <h3 className="h5">لینک‌های سریع</h3>
-            {/* footer menu */}
-            <ul className="mt-5 leading-10">
-              {(menu as FooterMenu).footer.map((menu) => (
-                <li key={menu.name}>
-                  <Link
-                    href={menu.url}
-                    className=" hover:text-primary hover:underline"
-                  >
-                    {menu.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div
-            className={`animate mt-8 md:col-6 lg:col-3 lg:mt-0${isRTL ? ' text-right' : ''}`}
-          >
-            <h3 className="h5">ارتباط با ما</h3>
-            <ul className="mt-5 leading-10">
-              <li>{location && markdownify({ content: location })}</li>
-              {phone && (
-                <li>
-                  <Link href={`tel:${phone}`}>{phone}</Link>
-                </li>
-              )}
-            </ul>
-          </div>
         </div>
-        {/* copyright */}
-        <div className=" py-6 text-center">
+      </div>
+
+      <div className="site-footer__bar">
+        <div className="container py-5 text-center">
           {markdownify({
             content: copyright,
             tag: 'p',
-            className: 'footer-copy-write',
+            className: 'footer-copy-write text-sm text-subtle',
           })}
         </div>
       </div>

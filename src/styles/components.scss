@@ -19,13 +19,16 @@
 
 // social icon style
 .social-icons {
-  // Using flex with gap instead of space-x for better RTL support
+  @apply w-fit grid grid-cols-3 gap-2.5;
+
   li {
     a {
-      @apply block h-11 w-11 rounded-full border text-center transition-all duration-300 hover:border-primary hover:text-primary;
+      @apply flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-solid text-muted;
+      @apply transition-all duration-300;
+      @apply hover:border-primary hover:bg-primary hover:text-white hover:shadow-[0_4px_14px_rgba(254,96,25,0.25)];
 
       svg {
-        @apply m-auto h-11;
+        @apply h-[1.125rem] w-[1.125rem];
       }
     }
   }
@@ -250,6 +253,47 @@
 }
 
 //footer
+.site-footer {
+  @apply mt-8;
+
+  &__main {
+    @apply border-t border-border-secondary bg-gradient-to-b from-theme-light to-body;
+  }
+
+  &__bar {
+    @apply border-t border-border;
+    background-color: color-mix(in srgb, var(--color-theme-light) 40%, transparent);
+  }
+}
+
+.footer-section-title {
+  @apply text-sm font-semibold text-dark;
+}
+
+.footer-links {
+  @apply space-y-3;
+
+  li {
+    @apply leading-normal;
+  }
+}
+
+.footer-link {
+  @apply text-muted transition-colors duration-200 hover:text-primary;
+}
+
+.footer-contact {
+  @apply space-y-4;
+
+  &__item {
+    @apply flex items-start gap-3 text-sm leading-relaxed text-muted;
+  }
+
+  &__icon {
+    @apply mt-0.5 shrink-0 text-lg text-primary;
+  }
+}
+
 .footer-copy-write {
   a {
     @apply underline;

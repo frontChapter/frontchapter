@@ -22,9 +22,9 @@ interface SocialProps {
 const SocialFixed = ({ source, className }: SocialProps) => {
   const { instagram, youtube, linkedin, github, email, telegram } = source;
 
-  // For RTL support, use flex with gap instead of space-x
+  // 3-column grid keeps rows balanced (3 icons per row)
   return (
-    <ul className={`${className} flex gap-4 flex-wrap`}>
+    <ul className={className}>
       {linkedin && (
         <li>
           <a
