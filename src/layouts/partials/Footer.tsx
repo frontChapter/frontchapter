@@ -118,7 +118,7 @@ const Footer: React.FC = () => {
                       className="footer-contact__icon"
                       aria-hidden
                     />
-                    <span>{markdownify({ content: location })}</span>
+                    {markdownify({ content: location })}
                   </li>
                 )}
                 {email && (
