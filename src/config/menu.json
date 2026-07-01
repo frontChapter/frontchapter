@@ -13,21 +13,6 @@
       "url": "/posts"
     },
     {
-      "name": "صفحات",
-      "url": "",
-      "hasChildren": true,
-      "children": [
-        {
-          "name": "المان‌ها",
-          "url": "/elements"
-        },
-        {
-          "name": "قوانین و مقررات",
-          "url": "/terms-policy"
-        }
-      ]
-    },
-    {
       "name": "تماس با ما",
       "url": "/contact"
     }
