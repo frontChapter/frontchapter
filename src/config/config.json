@@ -1,6 +1,6 @@
 {
   "site": {
-    "title": "فرانت‌چپتر | کامیونیتی فرانت‌اند ایران",
+    "title": "فرانت چپتر | جامعه و کامیونتی فرانت‌اند ایران",
     "base_url": "/",
     "favicon": "/images/favicon.png",
     "logo": "/images/logo.svg",
@@ -37,7 +37,7 @@
   "metadata": {
     "meta_author": "frontchapter",
     "meta_image": "/images/logo.svg",
-    "meta_description": "جامعه‌ی فرانت اند ایران، فرانت‌چپتر"
+    "meta_description": "کامیونتی فرانت‌اند ایران؛ همایش‌ها، دورهمی‌ها و رویدادهای تخصصی برای برنامه‌نویسان وب. آموزش فرانت‌اند و شبکه‌سازی حرفه‌ای."
   },
 
   "call_to_action": {

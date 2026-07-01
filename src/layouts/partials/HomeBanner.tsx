@@ -4,14 +4,12 @@ import { gsap } from '@lib/gsap';
 import { markdownify } from '@lib/utils/textConverter';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
-import { Autoplay } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import React from 'react';
 import { useRTL } from '../../hooks/useRTL';
 import Circle from '../components/Circle';
-import ImageFallback from '../components/ImageFallback';
 import LazyVideo from '../components/LazyVideo';
+import SponsorCarousel, { type Sponsor } from '../components/SponsorCarousel';
 
 interface BannerData {
   title: string;
@@ -22,12 +20,6 @@ interface BannerData {
   };
   image: string;
   video: string;
-}
-
-interface Sponsor {
-  name: string;
-  url: string;
-  logo: string;
 }
 
 interface SponsorsData {
@@ -323,7 +315,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                     ref={videoRef}
                     className="banner-video mx-auto w-full max-w-4xl opacity-0 lg:max-w-5xl xl:max-w-[1070px]"
                   >
-                    <div className="banner-video-frame overflow-hidden rounded-2xl border-[6px] border-white md:rounded-3xl md:border-[12px] lg:border-[16px]">
+                    <div className="banner-video-frame aspect-video overflow-hidden rounded-2xl border-[6px] border-white md:rounded-3xl md:border-[12px] lg:border-[16px]">
                       <LazyVideo
                         className="block h-auto w-full"
                         src={bannerData.video}
@@ -353,72 +345,11 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
               >
                 {sponsors.title}
               </p>
-              <Swiper
-                loop={sponsors.list.length > 4}
-                slidesPerView={2}
-                breakpoints={{
-                  576: {
-                    slidesPerView: 3,
-                  },
-                  992: {
-                    slidesPerView: 4,
-                  },
-                  1200: {
-                    slidesPerView: 5,
-                  },
-                }}
-                spaceBetween={20}
-                modules={[Autoplay]}
-                autoplay={{ delay: 3000 }}
-                dir={isRTL ? 'rtl' : 'ltr'}
-              >
-                {sponsors.list.map((sponsor) => {
-                  const sponsorUrl = withFrontChapterReferral(sponsor.url);
-                  const isRoundedLogo =
-                    sponsor.url.includes('liara.ir') ||
-                    sponsor.url.includes('winatalent.com');
-                  const showName = sponsor.name !== 'XWORK';
-
-                  return (
-                    <SwiperSlide
-                      className="cursor-pointer px-4 py-4 lg:px-6"
-                      key={sponsor.name}
-                    >
-                      <a
-                        href={sponsorUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex min-h-12 h-full items-center justify-center gap-2.5"
-                        dir={isRTL ? 'rtl' : 'ltr'}
-                        aria-label={`وب‌سایت ${sponsor.name}`}
-                      >
-                        <div
-                          className={`relative h-10 w-12 shrink-0 md:h-11 md:w-14${
-                            isRoundedLogo ? ' overflow-hidden rounded-xl' : ''
-                          }`}
-                        >
-                          <ImageFallback
-                            className={`object-contain${
-                              isRoundedLogo ? ' rounded-xl' : ''
-                            }`}
-                            src={sponsor.logo}
-                            sizes="56px"
-                            alt={`لوگوی ${sponsor.name}`}
-                            fill={true}
-                            priority={sponsors.list.indexOf(sponsor) < 5}
-                            fallback=""
-                          />
-                        </div>
-                        {showName && (
-                          <span className="max-w-[5rem] text-center text-xs font-medium leading-tight text-text sm:max-w-none sm:text-sm">
-                            {sponsor.name}
-                          </span>
-                        )}
-                      </a>
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper>
+              <SponsorCarousel
+                sponsors={sponsors.list}
+                isRTL={isRTL}
+                withReferral={withFrontChapterReferral}
+              />
             </div>
           </aside>
         </div>

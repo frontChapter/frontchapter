@@ -1,4 +1,6 @@
 'use client';
+
+import { externalLinkProps } from '@lib/seo/links';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -88,7 +90,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
   // Create lightbox for magazine images
   const magazineImages = magazine.images.map((img) => ({
     src: img.src,
-    alt: magazine.title,
+    alt: `${img.label} — هویج‌تایمز فرانت‌چپتر`,
     label: img.label,
   }));
   const magazineLightbox = useImageLightbox(magazineImages);
@@ -107,6 +109,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
     <section
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center gap-8 md:gap-14 py-10 md:py-20 relative overflow-hidden px-4 md:px-6"
+      aria-labelledby="year-three-heading"
     >
       <SectionDecorations />
 
@@ -116,6 +119,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
         stats={stats}
         yearRef={yearRef}
         statsRef={statsRef}
+        headingId="year-three-heading"
       />
 
       {/* Conference Section */}
@@ -126,12 +130,12 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
         <div className="flex flex-col max-w-5xl mx-auto gap-12">
           {/* Title and Description */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
+            <h3 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✯
               </span>
               {conference.title}
-            </h2>
+            </h3>
             <p className="text-text !leading-loose text-base md:text-lg">
               {conference.description}
             </p>
@@ -249,7 +253,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                   <Image
                     src={image.src}
-                    alt={magazine.title}
+                    alt={`${image.label} — هویج‌تایمز فرانت‌چپتر`}
                     width={480}
                     height={700}
                     className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
@@ -294,17 +298,18 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
             <p className="uppercase font-medium text-base text-primary mb-6 tracking-wider">
               {magazine.subtitle}
             </p>
-            <h2 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap">
+            <h3 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✯
               </span>
               {magazine.title}
-            </h2>
+            </h3>
             <p className="text-text mb-8 leading-relaxed text-base md:text-lg">
               {magazine.description}
             </p>
             <Link
               href={magazine.link.href}
+              {...externalLinkProps(magazine.link.href)}
               className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
             >
               {magazine.link.label}
@@ -321,7 +326,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
         <div className="flex flex-col max-w-5xl mx-auto gap-8">
           {/* Title and Description */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="font-bold text-3xl md:text-5xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
+            <h3 className="font-bold text-3xl md:text-5xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
               <span className="text-3xl md:text-4xl text-primary/40 me-3">
                 ✯
               </span>
@@ -329,12 +334,13 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
               <span className="text-3xl md:text-4xl text-primary/40 ms-3">
                 ✯
               </span>
-            </h2>
+            </h3>
             <p className="text-text leading-relaxed mb-8 text-base md:text-lg">
               {festival.description}
             </p>
             <Link
               href={festival.link.href}
+              {...externalLinkProps(festival.link.href)}
               className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
             >
               {festival.link.label}
@@ -374,7 +380,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                         <div className="w-20 h-20 mx-auto mb-2">
                           <Image
                             src="/images/white-logo.svg"
-                            alt="جام قهرمانی"
+                            alt="جام قهرمانی جشنواره فرانت‌چپتر"
                             width={80}
                             height={80}
                             className="w-full h-full object-contain"
@@ -433,7 +439,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                         <div className="flex items-center mt-4 space-x-3 rtl:space-x-reverse">
                           <Image
                             src="/images/white-logo.svg"
-                            alt="Logo"
+                            alt="لوگوی فرانت‌چپتر — جشنواره من قهرمانم"
                             width={40}
                             height={40}
                             className="object-contain"

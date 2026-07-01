@@ -35,7 +35,8 @@ function Cta() {
               src="/images/wave.svg"
               fill={true}
               sizes="100vw"
-              alt="bg wave"
+              alt=""
+              aria-hidden="true"
               fallback={''}
             />
             <Circle

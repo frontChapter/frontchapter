@@ -51,7 +51,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
     <section
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center gap-6 py-8 md:py-16 relative overflow-hidden px-4 md:px-6"
-      aria-labelledby={`year-${year}-memories`}
+      aria-labelledby="year-two-heading"
     >
       <SectionDecorations variant="compact" />
 
@@ -61,6 +61,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
         stats={stats}
         yearRef={yearRef}
         statsRef={statsRef}
+        headingId="year-two-heading"
       />
 
       <article className="w-full py-12 px-6 bg-surface rounded-xl shadow-sm">
@@ -88,8 +89,8 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
               {memories.subtitle}
             </p>
             <SectionHeading
-              as="h2"
-              id={`year-${year}-memories`}
+              as="h3"
+              id="year-two-memories"
               className="text-dark mb-6"
             >
               {memories.title}

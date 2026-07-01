@@ -44,6 +44,7 @@ const ExecutiveTeam: React.FC<ExecutiveTeamProps> = ({ title, list }) => {
     <section
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center py-10 md:py-16 px-4 md:px-6"
+      aria-labelledby="executive-team-heading"
     >
       <div className="w-full max-w-5xl bg-surface rounded-2xl backdrop-blur-sm shadow-sm px-6 md:px-10 py-8 md:py-12">
         <TeamShowcase
@@ -51,6 +52,8 @@ const ExecutiveTeam: React.FC<ExecutiveTeamProps> = ({ title, list }) => {
           members={list}
           containerRef={teamRef}
           titleIcon="✯"
+          titleAs="h2"
+          titleId="executive-team-heading"
           centered
         />
       </div>

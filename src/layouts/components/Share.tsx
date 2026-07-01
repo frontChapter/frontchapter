@@ -43,6 +43,7 @@ const Share = ({ title, description, slug, className }: ShareProps) => {
         <a
           aria-label="linkedin share button"
           href={`https://www.linkedin.com/shareArticle?mini=true&url=${base_url}/${slug}&title=${title}&summary=${description}&source=${base_url}`}
+          target="_blank"
           rel="noreferrer noopener"
         >
           <IoLogoLinkedin />

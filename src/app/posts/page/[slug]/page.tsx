@@ -3,9 +3,10 @@ import Cta from '@/src/layouts/components/Cta';
 import GSAPWrapper from '@/src/layouts/components/GSAPWrapper';
 import Pagination from '@/src/layouts/components/Pagination';
 import Post from '@/src/layouts/partials/Post';
-import SeoMeta from '@/src/layouts/partials/SeoMeta';
 import config from '@config/config.json';
 import { getListPage, getSinglePage } from '@lib/contentParser';
+import { buildPageMetadata } from '@lib/seo/metadata';
+import type { Metadata } from 'next';
 import { JSX } from 'react';
 
 const { blog_folder } = config.settings as {
@@ -41,6 +42,16 @@ interface ListPageType {
     title?: string;
     [key: string]: unknown;
   };
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const postIndex: ListPageType = await getListPage(
+    `src/content/${blog_folder}/_index.md`
+  );
+
+  return buildPageMetadata({
+    title: postIndex.frontmatter.title,
+  });
 }
 
 const BlogPagination = async ({
@@ -90,7 +101,6 @@ const BlogPagination = async ({
 
   return (
     <GSAPWrapper>
-      <SeoMeta title={title} />
       <section className="section pt-0">
         <Banner title={title || 'Blog'} />
         <div className="container">

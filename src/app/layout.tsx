@@ -15,7 +15,7 @@ interface RootLayoutProps {
 
 function LayoutContent({ children }: RootLayoutProps) {
   return (
-    <html suppressHydrationWarning={true} lang="fa-IR" dir="rtl">
+    <html suppressHydrationWarning={true} lang="fa" dir="rtl">
       <head>
         {/* responsive meta */}
         <meta

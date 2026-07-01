@@ -12,6 +12,7 @@ export interface YearStatsShowcaseProps {
   stats: Stat[];
   yearRef?: React.RefObject<HTMLHeadingElement | null>;
   statsRef?: React.RefObject<HTMLDivElement | null>;
+  headingId?: string;
   className?: string;
 }
 
@@ -55,18 +56,20 @@ const YearStatsShowcase: React.FC<YearStatsShowcaseProps> = ({
   stats,
   yearRef,
   statsRef,
+  headingId,
   className,
 }) => (
   <header className={clsx('w-full max-w-5xl', className)}>
     <div className="mb-6 flex flex-col items-center justify-center gap-2 text-center md:mb-8 md:gap-3">
-      <p className="font-medium text-sm tracking-wider text-primary sm:text-base">
-        {title}
-      </p>
       <h2
         ref={yearRef}
+        id={headingId}
         className="bg-gradient-to-r from-slate-800 to-primary bg-clip-text font-bold text-4xl leading-tight text-transparent dark:from-slate-200 sm:text-5xl md:text-7xl"
       >
-        {year}
+        <span className="mb-1 block font-medium text-sm tracking-wider text-primary sm:text-base">
+          {title}
+        </span>
+        <span className="block">{year}</span>
       </h2>
     </div>
 

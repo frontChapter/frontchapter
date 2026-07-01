@@ -10,7 +10,6 @@ import ImageFallback from './components/ImageFallback';
 import DisqussEmbed from './partials/DisqussEmbed';
 import type { PostType } from './partials/Post';
 import Post from './partials/Post';
-import SeoMeta from './partials/SeoMeta';
 
 interface Author {
   name: string;
@@ -41,13 +40,11 @@ const PostSingle: React.FC<PostSingleProps> = ({
   content,
   recentPosts,
 }) => {
-  let { description, title, date, image, author } = frontmatter;
-  description = description ? description : content.slice(0, 120);
+  let { title, date, image, author } = frontmatter;
   const { disqus } = config as { disqus: { enable: boolean } };
 
   return (
     <>
-      <SeoMeta title={title} description={description} image={image} />
       <section className="section pt-0">
         <div className="container">
           <article>

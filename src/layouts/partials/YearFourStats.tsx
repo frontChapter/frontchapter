@@ -1,4 +1,6 @@
 'use client';
+
+import { externalLinkProps } from '@lib/seo/links';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useRef } from 'react';
@@ -92,7 +94,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   const birthdayImages = [
     {
       src: birthday.image,
-      alt: birthday.title,
+      alt: `${birthday.title} — فرانت‌چپتر سال ${year}`,
       label: birthday.title,
     },
   ];
@@ -101,7 +103,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   // Create lightbox for events images
   const eventsImages = events.map((event) => ({
     src: event.image,
-    alt: event.title,
+    alt: `${event.title} — رویداد فرانت‌چپتر سال ${year}`,
     label: event.title,
   }));
   const eventsLightbox = useImageLightbox(eventsImages);
@@ -120,6 +122,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
     <section
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center gap-5 md:gap-8 py-6 md:py-12 relative overflow-hidden px-4 md:px-6"
+      aria-labelledby="year-four-heading"
     >
       <SectionDecorations />
       <YearStatsShowcase
@@ -128,6 +131,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
         stats={stats}
         yearRef={yearRef}
         statsRef={statsRef}
+        headingId="year-four-heading"
       />
       {/* Conference Section */}
       {conference && (
@@ -138,12 +142,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           <div className="flex flex-col max-w-5xl mx-auto gap-12">
             {/* Title and Description */}
             <div className="text-center max-w-3xl mx-auto">
-              <h2 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
+              <h3 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
                 <span className="text-2xl md:text-3xl text-primary/40 me-2">
                   ✯
                 </span>
                 {conference.title}
-              </h2>
+              </h3>
               <p className="text-text leading-relaxed text-base md:text-lg">
                 {conference.description}
               </p>
@@ -242,9 +246,9 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           <div className="max-w-6xl mx-auto relative">
             {/* Title Section */}
             <div className="text-center mb-12 md:mb-16 pt-4">
-              <h2 className="font-bold text-2xl md:text-3xl text-[#FF5C39]">
+              <h3 className="font-bold text-2xl md:text-3xl text-[#FF5C39]">
                 {communityCollaboration.title}
-              </h2>
+              </h3>
               <p className="text-text text-sm md:text-base max-w-2xl mx-auto mt-5 leading-loose">
                 {communityCollaboration.description}
               </p>
@@ -319,6 +323,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                     <div className="pt-4 border-t border-slate-100">
                       <Link
                         href={collab.link}
+                        {...externalLinkProps(collab.link)}
                         className="inline-flex items-center font-medium transition-colors"
                         style={{
                           color: collab.color,
@@ -355,12 +360,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
         <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Title and Description */}
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="font-bold text-2xl md:text-3xl text-primary mb-3 inline-flex items-center flex-wrap justify-center">
+            <h3 className="font-bold text-2xl md:text-3xl text-primary mb-3 inline-flex items-center flex-wrap justify-center">
               <span className="text-2xl md:text-3xl text-primary/40 me-2">
                 ✯
               </span>
               {birthday.title}
-            </h2>
+            </h3>
             <p className="text-text leading-relaxed text-base md:text-lg py-4">
               {birthday.description}
             </p>
@@ -372,7 +377,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
               <Image
                 src={birthday.image}
-                alt={birthday.title}
+                alt={`${birthday.title} — فرانت‌چپتر سال ${year}`}
                 width={900}
                 height={506}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -424,7 +429,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                         <Image
                           src={event.image}
-                          alt={event.title}
+                          alt={`${event.title} — رویداد فرانت‌چپتر سال ${year}`}
                           width={600}
                           height={450}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -474,6 +479,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       <div>
                         <Link
                           href={event.link.href}
+                          {...externalLinkProps(event.link.href)}
                           className="inline-flex min-h-12 items-center px-6 py-3 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
                         >
                           {event.link.label}
@@ -496,6 +502,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       <div>
                         <Link
                           href={event.link.href}
+                          {...externalLinkProps(event.link.href)}
                           className="inline-flex min-h-12 items-center px-6 py-3 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
                         >
                           {event.link.label}
@@ -508,7 +515,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                         <Image
                           src={event.image}
-                          alt={event.title}
+                          alt={`${event.title} — رویداد فرانت‌چپتر سال ${year}`}
                           width={600}
                           height={450}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

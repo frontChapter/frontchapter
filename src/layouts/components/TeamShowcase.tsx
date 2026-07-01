@@ -18,6 +18,8 @@ export interface TeamShowcaseProps {
   containerRef?: React.RefObject<HTMLDivElement | null>;
   titleIcon?: string;
   centered?: boolean;
+  titleAs?: 'h2' | 'h3';
+  titleId?: string;
 }
 
 const TeamShowcase: React.FC<TeamShowcaseProps> = ({
@@ -26,12 +28,15 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
   containerRef,
   titleIcon = '✫',
   centered = false,
+  titleAs: TitleTag = 'h3',
+  titleId,
 }) => {
   if (!members.length) return null;
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <h3
+      <TitleTag
+        id={titleId}
         className={`font-bold text-lg sm:text-xl md:text-2xl text-primary mb-5 md:mb-6 inline-flex items-center flex-wrap ${
           centered ? 'justify-center w-full' : ''
         }`}
@@ -40,7 +45,7 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
           {titleIcon}
         </span>
         {title}
-      </h3>
+      </TitleTag>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
         {members.map((member) => (
           <div
@@ -57,9 +62,9 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
                 loading="lazy"
               />
             </div>
-            <h5 className="font-bold text-sm sm:text-base text-dark mb-1">
+            <p className="font-bold text-sm sm:text-base text-dark mb-1">
               {member.name}
-            </h5>
+            </p>
             <p className="text-xs sm:text-sm text-text leading-relaxed">
               {member.role}
             </p>

@@ -4,13 +4,14 @@ import About from '../../layouts/About';
 import GSAPWrapper from '../../layouts/components/GSAPWrapper';
 import Contact from '../../layouts/Contact';
 import Default from '../../layouts/Default';
-import SeoMeta from '../../layouts/partials/SeoMeta';
+import { buildPageMetadata } from '../../lib/seo/metadata';
 import {
   getRegularPage,
   getSinglePage,
   RegularPageData,
   SinglePageData,
 } from '../../lib/contentParser';
+import type { Metadata } from 'next';
 
 type RegularPagesProps = {
   params: {
@@ -18,14 +19,29 @@ type RegularPagesProps = {
   };
 };
 
+export async function generateMetadata({
+  params,
+}: RegularPagesProps): Promise<Metadata> {
+  const pageData: RegularPageData = await getRegularPage(params.regular);
+  const { title, meta_title, description, image, noindex, canonical } =
+    pageData.frontmatter;
+
+  return buildPageMetadata({
+    title,
+    meta_title,
+    description: description ?? pageData.content.slice(0, 120),
+    image,
+    noindex,
+    canonical,
+  });
+}
+
 const RegularPages = async ({
   params,
 }: RegularPagesProps): Promise<React.JSX.Element> => {
   const { regular } = params;
   const pageData: RegularPageData = await getRegularPage(regular);
-  const { title, meta_title, description, image, noindex, canonical, layout } =
-    pageData.frontmatter;
-  const { content } = pageData;
+  const { layout } = pageData.frontmatter;
 
   // Type guards for About, Contact, Default
   // Local Frontmatter types for each layout
@@ -46,15 +62,6 @@ const RegularPages = async ({
 
   return (
     <GSAPWrapper>
-      <SeoMeta
-        title={title}
-        description={description ? description : content.slice(0, 120)}
-        meta_title={meta_title}
-        image={image}
-        noindex={noindex}
-        canonical={canonical}
-      />
-
       {layout === '404' ? (
         <NotFound data={pageData} />
       ) : layout === 'about' && isAbout ? (

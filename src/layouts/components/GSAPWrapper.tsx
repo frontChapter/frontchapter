@@ -11,7 +11,7 @@ interface GSAPWrapperProps {
 }
 
 const GSAPWrapper = ({ children }: GSAPWrapperProps) => {
-  const main = useRef<HTMLElement>(null);
+  const main = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   //gsap fade animation
   useEffect(() => {
@@ -71,7 +71,7 @@ const GSAPWrapper = ({ children }: GSAPWrapperProps) => {
     return () => ctx.revert();
   }, [pathname]);
 
-  return <main ref={main}>{children}</main>;
+  return <div ref={main}>{children}</div>;
 };
 
 export default GSAPWrapper;
