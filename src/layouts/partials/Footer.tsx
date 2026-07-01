@@ -95,7 +95,7 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Quick links */}
-            <div className="animate col-6 lg:col-3 lg:mt-0 mt-8">
+            <div className="animate col-12 sm:col-6 lg:col-3 lg:mt-0 mt-8">
               <p className="footer-section-title">لینک‌های سریع</p>
               <ul className="footer-links mt-4">
                 {(menu as FooterMenu).footer.map((item) => (
@@ -109,7 +109,7 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Contact */}
-            <div className="animate col-6 lg:col-4 lg:mt-0 mt-8">
+            <div className="animate col-12 sm:col-6 lg:col-4 lg:mt-0 mt-8">
               <p className="footer-section-title">ارتباط با ما</p>
               <ul className="footer-contact mt-4">
                 {location && (
