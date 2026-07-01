@@ -362,7 +362,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                 spaceBetween={20}
                 modules={[Autoplay]}
                 autoplay={{ delay: 3000 }}
-                dir="ltr"
+                dir={isRTL ? 'rtl' : 'ltr'}
               >
                 {sponsors.list.map((sponsor, index) => {
                   const sponsorUrl = withFrontChapterReferral(sponsor.url);
