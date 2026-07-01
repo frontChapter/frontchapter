@@ -5,7 +5,9 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import GalleryClickOverlay from '../components/GalleryClickOverlay';
 import ImageLightbox from '../components/ImageLightbox';
+import YearStatsShowcase from '../components/YearStatsShowcase';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearTwoStatsProps {
@@ -112,41 +114,13 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
       <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
       <div className="absolute -right-12 sm:-right-24 bottom-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-t from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
 
-      {/* Header */}
-      <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-3 md:gap-4 text-center">
-        <p className="uppercase font-medium text-sm sm:text-base text-primary mb-1 sm:mb-2 tracking-wider">
-          {title}
-        </p>
-        <h1
-          ref={yearRef}
-          className="font-bold text-4xl sm:text-5xl md:text-7xl text-dark leading-tight bg-gradient-to-r from-slate-800 dark:from-slate-200 to-primary bg-clip-text text-transparent"
-        >
-          {year}
-        </h1>
-      </div>
-
-      {/* Stats */}
-      <div
-        ref={statsRef}
-        className="w-full max-w-4xl flex flex-col md:flex-row items-stretch justify-start gap-6 md:gap-10 py-6 md:py-10"
-      >
-        <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row w-full gap-4 md:gap-10">
-          {stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="stat-item flex-1 text-center md:text-right p-4 relative bg-surface rounded-xl md:bg-transparent"
-            >
-              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
-              <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
-                {stat.value}
-              </h2>
-              <p className="text-text text-sm sm:text-base md:text-lg">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <YearStatsShowcase
+        title={title}
+        year={year}
+        stats={stats}
+        yearRef={yearRef}
+        statsRef={statsRef}
+      />
 
       {/* Memories Section */}
       <div className="w-full py-12 px-6 bg-surface rounded-xl shadow-sm">
@@ -166,7 +140,6 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
                       'shadow-md shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
                       'transition-all duration-300 cursor-pointer'
                     )}
-                    onClick={() => lightbox.openLightbox(idx)}
                   >
                     <div className="relative w-full aspect-square xs:aspect-[4/3] sm:h-36 md:h-56">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 sm:opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
@@ -205,12 +178,12 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
                           }}
                         />
                       )}
-                      <div className="absolute bottom-0 left-0 right-0 p-2 xs:p-2 sm:p-3 text-white opacity-100 transform transition-all duration-300 z-20">
+                      <div className="absolute bottom-0 left-0 right-0 p-2 xs:p-2 sm:p-3 text-white opacity-100 transform transition-all duration-300 z-20 pointer-events-none">
                         <span className="text-2xs xs:text-xs md:text-sm font-medium backdrop-blur-sm bg-black/30 px-1.5 xs:px-2 sm:px-3 py-0.5 xs:py-1 rounded-full inline-block truncate max-w-[calc(100%-8px)]">
                           {img.label || ''}
                         </span>
                       </div>
-                      <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+                      <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
                         <span className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-2 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                           <svg
                             width="256"
@@ -231,7 +204,7 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
                           </svg>
                         </span>
                       </div>
-                      <div className="absolute inset-0 flex md:hidden items-center justify-center opacity-0 active:opacity-100 transition-opacity duration-300 z-30">
+                      <div className="absolute inset-0 flex md:hidden items-center justify-center opacity-0 active:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
                         <span className="w-8 h-8 p-1.5 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                           <svg
                             viewBox="0 0 256 256"
@@ -250,6 +223,10 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
                           </svg>
                         </span>
                       </div>
+                      <GalleryClickOverlay
+                        label={img.label || img.alt}
+                        onClick={() => lightbox.openLightbox(idx)}
+                      />
                     </div>
                   </figure>
                 );

@@ -4,8 +4,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef } from 'react';
+import GalleryClickOverlay from '../components/GalleryClickOverlay';
 import ImageLightbox from '../components/ImageLightbox';
 import SpeakersShowcase, { Speaker } from '../components/SpeakersShowcase';
+import YearStatsShowcase from '../components/YearStatsShowcase';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearFourStatsProps {
@@ -211,7 +213,8 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       );
 
       // Images animation
-      const imageContainers = document.querySelectorAll('.image-container');
+      const imageContainers =
+        sectionRef.current?.querySelectorAll('.image-container');
       if (imageContainers && imageContainers.length) {
         gsap.fromTo(
           imageContainers,
@@ -222,7 +225,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
             stagger: 0.1,
             duration: 0.6,
             scrollTrigger: {
-              trigger: imageContainers[0],
+              trigger: sectionRef.current,
               start: 'top bottom',
             },
           }
@@ -240,40 +243,13 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
       <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
       <div className="absolute -right-12 sm:-right-24 bottom-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-t from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
       <div className="absolute left-1/4 top-1/3 w-36 sm:w-48 h-36 sm:h-48 rounded-full bg-gradient-to-r from-primary/5 to-primary/10 opacity-30 blur-3xl -z-10"></div>
-      {/* Header */}
-      <div className="w-full max-w-4xl flex flex-col items-center justify-center gap-2 md:gap-3 text-center">
-        <p className="uppercase font-medium text-sm sm:text-base text-primary mb-1 tracking-wider">
-          {title}
-        </p>
-        <h1
-          ref={yearRef}
-          className="font-bold text-4xl sm:text-5xl md:text-7xl text-dark leading-tight bg-gradient-to-r from-slate-800 dark:from-slate-200 to-primary bg-clip-text text-transparent"
-        >
-          {year}
-        </h1>
-      </div>
-      {/* Stats */}
-      <div
-        ref={statsRef}
-        className="w-full max-w-4xl flex flex-col md:flex-row items-stretch justify-start gap-4 md:gap-6 py-4 md:py-8"
-      >
-        <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row w-full gap-4 md:gap-6">
-          {stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="stat-item flex-1 text-center md:text-right p-4 relative bg-surface rounded-xl md:bg-transparent"
-            >
-              <div className="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-[1px] h-12 bg-[#ffe6db]/30 last:hidden first:hidden"></div>
-              <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-primary mb-2 md:mb-3 transition-all hover:scale-110 origin-right">
-                {stat.value}
-              </h2>
-              <p className="text-text text-sm sm:text-base md:text-lg">
-                {stat.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <YearStatsShowcase
+        title={title}
+        year={year}
+        stats={stats}
+        yearRef={yearRef}
+        statsRef={statsRef}
+      />
       {/* Conference Section */}
       {conference && (
         <div
@@ -324,7 +300,6 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       transition-all duration-300 cursor-pointer
                       aspect-square w-full
                       ${idx % 2 !== 0 ? 'mt-6' : ''}`}
-                    onClick={() => conferenceLightbox.openLightbox(idx)}
                   >
                     <div className="relative w-full h-full">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
@@ -335,12 +310,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         height={350}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-                      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20">
+                      <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
                         <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
                           {image.label}
                         </span>
                       </div>
-                      <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+                      <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
                         <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                           <svg
                             width="256"
@@ -360,6 +335,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           </svg>
                         </span>
                       </div>
+                      <GalleryClickOverlay
+                        label={image.label}
+                        onClick={() => conferenceLightbox.openLightbox(idx)}
+                      />
                     </div>
                   </figure>
                 ))}
@@ -509,7 +488,6 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           {/* Birthday Image */}
           <figure
             className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer w-full max-w-4xl mx-auto"
-            onClick={() => birthdayLightbox.openLightbox(0)}
           >
             <div className="relative w-full h-full aspect-[16/9]">
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
@@ -521,7 +499,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />
-              <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+              <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
                 <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                   <svg
                     width="256"
@@ -541,6 +519,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                   </svg>
                 </span>
               </div>
+              <GalleryClickOverlay
+                label={birthday.title}
+                onClick={() => birthdayLightbox.openLightbox(0)}
+              />
             </div>
           </figure>
         </div>
@@ -560,7 +542,6 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                     {/* Image (Left) */}
                     <figure
                       className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full"
-                      onClick={() => eventsLightbox.openLightbox(idx)}
                     >
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
@@ -572,12 +553,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           loading="lazy"
                         />
-                        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20">
+                        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
                           <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
                             {event.title}
                           </span>
                         </div>
-                        <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+                        <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
                           <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                             <svg
                               width="256"
@@ -597,6 +578,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                             </svg>
                           </span>
                         </div>
+                        <GalleryClickOverlay
+                          label={event.title}
+                          onClick={() => eventsLightbox.openLightbox(idx)}
+                        />
                       </div>
                     </figure>
                     {/* Content (Right) */}
@@ -643,7 +628,6 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                     {/* Image (Right) */}
                     <figure
                       className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full"
-                      onClick={() => eventsLightbox.openLightbox(idx)}
                     >
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
@@ -655,12 +639,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           loading="lazy"
                         />
-                        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20">
+                        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
                           <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
                             {event.title}
                           </span>
                         </div>
-                        <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
+                        <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
                           <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
                             <svg
                               width="256"
@@ -680,6 +664,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                             </svg>
                           </span>
                         </div>
+                        <GalleryClickOverlay
+                          label={event.title}
+                          onClick={() => eventsLightbox.openLightbox(idx)}
+                        />
                       </div>
                     </figure>
                   </>

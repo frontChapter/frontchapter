@@ -134,27 +134,6 @@ const ImageLightbox: React.FC<ImageLightboxProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.height = '100%';
-    } else {
-      document.body.style.overflow = 'unset';
-      document.body.style.position = 'unset';
-      document.body.style.width = 'unset';
-      document.body.style.height = 'unset';
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-      document.body.style.position = 'unset';
-      document.body.style.width = 'unset';
-      document.body.style.height = 'unset';
-    };
-  }, [isOpen]);
-
   if (!mounted || !isOpen || !images.length || currentIndex >= images.length)
     return null;
 
