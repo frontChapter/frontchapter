@@ -92,16 +92,17 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
           <h3 className="text-lg md:text-xl font-bold text-primary mb-4 md:mb-5">
             {galleryTitle}
           </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-3 sm:gap-4 md:gap-5 w-full">
+          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-fr gap-3 sm:gap-4 md:gap-5 w-full items-stretch">
             {video && (
               <figure
                 className={clsx(
                   'image-container group relative rounded-xl overflow-hidden',
                   'shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
-                  'transition-all duration-300 col-span-2 row-span-2 md:col-span-2 md:row-span-2'
+                  'transition-all duration-300',
+                  'col-span-2 md:row-span-2 md:h-full md:min-h-0'
                 )}
               >
-                <div className="relative w-full aspect-video min-h-[180px] sm:min-h-[220px]">
+                <div className="relative w-full aspect-video md:aspect-auto md:h-full">
                   <LazyVideo
                     src={video.src}
                     label={video.label}
