@@ -82,7 +82,9 @@ const Post: React.FC<PostProps> = ({ post, compact = false }) => {
               : post.frontmatter.title}
           </h2>
 
-          <div className={`flex items-center ${compact ? 'mt-2 gap-2' : 'mt-3 gap-2.5'}`}>
+          <div
+            className={`flex items-center ${compact ? 'mt-2 gap-2' : 'mt-3 gap-2.5'}`}
+          >
             <div className="shrink-0 overflow-hidden rounded-full">
               <ImageFallback
                 src={post.frontmatter.author.avatar}

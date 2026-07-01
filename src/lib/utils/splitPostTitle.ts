@@ -1,6 +1,6 @@
 export function splitPostTitle(
   title: string,
-  variant: 'full' | 'compact' = 'full',
+  variant: 'full' | 'compact' = 'full'
 ): string[] {
   if (variant === 'compact') {
     if (title.includes(' - ')) {
