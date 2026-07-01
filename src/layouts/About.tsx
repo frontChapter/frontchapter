@@ -64,7 +64,7 @@ interface OurMember {
 }
 
 interface Country {
-  flag: string;
+  flag?: string;
   name: string;
   location: string;
 }
@@ -456,15 +456,7 @@ const About: React.FC<AboutProps> = ({ data }) => {
                     className="animate mt-10 md:col-6 xl:col-3"
                   >
                     <div className="rounded-xl p-5 shadow-[0_4px_25px_rgba(0,0,0,.05)]">
-                      <ImageFallback
-                        // className="mx-auto"
-                        src={country.flag}
-                        fallback="/images/fallback.png"
-                        width={80}
-                        height={80}
-                        alt={country.name}
-                      />
-                      <h5 className="h4 mt-2">{country.name}</h5>
+                      <h5 className="h4">{country.name}</h5>
                       <p className="mt-2">{country.location}</p>
                     </div>
                   </div>
