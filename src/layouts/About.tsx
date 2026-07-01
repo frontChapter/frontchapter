@@ -413,14 +413,14 @@ const About: React.FC<AboutProps> = ({ data }) => {
                 {our_member.list.map((member, index) => (
                   <div
                     key={`member-${index}`}
-                    className="animate mt-10 text-center md:col-6 lg:col-4"
+                    className="animate mt-10 text-center md:col-6 lg:col-3"
                   >
                     <ImageFallback
                       className="mx-auto rounded-full shadow-[10px_10px_0] shadow-primary/10"
                       src={member.image}
                       fallback="/images/fallback.png"
-                      width={245}
-                      height={245}
+                      width={180}
+                      height={180}
                       alt={member.name}
                     />
                     <h4 className="mt-8">{member.name}</h4>

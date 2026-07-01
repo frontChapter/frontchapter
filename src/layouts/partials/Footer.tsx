@@ -4,7 +4,11 @@ import social from '@config/social.json';
 import { markdownify } from '@lib/utils/textConverter';
 import Link from 'next/link';
 import React from 'react';
-import { IoLocationOutline, IoMailOutline, IoCallOutline } from 'react-icons/io5';
+import {
+  IoLocationOutline,
+  IoMailOutline,
+  IoCallOutline,
+} from 'react-icons/io5';
 import { useRTL } from '../../hooks/useRTL';
 import Logo from '../components/Logo';
 import SocialFixed from '../components/SocialFixed';
