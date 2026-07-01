@@ -8,7 +8,8 @@ interface Props {
 
 const Logo = ({ src }: Props) => {
   // destructuring items from config object
-  const { logo, logo_dark, logo_width, logo_height, logo_text, title } = config.site;
+  const { logo, logo_dark, logo_width, logo_height, logo_text, title } =
+    config.site;
 
   return (
     <Link href="/" className="navbar-brand block">
@@ -31,7 +32,7 @@ const Logo = ({ src }: Props) => {
         <ImageFallback
           width={parseInt(logo_width.replace('px', '')) * 2}
           height={parseInt(logo_height.replace('px', '')) * 2}
-          src={src ? src : (logo_dark || logo)}
+          src={src ? src : logo_dark || logo}
           className="hidden dark:block"
           alt={title}
           priority

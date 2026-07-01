@@ -75,9 +75,6 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // logo source
-  const { logo } = (config as Config).site;
-
   const { isRTL } = useRTL();
   return (
     <>
@@ -137,12 +134,12 @@ const Header: React.FC = () => {
                 )}
               </div>
               <div className="flex-1 flex justify-center">
-                <Logo src={logo} />
+                <Logo />
               </div>
             </>
           ) : (
             <div className="flex items-center">
-              <Logo src={logo} />
+              <Logo />
             </div>
           )}
 
