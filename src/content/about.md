@@ -37,8 +37,8 @@ video:
   subtitle: یک ویدئوی کوتاه
   title: نگاهی به داستان فرانت‌چپتر
   description: از یک ایده اولیه تا ایجاد جامعه‌ای پرشور و فعال؛ در این ویدئو داستان شکل‌گیری و مسیر رشد فرانت‌چپتر را مرور می‌کنیم.
-  video_id: dyZcRRWiuuw
-  thumbnail: /images/1403/video_poster.jpg
+  src: /videos/frontchapter-1403.mp4
+  poster: /images/1403/video_poster.jpg
 
 ## مشتریان
 clients:

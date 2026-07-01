@@ -8,7 +8,7 @@ import Banner from './components/Banner';
 import Circle from './components/Circle';
 import Cta from './components/Cta';
 import ImageFallback from './components/ImageFallback';
-import VideoPopup from './components/VideoPopup';
+import LazyVideo from './components/LazyVideo';
 
 interface AboutUs {
   image: string;
@@ -40,8 +40,8 @@ interface Video {
   subtitle: string;
   title: string;
   description: string;
-  video_id: string;
-  thumbnail: string;
+  src: string;
+  poster: string;
 }
 
 interface Clients {
@@ -335,11 +335,11 @@ const About: React.FC<AboutProps> = ({ data }) => {
             </div>
             <div className="md:col-6 xl:col-5">
               <div className="px-4 ">
-                <VideoPopup
-                  id={video.video_id}
-                  thumbnail={video.thumbnail}
-                  width={540}
-                  height={585}
+                <LazyVideo
+                  src={video.src}
+                  poster={video.poster}
+                  controls
+                  className="rounded-2xl"
                 />
               </div>
             </div>
