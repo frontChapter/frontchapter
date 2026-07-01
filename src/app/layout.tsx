@@ -16,7 +16,7 @@ interface RootLayoutProps {
 function LayoutContent({ children }: RootLayoutProps) {
   const { isRTL } = useRTL();
   return (
-    <html suppressHydrationWarning={true} lang="fa" dir={isRTL ? 'rtl' : 'ltr'}>
+    <html suppressHydrationWarning={true} lang={isRTL ? 'fa' : 'en'} dir={isRTL ? 'rtl' : 'ltr'}>
       <head>
         {/* responsive meta */}
         <meta

@@ -1,8 +1,7 @@
 import config from '@config/config.json';
-import dateFormat from '@lib/utils/dateFormat';
-import readingTime from '@lib/utils/readingTime';
 import Link from 'next/link';
 import React from 'react';
+import FormattedDate from '../components/FormattedDate';
 import ImageFallback from '../components/ImageFallback';
 
 interface Author {
@@ -28,57 +27,61 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ post }) => {
-  const { summary_length, blog_folder } = config.settings as {
-    summary_length: number | string;
+  const { blog_folder } = config.settings as {
     blog_folder: string;
   };
+  const href = `/${blog_folder}/${post.slug}`;
+
   return (
-    <div className="overflow-hidden rounded-2xl shadow-[0_10px_35px_rgba(0,0,0,.05)]">
-      {post.frontmatter.image && (
-        <Link href={`/${blog_folder}/${post.slug}`}>
-          <ImageFallback
-            className="w-full object-cover"
-            src={post.frontmatter.image}
-            alt={post.frontmatter.title}
-            width={570}
-            height={335}
-            fallback={''}
-          />
-        </Link>
-      )}
-      <div className="p-8">
-        <h2 className="h4">
-          <Link
-            href={`/${blog_folder}/${post.slug}`}
-            className="block hover:text-primary hover:underline"
-          >
-            {post.frontmatter.title}
-          </Link>
-        </h2>
-        <p className="mt-4">
-          {post.content.slice(0, Number(summary_length))}...
-        </p>
-        <div className="mt-6 flex items-center">
-          <div className="overflow-hidden rounded-full border-2 border-white shadow-[0_0_0_2px] shadow-primary">
+    <article className="h-full">
+      <Link
+        href={href}
+        className="group flex h-full flex-col overflow-hidden rounded-xl bg-surface-solid transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/10"
+      >
+        {post.frontmatter.image && (
+          <div className="relative aspect-square overflow-hidden bg-theme-light">
             <ImageFallback
-              src={post.frontmatter.author.avatar}
-              width={50}
-              height={50}
-              alt="author"
+              className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              src={post.frontmatter.image}
+              alt={post.frontmatter.title}
+              width={400}
+              height={400}
               fallback={''}
             />
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              aria-hidden="true"
+            />
           </div>
-          <div className="ps-5">
-            <p className="font-medium text-dark">
-              {post.frontmatter.author.name}
-            </p>
-            <p>
-              {dateFormat(post.frontmatter.date)} - {readingTime(post.content)}
-            </p>
+        )}
+
+        <div className="p-3.5 sm:p-4">
+          <h2 className="line-clamp-2 text-sm font-semibold leading-snug text-dark transition-colors group-hover:text-primary sm:text-[0.95rem]">
+            {post.frontmatter.title}
+          </h2>
+
+          <div className="mt-3 flex items-center gap-2.5">
+            <div className="shrink-0 overflow-hidden rounded-full">
+              <ImageFallback
+                src={post.frontmatter.author.avatar}
+                width={28}
+                height={28}
+                alt={post.frontmatter.author.name}
+                fallback={''}
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-xs font-medium text-dark">
+                {post.frontmatter.author.name}
+              </p>
+              <p className="mt-0.5 truncate text-2xs text-muted sm:text-xs">
+                <FormattedDate date={post.frontmatter.date} />
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Link>
+    </article>
   );
 };
 

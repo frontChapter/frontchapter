@@ -1,6 +1,5 @@
 import config from '@config/config.json';
-import dateFormat from '@lib/utils/dateFormat';
-import readingTime from '@lib/utils/readingTime';
+import FormattedDate from './components/FormattedDate';
 import { markdownify } from '@lib/utils/textConverter';
 import Image from 'next/image';
 import React from 'react';
@@ -80,7 +79,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
                   <div className="ps-5">
                     <p className="font-medium text-dark">{author.name}</p>
                     <p>
-                      {dateFormat(date)} - {readingTime(content)}
+                      <FormattedDate date={date} />
                     </p>
                   </div>
                 </div>
@@ -100,8 +99,8 @@ const PostSingle: React.FC<PostSingleProps> = ({
 
           <div className="section mt-16">
             <h2 className="section-title text-center">Recent Articles</h2>
-            <div className="row justify-center">
-              {recentPosts.slice(0, 2).map((post, index) => {
+            <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {recentPosts.slice(0, 3).map((post, index) => {
                 const isPostType =
                   post &&
                   typeof post === 'object' &&
@@ -110,9 +109,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
                   'slug' in post;
                 if (!isPostType) return null;
                 return (
-                  <div key={'post-' + index} className="animate mt-16 lg:col-5">
-                    <Post post={post as unknown as PostType} />
-                  </div>
+                  <Post key={'post-' + index} post={post as unknown as PostType} />
                 );
               })}
             </div>

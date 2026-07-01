@@ -5,6 +5,7 @@ import Pagination from '@/src/layouts/components/Pagination';
 import Post from '@/src/layouts/partials/Post';
 import config from '@config/config.json';
 import { getListPage, getSinglePage } from '@lib/contentParser';
+import { sortByDate } from '@lib/utils/sortFunctions';
 import { buildPageMetadata } from '@lib/seo/metadata';
 import type { Metadata } from 'next';
 import { JSX } from 'react';
@@ -89,13 +90,14 @@ const BlogPagination = async ({
       return null;
     })
     .filter((p): p is PostType => p !== null);
+  const sortedPosts = sortByDate(posts) as PostType[];
   const postIndex: ListPageType = await getListPage(
     `src/content/${blog_folder}/_index.md`
   );
   const indexOfLastPost = currentPage * pagination;
   const indexOfFirstPost = indexOfLastPost - pagination;
-  const totalPages = Math.ceil(posts.length / pagination);
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(sortedPosts.length / pagination);
+  const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
   const { frontmatter } = postIndex;
   const { title } = frontmatter;
 
@@ -104,11 +106,9 @@ const BlogPagination = async ({
       <section className="section pt-0">
         <Banner title={title || 'Blog'} />
         <div className="container">
-          <div className="row justify-center pb-16 pt-20 ">
+          <div className="grid grid-cols-1 gap-4 pb-12 pt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
             {currentPosts.map((post, i) => (
-              <div key={`key-${i}`} className="mb-8 lg:col-5">
-                <Post post={post} />
-              </div>
+              <Post key={`key-${i}`} post={post} />
             ))}
           </div>
           <Pagination
@@ -155,7 +155,8 @@ export async function generateStaticParams(): Promise<{ slug: string }[]> {
       return null;
     })
     .filter((p): p is PostType => p !== null);
-  const allSlug = posts.map((item) => item.slug);
+  const sortedPosts = sortByDate(posts) as PostType[];
+  const allSlug = sortedPosts.map((item) => item.slug);
   const { pagination } = config.settings as { pagination: number };
   const totalPages = Math.ceil(allSlug.length / pagination);
   const paths: { slug: string }[] = [];
