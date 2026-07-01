@@ -1,6 +1,7 @@
 'use client';
 
 import config from '@config/config.json';
+import NextTopLoader from 'nextjs-toploader';
 import TwSizeIndicator from '../layouts/components/TwSizeIndicator';
 import Footer from '../layouts/partials/Footer';
 import Header from '../layouts/partials/Header';
@@ -58,6 +59,7 @@ function LayoutContent({ children }: RootLayoutProps) {
         />
       </head>
       <body suppressHydrationWarning={true} className="overflow-x-hidden">
+        <NextTopLoader color="#fe6019" height={3} showSpinner={false} />
         <a
           href="#main-content"
           className="absolute -top-16 start-4 z-[100] rounded-lg bg-primary px-4 py-3 text-sm text-white transition-[top] focus:top-4"
