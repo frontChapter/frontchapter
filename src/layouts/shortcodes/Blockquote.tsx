@@ -9,8 +9,8 @@ const Blockquote = ({
   children: React.ReactNode;
 }) => {
   return (
-    <blockquote className="rounded-xl border border-border-secondary bg-body px-8 py-3  not-italic">
-      <span className="text-5xl text-gray-400">
+    <blockquote className="rounded-xl border border-border-secondary bg-theme-light px-8 py-3 not-italic text-text">
+      <span className="text-5xl text-muted">
         <TfiQuoteLeft />
       </span>
       {children}

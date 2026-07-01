@@ -94,20 +94,20 @@
 
 // content style
 .content {
-  @apply text-base;
-  @apply prose max-w-none;
+  @apply text-base text-text;
+  @apply prose max-w-none prose-neutral;
   @apply prose-headings:mb-[.9em] prose-headings:mt-[.5em] prose-headings:font-semibold prose-headings:text-dark;
   @apply prose-h1:text-h1-sm md:prose-h1:text-h1;
   @apply prose-h2:text-h2-sm md:prose-h2:text-h2;
   @apply prose-h3:text-h3-sm md:prose-h3:text-h3;
   @apply prose-hr:border-border;
-  @apply prose-p:text-base;
+  @apply prose-p:text-base prose-p:text-text;
   @apply prose-blockquote:px-4 prose-blockquote:py-1 prose-blockquote:text-dark;
   @apply prose-code:px-1 prose-code:text-primary;
   @apply prose-pre:rounded-xl;
   @apply prose-strong:text-dark;
   @apply prose-a:text-primary prose-a:no-underline hover:prose-a:underline;
-  @apply prose-li:text-text;
+  @apply prose-li:text-text prose-ul:text-text prose-ol:text-text;
   @apply prose-table:overflow-hidden prose-table:border prose-table:border-border;
   @apply prose-thead:border-border prose-thead:bg-theme-light prose-th:px-4 prose-th:py-4 prose-th:text-dark;
   @apply prose-tr:border-border;
