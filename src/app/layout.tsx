@@ -52,7 +52,13 @@ function LayoutContent({ children }: RootLayoutProps) {
           content="#0f1419"
         />
       </head>
-      <body suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true} className="overflow-x-hidden">
+        <a
+          href="#main-content"
+          className="absolute -top-16 start-4 z-[100] rounded-lg bg-primary px-4 py-3 text-sm text-white transition-[top] focus:top-4"
+        >
+          رفتن به محتوای اصلی
+        </a>
         <TwSizeIndicator />
         <Header />
         {children}

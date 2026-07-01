@@ -13,17 +13,23 @@ interface MarkdownifyProps {
   content: string;
   tag?: string;
   className?: string;
+  id?: string;
 }
 
-export const markdownify = ({ content, tag, className }: MarkdownifyProps) => {
+export const markdownify = ({
+  content,
+  tag,
+  className,
+  id,
+}: MarkdownifyProps) => {
   if (!content) return null;
 
   const html =
     tag === 'div' ? marked.parse(content) : marked.parseInline(content);
   const Tag = tag || 'span';
-  // Use React.createElement for dynamic tag and props
   return React.createElement(Tag, {
     className,
+    id,
     dangerouslySetInnerHTML: { __html: html },
   });
 };

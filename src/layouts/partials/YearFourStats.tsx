@@ -1,22 +1,21 @@
 'use client';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import GalleryClickOverlay from '../components/GalleryClickOverlay';
 import ImageLightbox from '../components/ImageLightbox';
+import LazyVideo from '../components/LazyVideo';
+import SectionDecorations from '../components/SectionDecorations';
 import SpeakersShowcase, { Speaker } from '../components/SpeakersShowcase';
 import YearStatsShowcase from '../components/YearStatsShowcase';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
+import { useYearStatsAnimations } from '../../hooks/useYearStatsAnimations';
+import type { Stat } from '../../types/content';
 
 export interface YearFourStatsProps {
   title: string;
   year: string;
-  stats: Array<{
-    value: string;
-    label: string;
-  }>;
+  stats: Stat[];
   birthday: {
     title: string;
     description: string;
@@ -107,142 +106,22 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   }));
   const eventsLightbox = useImageLightbox(eventsImages);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
-
-      // Year animation
-      gsap.fromTo(
-        yearRef.current,
-        { scale: 0.9, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1,
-          scrollTrigger: {
-            trigger: yearRef.current,
-            start: 'top bottom',
-            end: 'bottom center',
-          },
-        }
-      );
-
-      // Stats animation
-      const statItems = statsRef.current?.querySelectorAll('.stat-item');
-      if (statItems && statItems.length) {
-        gsap.fromTo(
-          statItems,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: statsRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-
-      // Birthday section animation
-      gsap.fromTo(
-        birthdayRef.current,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: birthdayRef.current,
-            start: 'top bottom',
-          },
-        }
-      );
-
-      // Conference section animation
-      if (conference && conferenceRef.current) {
-        gsap.fromTo(
-          conferenceRef.current,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            scrollTrigger: {
-              trigger: conferenceRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-
-      const speakerCards =
-        speakersRef.current?.querySelectorAll('.speaker-card');
-      if (speakerCards && speakerCards.length) {
-        gsap.fromTo(
-          speakerCards,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.08,
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: speakersRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-
-      // Events section animation
-      gsap.fromTo(
-        eventsRef.current,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: eventsRef.current,
-            start: 'top bottom',
-          },
-        }
-      );
-
-      // Images animation
-      const imageContainers =
-        sectionRef.current?.querySelectorAll('.image-container');
-      if (imageContainers && imageContainers.length) {
-        gsap.fromTo(
-          imageContainers,
-          { scale: 0.95, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.6,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-    }
-  }, [conference]);
+  useYearStatsAnimations({
+    yearRef,
+    statsRef,
+    sectionRef,
+    blockRefs: [birthdayRef, ...(conference ? [conferenceRef] : []), eventsRef],
+    cardSelectors: speakers
+      ? [{ containerRef: speakersRef, selector: '.speaker-card' }]
+      : [],
+  });
 
   return (
     <section
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center gap-5 md:gap-8 py-6 md:py-12 relative overflow-hidden px-4 md:px-6"
     >
-      {/* Gradient Background Elements */}
-      <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
-      <div className="absolute -right-12 sm:-right-24 bottom-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-t from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
-      <div className="absolute left-1/4 top-1/3 w-36 sm:w-48 h-36 sm:h-48 rounded-full bg-gradient-to-r from-primary/5 to-primary/10 opacity-30 blur-3xl -z-10"></div>
+      <SectionDecorations />
       <YearStatsShowcase
         title={title}
         year={year}
@@ -278,16 +157,15 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                   <span className="me-1 inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
                   {conference.images.video_label}
                 </div>
-                <video
+                <LazyVideo
+                  src={conference.images.video}
+                  label={conference.images.video_label}
+                  showLiveBadge
+                  controls
                   loop
                   playsInline
-                  controls
-                  className="w-full h-full object-cover"
                   poster={conference.images.video_poster}
-                >
-                  <source src={conference.images.video} type="video/mp4" />
-                  مرورگر شما از ویدیو پشتیبانی نمی‌کند.
-                </video>
+                />
               </figure>
 
               {/* Image Grid */}
@@ -305,10 +183,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                       <Image
                         src={image.src}
-                        alt={`همایش ${year} فرانت‌چپتر`}
+                        alt={`${image.label} — همایش ${year} فرانت‌چپتر`}
                         width={350}
                         height={350}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        sizes="(max-width: 768px) 50vw, 350px"
                       />
                       <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
                         <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
@@ -350,7 +230,6 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 title={speakers.title}
                 speakers={speakers.list}
                 containerRef={speakersRef}
-                titleIcon="✯"
                 centered
               />
             )}
@@ -381,10 +260,12 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
                       src={collab.image}
-                      alt={`${collab.community} Event`}
+                      alt={`رویداد مشترک فرانت‌چپتر و ${collab.community}`}
                       width={600}
                       height={450}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 100vw, 33vw"
                     />
                     <div className="absolute top-0 right-0">
                       <div
@@ -486,9 +367,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           </div>
 
           {/* Birthday Image */}
-          <figure
-            className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer w-full max-w-4xl mx-auto"
-          >
+          <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer w-full max-w-4xl mx-auto">
             <div className="relative w-full h-full aspect-[16/9]">
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
               <Image
@@ -540,9 +419,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 {idx % 2 === 0 ? (
                   <>
                     {/* Image (Left) */}
-                    <figure
-                      className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full"
-                    >
+                    <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full">
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                         <Image
@@ -597,7 +474,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       <div>
                         <Link
                           href={event.link.href}
-                          className="px-6 py-3 bg-primary text-white font-semibold rounded inline-block hover:opacity-90 transition-all duration-300 transform hover:scale-105"
+                          className="inline-flex min-h-12 items-center px-6 py-3 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
                         >
                           {event.link.label}
                         </Link>
@@ -619,16 +496,14 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       <div>
                         <Link
                           href={event.link.href}
-                          className="px-6 py-3 bg-primary text-white font-semibold rounded inline-block hover:opacity-90 transition-all duration-300 transform hover:scale-105"
+                          className="inline-flex min-h-12 items-center px-6 py-3 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
                         >
                           {event.link.label}
                         </Link>
                       </div>
                     </div>
                     {/* Image (Right) */}
-                    <figure
-                      className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full"
-                    >
+                    <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full">
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                         <Image

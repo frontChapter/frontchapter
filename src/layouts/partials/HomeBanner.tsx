@@ -11,7 +11,7 @@ import React from 'react';
 import { useRTL } from '../../hooks/useRTL';
 import Circle from '../components/Circle';
 import ImageFallback from '../components/ImageFallback';
-import Video from '../shortcodes/Video';
+import LazyVideo from '../components/LazyVideo';
 
 interface BannerData {
   title: string;
@@ -268,27 +268,28 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
       ref={sectionRef}
       className="section banner overflow-hidden pt-0"
       dir={isRTL ? 'rtl' : 'ltr'}
+      aria-label="معرفی فرانت‌چپتر"
     >
       <div className="container-xl">
         <div className="relative">
           <div
             className={`bg-theme banner-bg col-12 absolute top-0 ${isRTL ? 'right-0' : 'left-0'}`}
+            aria-hidden="true"
           >
             {circleConfigs.map((props, i) => (
               <Circle
-                key={i}
+                key={props.className}
                 {...props}
-                // @ts-ignore
-                ref={(el: HTMLDivElement | null) =>
-                  (circlesRef.current[i] = el)
-                }
+                ref={(el: HTMLDivElement | null) => {
+                  circlesRef.current[i] = el;
+                }}
               />
             ))}
           </div>
           <div className="row overflow-hidden rounded-2xl">
             <div className="col-12">
               <div className="row relative justify-center pb-6 pb-md-8 pb-lg-10">
-                <div className="banner-content col-12 col-md-11 col-lg-10 px-4 pb-8 pb-md-10 pb-lg-12 pt-14 pt-md-20 pt-lg-24 text-center md:px-6">
+                <header className="banner-content col-12 col-md-11 col-lg-10 px-4 pb-8 pb-md-10 pb-lg-12 pt-14 pt-md-20 pt-lg-24 text-center md:px-6">
                   <div ref={headingRef} className="banner-heading opacity-0">
                     {markdownify({
                       content: bannerData.title,
@@ -310,39 +311,46 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                   </div>
                   <div ref={btnRef} className="banner-btn opacity-0">
                     <Link
-                      className="btn btn-primary px-6 py-3 text-sm transition-transform duration-300 hover:scale-105 md:px-8 md:text-base"
+                      className="btn btn-primary inline-flex min-h-12 items-center px-6 py-3 text-sm transition-transform duration-300 hover:scale-105 md:px-8 md:text-base"
                       href={bannerData.link.href}
                     >
                       {bannerData.link.label}
                     </Link>
                   </div>
-                </div>
+                </header>
                 <div className="col-12 col-md-11 col-lg-10 px-3 md:px-5 lg:px-6">
-                  <div
+                  <figure
                     ref={videoRef}
                     className="banner-video mx-auto w-full max-w-4xl opacity-0 lg:max-w-5xl xl:max-w-[1070px]"
                   >
                     <div className="banner-video-frame overflow-hidden rounded-2xl border-[6px] border-white md:rounded-3xl md:border-[12px] lg:border-[16px]">
-                      <Video
+                      <LazyVideo
                         className="block h-auto w-full"
                         src={bannerData.video}
-                        width={1070}
-                        height="auto"
-                        title=""
+                        label="ویدیوی معرفی فرانت‌چپتر"
+                        lazy={false}
                         autoPlay
                         loop
+                        muted
+                        playsInline
                       />
                     </div>
-                  </div>
+                  </figure>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row border-y border-border py-5">
+          <aside
+            className="row border-y border-border py-5"
+            aria-labelledby="sponsors-heading"
+          >
             <div
               className={`animate ${isRTL ? 'from-left' : 'from-right'} col-12`}
             >
-              <p className="mb-5 text-center text-sm font-medium text-muted md:text-base">
+              <p
+                id="sponsors-heading"
+                className="mb-5 text-center text-sm font-medium text-muted md:text-base"
+              >
                 {sponsors.title}
               </p>
               <Swiper
@@ -364,7 +372,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                 autoplay={{ delay: 3000 }}
                 dir={isRTL ? 'rtl' : 'ltr'}
               >
-                {sponsors.list.map((sponsor, index) => {
+                {sponsors.list.map((sponsor) => {
                   const sponsorUrl = withFrontChapterReferral(sponsor.url);
                   const isRoundedLogo =
                     sponsor.url.includes('liara.ir') ||
@@ -374,15 +382,15 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                   return (
                     <SwiperSlide
                       className="cursor-pointer px-4 py-4 lg:px-6"
-                      key={'sponsor-' + index}
+                      key={sponsor.name}
                     >
                       <a
                         href={sponsorUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex h-full items-center justify-center gap-2.5"
+                        className="flex min-h-12 h-full items-center justify-center gap-2.5"
                         dir={isRTL ? 'rtl' : 'ltr'}
-                        aria-label={`${sponsor.name} - ${sponsorUrl}`}
+                        aria-label={`وب‌سایت ${sponsor.name}`}
                       >
                         <div
                           className={`relative h-10 w-12 shrink-0 md:h-11 md:w-14${
@@ -395,9 +403,9 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                             }`}
                             src={sponsor.logo}
                             sizes="56px"
-                            alt={`لوگوی ${sponsor.name} - ${sponsorUrl}`}
+                            alt={`لوگوی ${sponsor.name}`}
                             fill={true}
-                            priority={index < 5}
+                            priority={sponsors.list.indexOf(sponsor) < 5}
                             fallback=""
                           />
                         </div>
@@ -412,7 +420,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                 })}
               </Swiper>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>

@@ -27,7 +27,10 @@ const SeoMeta: React.FC<SeoMetaProps> = ({
     meta_author: string;
     meta_description: string;
   };
-  const { base_url } = config.site as { base_url: string; title: string };
+  const { base_url, title: siteTitle } = config.site as {
+    base_url: string;
+    title: string;
+  };
   const pathname = usePathname();
 
   const [plainTitle, setPlainTitle] = useState('');
@@ -36,63 +39,49 @@ const SeoMeta: React.FC<SeoMetaProps> = ({
   useEffect(() => {
     const getPlain = async () => {
       setPlainTitle(
-        (await plainify(
-          meta_title ? meta_title : title ? title : config.site.title
-        )) || ''
+        (await plainify(meta_title ? meta_title : title ? title : siteTitle)) ||
+          ''
       );
       setPlainDesc(
         (await plainify(description ? description : meta_description)) || ''
       );
     };
     getPlain();
-  }, [title, meta_title, description, meta_description]);
+  }, [title, meta_title, description, meta_description, siteTitle]);
+
+  const ogImage = `${base_url === '/' ? '' : base_url}${image ? image : meta_image}`;
+  const pagePath = pathname === '/' ? '' : pathname.replace(/^\//, '');
+  const ogUrl =
+    canonical ??
+    `${base_url === '/' ? 'https://frontchapter.ir' : base_url}${pagePath ? `/${pagePath}` : ''}`;
 
   return (
     <>
-      {/* title */}
       <title>{plainTitle}</title>
 
-      {/* canonical url */}
-      {canonical && <link rel="canonical" href={canonical} itemProp="url" />}
+      {canonical && <link rel="canonical" href={canonical} />}
 
-      {/* noindex robots */}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
 
-      {/* meta-description */}
       <meta name="description" content={plainDesc} />
-
-      {/* author from config.json */}
       <meta name="author" content={meta_author} />
 
-      {/* og-title */}
+      {/* Open Graph */}
       <meta property="og:title" content={plainTitle} />
-
-      {/* og-description */}
       <meta property="og:description" content={plainDesc} />
       <meta property="og:type" content="website" />
-      <meta
-        property="og:url"
-        content={`${base_url}/${pathname.replace('/', '')}`}
-      />
+      <meta property="og:url" content={ogUrl} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:alt" content={plainTitle} />
+      <meta property="og:locale" content="fa_IR" />
+      <meta property="og:site_name" content="فرانت‌چپتر" />
 
-      {/* twitter-title */}
-      <meta name="twitter:title" content={plainTitle} />
-
-      {/* twitter-description */}
-      <meta name="twitter:description" content={plainDesc} />
-
-      {/* og-image */}
-      <meta
-        property="og:image"
-        content={`${base_url}${image ? image : meta_image}`}
-      />
-
-      {/* twitter-image */}
-      <meta
-        name="twitter:image"
-        content={`${base_url}${image ? image : meta_image}`}
-      />
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={plainTitle} />
+      <meta name="twitter:description" content={plainDesc} />
+      <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={plainTitle} />
     </>
   );
 };

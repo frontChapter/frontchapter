@@ -1,23 +1,22 @@
 'use client';
 import clsx from 'clsx';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import GalleryClickOverlay from '../components/GalleryClickOverlay';
 import ImageLightbox from '../components/ImageLightbox';
+import LazyVideo from '../components/LazyVideo';
+import SectionDecorations from '../components/SectionDecorations';
 import SpeakersShowcase from '../components/SpeakersShowcase';
 import YearStatsShowcase from '../components/YearStatsShowcase';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
+import { useYearStatsAnimations } from '../../hooks/useYearStatsAnimations';
+import type { Speaker, Stat } from '../../types/content';
 
 export interface YearThreeStatsProps {
   title: string;
   year: string;
-  stats: Array<{
-    value: string;
-    label: string;
-  }>;
+  stats: Stat[];
   conference: {
     title: string;
     description: string;
@@ -57,14 +56,7 @@ export interface YearThreeStatsProps {
   };
   speakers?: {
     title: string;
-    list: Array<{
-      name: string;
-      role: string;
-      company?: string;
-      companyLogo?: string;
-      image: string;
-      linkedin?: string;
-    }>;
+    list: Speaker[];
   };
 }
 
@@ -101,138 +93,22 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
   }));
   const magazineLightbox = useImageLightbox(magazineImages);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
-
-      gsap.fromTo(
-        yearRef.current,
-        { scale: 0.9, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 1,
-          scrollTrigger: {
-            trigger: yearRef.current,
-            start: 'top bottom',
-            end: 'bottom center',
-          },
-        }
-      );
-
-      const statItems = statsRef.current?.querySelectorAll('.stat-item');
-      if (statItems && statItems.length) {
-        gsap.fromTo(
-          statItems,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: statsRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-
-      // Conference Section
-      gsap.fromTo(
-        conferenceRef.current,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: conferenceRef.current,
-            start: 'top bottom',
-          },
-        }
-      );
-
-      const speakerCards =
-        speakersRef.current?.querySelectorAll('.speaker-card');
-      if (speakerCards && speakerCards.length) {
-        gsap.fromTo(
-          speakerCards,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            stagger: 0.08,
-            duration: 0.5,
-            scrollTrigger: {
-              trigger: speakersRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-
-      // Magazine Section
-      gsap.fromTo(
-        magazineRef.current,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: magazineRef.current,
-            start: 'top bottom',
-          },
-        }
-      );
-
-      // Festival Section
-      gsap.fromTo(
-        festivalRef.current,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          scrollTrigger: {
-            trigger: festivalRef.current,
-            start: 'top bottom',
-          },
-        }
-      );
-
-      // Images Animation
-      const imageContainers =
-        sectionRef.current?.querySelectorAll('.image-container');
-      if (imageContainers && imageContainers.length) {
-        gsap.fromTo(
-          imageContainers,
-          { scale: 0.95, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            stagger: 0.1,
-            duration: 0.6,
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top bottom',
-            },
-          }
-        );
-      }
-    }
-  }, []);
+  useYearStatsAnimations({
+    yearRef,
+    statsRef,
+    sectionRef,
+    blockRefs: [conferenceRef, magazineRef, festivalRef],
+    cardSelectors: speakers
+      ? [{ containerRef: speakersRef, selector: '.speaker-card' }]
+      : [],
+  });
 
   return (
     <section
       ref={sectionRef}
       className="w-full flex flex-col items-center justify-center gap-8 md:gap-14 py-10 md:py-20 relative overflow-hidden px-4 md:px-6"
     >
-      {/* Gradient Background Elements */}
-      <div className="absolute -left-12 sm:-left-24 top-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-b from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
-      <div className="absolute -right-12 sm:-right-24 bottom-10 w-48 sm:w-72 h-48 sm:h-72 rounded-full bg-gradient-to-t from-[#ffece4]/20 to-[#ffe6db]/30 opacity-40 blur-3xl -z-10"></div>
-      <div className="absolute left-1/4 top-1/3 w-36 sm:w-48 h-36 sm:h-48 rounded-full bg-gradient-to-r from-primary/5 to-primary/10 opacity-30 blur-3xl -z-10"></div>
+      <SectionDecorations />
 
       <YearStatsShowcase
         title={title}
@@ -269,16 +145,15 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                 <span className="me-1 inline-block w-2 h-2 bg-white rounded-full animate-pulse"></span>
                 {conference.images.video_label}
               </div>
-              <video
+              <LazyVideo
+                src={conference.images.video}
+                label={conference.images.video_label}
+                showLiveBadge
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover"
-              >
-                <source src={conference.images.video} type="video/mp4" />
-                مرورگر شما از ویدیو پشتیبانی نمی‌کند.
-              </video>
+              />
             </figure>
 
             {/* Image Grid */}
@@ -298,10 +173,12 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
                     <Image
                       src={image.src}
-                      alt={`همایش ${year} فرانت‌چپتر`}
+                      alt={`${image.label} — همایش ${year} فرانت‌چپتر`}
                       width={350}
                       height={350}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 50vw, 350px"
                     />
                     <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 text-white opacity-100 md:opacity-0 md:group-hover:opacity-100 transform md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-300 z-20 pointer-events-none">
                       <span className="text-xs md:text-sm font-medium backdrop-blur-sm bg-black/20 px-2 sm:px-3 py-1 rounded-full inline-block">
@@ -343,7 +220,6 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
               title={speakers.title}
               speakers={speakers.list}
               containerRef={speakersRef}
-              titleIcon="✯"
               centered
             />
           )}
@@ -429,7 +305,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
             </p>
             <Link
               href={magazine.link.href}
-              className="px-8 py-4 bg-primary text-white font-semibold rounded inline-block hover:opacity-90 transition-all duration-300 transform hover:scale-105"
+              className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
             >
               {magazine.link.label}
             </Link>
@@ -459,7 +335,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
             </p>
             <Link
               href={festival.link.href}
-              className="px-8 py-4 bg-primary text-white font-semibold rounded inline-block hover:opacity-90 transition-all duration-300 transform hover:scale-105"
+              className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
             >
               {festival.link.label}
             </Link>

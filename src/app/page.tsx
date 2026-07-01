@@ -26,53 +26,59 @@ const Home = async () => {
   } = frontmatter;
   return (
     <GSAPWrapper>
-      <SeoMeta title="فرانت‌چپتر | جامعه توسعه‌دهندگان فرانت‌اند ایران" />
-      <HomeBanner banner={banner} sponsors={sponsors} />
-      <StorySection {...storySection} />
-      <YearOneStats
-        title={frontmatter.yearOne.title}
-        year={frontmatter.yearOne.year}
-        stats={frontmatter.yearOne.stats}
-        gatherings={frontmatter.yearOne.gatherings}
-        conference={frontmatter.yearOne.conference}
-        images={frontmatter.yearOne.images}
-        video={frontmatter.yearOne.video}
-        galleryTitle={frontmatter.yearOne.galleryTitle}
-        speakers={frontmatter.yearOne.speakers}
+      <SeoMeta
+        title="فرانت‌چپتر | جامعه توسعه‌دهندگان فرانت‌اند ایران"
+        description="جامعه‌ی فرانت‌اند ایران — همایش‌ها، دورهمی‌ها و رویدادهای تخصصی برای توسعه‌دهندگان وب"
+        image="/images/banner-app.png"
       />
-      <YearTwoStats
-        title={yearTwo.title}
-        year={yearTwo.year}
-        stats={yearTwo.stats}
-        memories={yearTwo.memories}
-        images={yearTwo.images}
-      />
-      <YearThreeStats
-        title={yearThree.title}
-        year={yearThree.year}
-        stats={yearThree.stats}
-        conference={yearThree.conference}
-        speakers={yearThree.speakers}
-        magazine={yearThree.magazine}
-        festival={yearThree.festival}
-      />
-      <YearFourStats
-        title={yearFour.title}
-        year={yearFour.year}
-        stats={yearFour.stats}
-        birthday={yearFour.birthday}
-        conference={yearFour.conference}
-        speakers={yearFour.speakers}
-        events={yearFour.events}
-        communityCollaboration={yearFour.communityCollaboration}
-      />
-      <ExecutiveTeam title={executiveTeam.title} list={executiveTeam.list} />
-      <ContinuedStory
-        subtitle={continuedStory.subtitle}
-        title={continuedStory.title}
-        description={continuedStory.description}
-      />
-      <Cta />
+      <main id="main-content">
+        <HomeBanner banner={banner} sponsors={sponsors} />
+        <StorySection {...storySection} />
+        <YearOneStats
+          title={frontmatter.yearOne.title}
+          year={frontmatter.yearOne.year}
+          stats={frontmatter.yearOne.stats}
+          gatherings={frontmatter.yearOne.gatherings}
+          conference={frontmatter.yearOne.conference}
+          images={frontmatter.yearOne.images}
+          video={frontmatter.yearOne.video}
+          galleryTitle={frontmatter.yearOne.galleryTitle}
+          speakers={frontmatter.yearOne.speakers}
+        />
+        <YearTwoStats
+          title={yearTwo.title}
+          year={yearTwo.year}
+          stats={yearTwo.stats}
+          memories={yearTwo.memories}
+          images={yearTwo.images}
+        />
+        <YearThreeStats
+          title={yearThree.title}
+          year={yearThree.year}
+          stats={yearThree.stats}
+          conference={yearThree.conference}
+          speakers={yearThree.speakers}
+          magazine={yearThree.magazine}
+          festival={yearThree.festival}
+        />
+        <YearFourStats
+          title={yearFour.title}
+          year={yearFour.year}
+          stats={yearFour.stats}
+          birthday={yearFour.birthday}
+          conference={yearFour.conference}
+          speakers={yearFour.speakers}
+          events={yearFour.events}
+          communityCollaboration={yearFour.communityCollaboration}
+        />
+        <ExecutiveTeam title={executiveTeam.title} list={executiveTeam.list} />
+        <ContinuedStory
+          subtitle={continuedStory.subtitle}
+          title={continuedStory.title}
+          description={continuedStory.description}
+        />
+        <Cta />
+      </main>
     </GSAPWrapper>
   );
 };

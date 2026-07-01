@@ -5,23 +5,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { IoLogoLinkedin } from 'react-icons/io5';
+import type { Speaker } from '../../types/content';
 
-export interface Speaker {
-  name: string;
-  talk?: string;
-  talkSubtitle?: string;
-  role: string;
-  company?: string;
-  companyLogo?: string;
-  image: string;
-  linkedin?: string;
-}
+export type { Speaker };
 
 export interface SpeakersShowcaseProps {
   title: string;
   speakers: Speaker[];
   containerRef?: React.RefObject<HTMLDivElement | null>;
-  titleIcon?: string;
   centered?: boolean;
 }
 
@@ -36,8 +27,13 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
   const hasTalks = speakers.some((s) => s.talk);
 
   return (
-    <div ref={containerRef} className="w-full">
+    <section
+      ref={containerRef}
+      className="w-full"
+      aria-labelledby="speakers-heading"
+    >
       <h3
+        id="speakers-heading"
         className={clsx(
           'mb-10 text-base font-medium text-primary md:mb-12 md:text-lg',
           centered ? 'text-center' : 'text-right'
@@ -47,24 +43,25 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
       </h3>
 
       <ul className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 lg:grid-cols-4 md:gap-x-8 md:gap-y-12">
-        {speakers.map((speaker, idx) => {
+        {speakers.map((speaker) => {
           const talkFull = [speaker.talk, speaker.talkSubtitle]
             .filter(Boolean)
             .join(' — ');
 
           return (
             <li
-              key={idx}
+              key={speaker.name}
               className="speaker-card flex w-full flex-col items-center px-1 text-center"
             >
               <div className="relative mb-3 h-[5.5rem] w-[5.5rem] shrink-0 sm:mb-4 sm:h-24 sm:w-24">
                 <div className="relative h-full w-full overflow-hidden rounded-full">
                   <Image
                     src={speaker.image}
-                    alt={speaker.name}
+                    alt={`عکس ${speaker.name} — سخنران فرانت‌چپتر`}
                     fill
                     className="object-cover"
                     sizes="96px"
+                    loading="lazy"
                   />
                 </div>
                 {speaker.companyLogo ? (
@@ -74,10 +71,11 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                   >
                     <Image
                       src={speaker.companyLogo}
-                      alt={speaker.company ?? ''}
+                      alt={speaker.company ? `لوگوی ${speaker.company}` : ''}
                       width={28}
                       height={28}
                       className="h-3 w-auto max-w-[2rem] object-contain sm:h-3.5 sm:max-w-[2.25rem]"
+                      loading="lazy"
                     />
                   </div>
                 ) : speaker.company ? (
@@ -100,10 +98,10 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
                       href={speaker.linkedin}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      aria-label={`لینکدین ${speaker.name}`}
-                      className="shrink-0 text-subtle transition-colors hover:text-primary"
+                      aria-label={`صفحه لینکدین ${speaker.name}`}
+                      className="inline-flex min-h-12 min-w-12 shrink-0 items-center justify-center text-subtle transition-colors hover:text-primary"
                     >
-                      <IoLogoLinkedin className="h-3.5 w-3.5" />
+                      <IoLogoLinkedin className="h-4 w-4" aria-hidden="true" />
                     </Link>
                   )}
                 </div>
@@ -142,7 +140,7 @@ const SpeakersShowcase: React.FC<SpeakersShowcaseProps> = ({
           );
         })}
       </ul>
-    </div>
+    </section>
   );
 };
 

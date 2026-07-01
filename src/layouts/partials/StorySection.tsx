@@ -13,21 +13,24 @@ const StorySection: React.FC<StorySectionProps> = ({
   description,
 }) => {
   return (
-    <section className="section">
+    <section className="section" aria-labelledby="story-heading">
       <div className="container">
-        <div className="animate text-center">
-          <p>{subtitle}</p>
+        <header className="animate text-center">
+          <p className="text-sm font-medium tracking-wider text-primary">
+            {subtitle}
+          </p>
           {markdownify({
             content: title,
             tag: 'h2',
             className: 'mt-4 section-title',
+            id: 'story-heading',
           })}
           {markdownify({
             content: description,
             tag: 'p',
             className: 'mt-10 max-w-2xl mx-auto !leading-loose text-base',
           })}
-        </div>
+        </header>
       </div>
     </section>
   );

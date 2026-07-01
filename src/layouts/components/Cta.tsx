@@ -23,7 +23,10 @@ function Cta() {
               tag: 'p',
               className: 'mt-10 max-w-lg mx-auto',
             })}
-            <Link href={button.link} className="btn btn-primary mt-10">
+            <Link
+              href={button.link}
+              className="btn btn-primary mt-10 inline-flex min-h-12 items-center"
+            >
               {button.label}
             </Link>
           </div>

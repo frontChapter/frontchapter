@@ -42,18 +42,19 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
         {title}
       </h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
-        {members.map((member, idx) => (
+        {members.map((member) => (
           <div
-            key={idx}
+            key={member.name}
             className="team-card group flex flex-col items-center text-center bg-surface rounded-xl p-3 sm:p-4 shadow-sm shadow-primary/5 hover:shadow-md hover:shadow-primary/10 transition-shadow duration-300"
           >
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 mb-3 rounded-full overflow-hidden ring-2 ring-primary/10 group-hover:ring-primary/30 transition-all duration-300">
               <Image
                 src={member.image}
-                alt={member.name}
+                alt={`عکس ${member.name} — تیم اجرایی فرانت‌چپتر`}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                 sizes="(max-width: 640px) 80px, 112px"
+                loading="lazy"
               />
             </div>
             <h5 className="font-bold text-sm sm:text-base text-dark mb-1">
@@ -67,10 +68,10 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
                 href={member.linkedin}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                aria-label={`لینکدین ${member.name}`}
-                className="mt-2 text-primary/60 hover:text-primary transition-colors duration-200"
+                aria-label={`صفحه لینکدین ${member.name}`}
+                className="mt-2 inline-flex min-h-12 min-w-12 items-center justify-center text-primary/60 hover:text-primary transition-colors duration-200"
               >
-                <IoLogoLinkedin className="w-5 h-5" />
+                <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
               </Link>
             )}
           </div>

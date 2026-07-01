@@ -2,11 +2,9 @@
 
 import clsx from 'clsx';
 import React from 'react';
+import type { Stat } from '../../types/content';
 
-export interface Stat {
-  value: string;
-  label: string;
-}
+export type { Stat };
 
 export interface YearStatsShowcaseProps {
   title: string;
@@ -20,36 +18,35 @@ export interface YearStatsShowcaseProps {
 interface StatItemProps {
   value: string;
   label: string;
-  showDivider?: boolean;
   className?: string;
 }
 
 export const StatItem: React.FC<StatItemProps> = ({
   value,
   label,
-  showDivider = false,
   className,
 }) => (
   <div
     className={clsx(
-      'stat-item relative flex flex-1 flex-col items-center text-center',
+      'stat-item flex flex-1 flex-col items-center justify-center text-center',
+      'px-4 py-2 sm:px-6 md:px-6 lg:px-8',
       className
     )}
   >
-    {showDivider && (
-      <div
-        className="absolute start-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-primary/20 md:block"
-        aria-hidden
-      />
-    )}
-
-    <p className="mb-1.5 font-bold text-2xl text-primary transition-transform duration-300 hover:scale-105 sm:text-3xl md:mb-2 md:text-4xl md:origin-center tabular-nums">
+    <p className="mb-1.5 font-bold text-2xl text-primary transition-transform duration-300 hover:scale-105 sm:text-3xl md:mb-2 md:text-4xl tabular-nums">
       {value}
     </p>
-    <p className="text-text text-sm leading-relaxed sm:text-base md:text-lg">
+    <p className="max-w-[9rem] text-balance text-text text-sm leading-snug sm:max-w-none sm:text-base md:text-lg md:leading-relaxed">
       {label}
     </p>
   </div>
+);
+
+const StatDivider = () => (
+  <div
+    className="hidden md:block mx-4 lg:mx-6 w-px shrink-0 self-center h-14 bg-primary/20"
+    aria-hidden="true"
+  />
 );
 
 const YearStatsShowcase: React.FC<YearStatsShowcaseProps> = ({
@@ -60,32 +57,32 @@ const YearStatsShowcase: React.FC<YearStatsShowcaseProps> = ({
   statsRef,
   className,
 }) => (
-  <div className={clsx('w-full max-w-4xl', className)}>
+  <header className={clsx('w-full max-w-5xl', className)}>
     <div className="mb-6 flex flex-col items-center justify-center gap-2 text-center md:mb-8 md:gap-3">
       <p className="font-medium text-sm tracking-wider text-primary sm:text-base">
         {title}
       </p>
-      <h1
+      <h2
         ref={yearRef}
         className="bg-gradient-to-r from-slate-800 to-primary bg-clip-text font-bold text-4xl leading-tight text-transparent dark:from-slate-200 sm:text-5xl md:text-7xl"
       >
         {year}
-      </h1>
+      </h2>
     </div>
 
-    <div ref={statsRef} className="py-4 md:py-8">
-      <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:flex md:flex-row md:justify-center md:gap-10">
+    <div ref={statsRef} className="py-4 md:py-8" role="list">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-5 sm:gap-y-8 md:flex md:flex-row md:items-center md:justify-center">
         {stats.map((stat, idx) => (
-          <StatItem
-            key={idx}
-            value={stat.value}
-            label={stat.label}
-            showDivider={idx > 0}
-          />
+          <React.Fragment key={stat.label}>
+            {idx > 0 && <StatDivider />}
+            <div role="listitem" className="flex min-w-0 flex-1 justify-center">
+              <StatItem value={stat.value} label={stat.label} />
+            </div>
+          </React.Fragment>
         ))}
       </div>
     </div>
-  </div>
+  </header>
 );
 
 export default YearStatsShowcase;

@@ -105,15 +105,21 @@ const Header: React.FC = () => {
                 {/* Hamburger menu button */}
                 {showMenu ? (
                   <button
-                    className="h-8 w-8 text-3xl text-dark lg:hidden me-2"
+                    type="button"
+                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-3xl text-dark lg:hidden me-2"
                     onClick={() => setShowMenu(false)}
+                    aria-label="بستن منو"
                   >
-                    <CgClose />
+                    <CgClose aria-hidden="true" />
                   </button>
                 ) : (
                   <button
-                    className="text-dark lg:hidden me-2"
+                    type="button"
+                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-dark lg:hidden me-2"
                     onClick={() => setShowMenu(true)}
+                    aria-label="باز کردن منو"
+                    aria-expanded={showMenu}
+                    aria-controls="nav-menu"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -233,16 +239,22 @@ const Header: React.FC = () => {
             {/* Hamburger menu button for LTR and close button for RTL when menu is open */}
             {!isRTL && showMenu && (
               <button
-                className="h-8 w-8 text-3xl text-dark lg:hidden ms-2"
+                type="button"
+                className="inline-flex min-h-12 min-w-12 items-center justify-center text-3xl text-dark lg:hidden ms-2"
                 onClick={() => setShowMenu(!showMenu)}
+                aria-label="بستن منو"
               >
-                <CgClose />
+                <CgClose aria-hidden="true" />
               </button>
             )}
             {!isRTL && !showMenu && (
               <button
-                className="text-dark lg:hidden ms-2"
+                type="button"
+                className="inline-flex min-h-12 min-w-12 items-center justify-center text-dark lg:hidden ms-2"
                 onClick={() => setShowMenu(!showMenu)}
+                aria-label="باز کردن منو"
+                aria-expanded={showMenu}
+                aria-controls="nav-menu"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -260,7 +272,7 @@ const Header: React.FC = () => {
             {/* /navbar toggler */}
             {(config as Config).nav_button.enable && (
               <Link
-                className="btn btn-primary hidden lg:flex"
+                className="btn btn-primary hidden min-h-12 items-center lg:inline-flex"
                 href={(config as Config).nav_button.link}
               >
                 {(config as Config).nav_button.label}
