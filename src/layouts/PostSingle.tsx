@@ -49,7 +49,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
         <div className="container">
           <article>
             <div className="row justify-center">
-              <div className="lg:col-10">
+              <div className="lg:col-8">
                 {image && (
                   <Image
                     src={image}
@@ -57,7 +57,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
                     width={1120}
                     alt={title}
                     priority={true}
-                    className="fade w-full rounded-lg "
+                    className="fade w-full rounded-lg max-h-[500px] object-cover"
                   />
                 )}
               </div>
@@ -84,7 +84,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
                     </p>
                   </div>
                 </div>
-                <div className="content mb-16 mt-16 text-left">
+                <div className="content mb-16 mt-16 text-start">
                   <MDXContent content={content} />
                 </div>
               </div>

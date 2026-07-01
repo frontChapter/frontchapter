@@ -7,15 +7,16 @@ import Header from '../layouts/partials/Header';
 import '../styles/style.scss';
 
 import type { ReactNode } from 'react';
-import { RTLProvider } from '../hooks/useRTL';
+import { RTLProvider, useRTL } from '../hooks/useRTL';
 
 interface RootLayoutProps {
   children: ReactNode;
 }
 
 function LayoutContent({ children }: RootLayoutProps) {
+  const { isRTL } = useRTL();
   return (
-    <html suppressHydrationWarning={true} lang="fa" dir="rtl">
+    <html suppressHydrationWarning={true} lang="fa" dir={isRTL ? 'rtl' : 'ltr'}>
       <head>
         {/* responsive meta */}
         <meta
