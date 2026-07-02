@@ -9,6 +9,8 @@ import Circle from './components/Circle';
 import Cta from './components/Cta';
 import ImageFallback from './components/ImageFallback';
 import LazyVideo from './components/LazyVideo';
+import SocialFixed from './components/SocialFixed';
+import TeamShowcase from './components/TeamShowcase';
 
 interface AboutUs {
   image: string;
@@ -50,17 +52,37 @@ interface Clients {
   brands: string[];
 }
 
-interface Member {
+interface CoreTeamMember {
   image: string;
   name: string;
-  field: string;
+  role: string;
+  bio: string;
+  social?: {
+    instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+    github?: string;
+  };
 }
 
-interface OurMember {
+interface CoreTeam {
+  subtitle: string;
+  title: string;
+  list: CoreTeamMember[];
+}
+
+interface ExecutiveTeam {
   subtitle: string;
   title: string;
   content: string;
-  list: Member[];
+  list: {
+    image: string;
+    name: string;
+    role: string;
+    linkedin?: string;
+    instagram?: string;
+    youtube?: string;
+  }[];
 }
 
 interface Country {
@@ -83,7 +105,8 @@ interface Frontmatter {
   mission: Mission;
   video: Video;
   clients: Clients;
-  our_member: OurMember;
+  core_team: CoreTeam;
+  executive_team: ExecutiveTeam;
   our_office: OurOffice;
 }
 
@@ -102,7 +125,8 @@ const About: React.FC<AboutProps> = ({ data }) => {
     mission,
     video,
     clients,
-    our_member,
+    core_team,
+    executive_team,
     our_office,
   } = frontmatter;
 
@@ -392,42 +416,71 @@ const About: React.FC<AboutProps> = ({ data }) => {
           </div>
         </div>
 
-        {/* Members */}
+        {/* Core Team */}
         <div className="section container">
           <div className="animate text-center">
-            <p>{our_member.subtitle}</p>
+            <p>{core_team.subtitle}</p>
             {markdownify({
-              content: our_member.title,
+              content: core_team.title,
+              tag: 'h2',
+              className: 'section-title mt-4',
+            })}
+          </div>
+          <div className="row justify-center mt-10">
+            {core_team.list.map((member, index) => (
+              <div
+                key={`core-member-${index}`}
+                className="animate mt-10 text-center md:col-6 lg:col-4"
+              >
+                <ImageFallback
+                  className="mx-auto rounded-full shadow-[10px_10px_0] shadow-primary/10"
+                  src={member.image}
+                  fallback="/images/fallback.png"
+                  width={200}
+                  height={200}
+                  alt={`${member.name} در فرانت‌چپتر`}
+                />
+                <h3 className="mt-8 h4">{member.name}</h3>
+                <p className="mt-2 font-semibold text-primary">{member.role}</p>
+                {markdownify({
+                  content: member.bio,
+                  tag: 'p',
+                  className: 'mt-4 text-text leading-relaxed',
+                })}
+                {member.social && (
+                  <SocialFixed
+                    source={member.social}
+                    className="social-icons mt-4 flex justify-center gap-2"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Executive Team */}
+        <div className="section container">
+          <div className="animate text-center">
+            <p>{executive_team.subtitle}</p>
+            {markdownify({
+              content: executive_team.title,
               tag: 'h2',
               className: 'section-title mt-4',
             })}
             {markdownify({
-              content: our_member.content,
+              content: executive_team.content,
               tag: 'p',
-              className: 'mt-16',
+              className: 'mt-10',
             })}
           </div>
-          <div className="row justify-center">
-            <div className="lg:col-10">
-              <div className="row">
-                {our_member.list.map((member, index) => (
-                  <div
-                    key={`member-${index}`}
-                    className="animate mt-10 text-center md:col-6 lg:col-3"
-                  >
-                    <ImageFallback
-                      className="mx-auto rounded-full shadow-[10px_10px_0] shadow-primary/10"
-                      src={member.image}
-                      fallback="/images/fallback.png"
-                      width={180}
-                      height={180}
-                      alt={member.name}
-                    />
-                    <h4 className="mt-8">{member.name}</h4>
-                    <p className="mt-3">{member.field}</p>
-                  </div>
-                ))}
-              </div>
+          <div className="row justify-center mt-6">
+            <div className="lg:col-11">
+              <TeamShowcase
+                title=""
+                members={executive_team.list}
+                centered
+                titleAs="h2"
+              />
             </div>
           </div>
         </div>

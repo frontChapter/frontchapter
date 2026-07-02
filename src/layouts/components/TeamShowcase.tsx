@@ -3,13 +3,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { IoLogoLinkedin } from 'react-icons/io5';
+import {
+  IoLogoInstagram,
+  IoLogoLinkedin,
+  IoLogoYoutube,
+} from 'react-icons/io5';
 
 export interface TeamMember {
   name: string;
   role: string;
   image: string;
   linkedin?: string;
+  instagram?: string;
+  youtube?: string;
 }
 
 export interface TeamShowcaseProps {
@@ -35,17 +41,19 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <TitleTag
-        id={titleId}
-        className={`font-bold text-lg sm:text-xl md:text-2xl text-primary mb-5 md:mb-6 inline-flex items-center flex-wrap ${
-          centered ? 'justify-center w-full' : ''
-        }`}
-      >
-        <span className="text-2xl md:text-3xl text-primary/40 me-2">
-          {titleIcon}
-        </span>
-        {title}
-      </TitleTag>
+      {title ? (
+        <TitleTag
+          id={titleId}
+          className={`font-bold text-lg sm:text-xl md:text-2xl text-primary mb-5 md:mb-6 inline-flex items-center flex-wrap ${
+            centered ? 'justify-center w-full' : ''
+          }`}
+        >
+          <span className="text-2xl md:text-3xl text-primary/40 me-2">
+            {titleIcon}
+          </span>
+          {title}
+        </TitleTag>
+      ) : null}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
         {members.map((member) => (
           <div
@@ -68,16 +76,42 @@ const TeamShowcase: React.FC<TeamShowcaseProps> = ({
             <p className="text-xs sm:text-sm text-text leading-relaxed">
               {member.role}
             </p>
-            {member.linkedin && (
-              <Link
-                href={member.linkedin}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                aria-label={`صفحه لینکدین ${member.name}`}
-                className="mt-2 inline-flex min-h-12 min-w-12 items-center justify-center text-primary/60 hover:text-primary transition-colors duration-200"
-              >
-                <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
-              </Link>
+            {(member.linkedin || member.instagram || member.youtube) && (
+              <div className="mt-2 flex items-center justify-center gap-1">
+                {member.linkedin && (
+                  <Link
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    aria-label={`صفحه لینکدین ${member.name}`}
+                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-primary/60 hover:text-primary transition-colors duration-200"
+                  >
+                    <IoLogoLinkedin className="w-5 h-5" aria-hidden="true" />
+                  </Link>
+                )}
+                {member.instagram && (
+                  <Link
+                    href={member.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    aria-label={`صفحه اینستاگرام ${member.name}`}
+                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-primary/60 hover:text-primary transition-colors duration-200"
+                  >
+                    <IoLogoInstagram className="w-5 h-5" aria-hidden="true" />
+                  </Link>
+                )}
+                {member.youtube && (
+                  <Link
+                    href={member.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    aria-label={`کانال یوتیوب ${member.name}`}
+                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-primary/60 hover:text-primary transition-colors duration-200"
+                  >
+                    <IoLogoYoutube className="w-5 h-5" aria-hidden="true" />
+                  </Link>
+                )}
+              </div>
             )}
           </div>
         ))}

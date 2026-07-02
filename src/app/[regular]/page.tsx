@@ -54,7 +54,8 @@ const RegularPages = async ({
     fm.mission &&
     fm.video &&
     fm.clients &&
-    fm.our_member &&
+    fm.core_team &&
+    fm.executive_team &&
     fm.our_office;
   const isContact = typeof fm.title === 'string' && layout === 'contact';
   const isDefault =
