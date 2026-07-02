@@ -62,9 +62,7 @@ export function authorMatchesSpeaker(
     return authorName
       .split(' و ')
       .map((n) => n.trim())
-      .some(
-        (part) => part === speaker.name || speaker.aliases.includes(part)
-      );
+      .some((part) => part === speaker.name || speaker.aliases.includes(part));
   }
 
   return authorName === speaker.name || speaker.aliases.includes(authorName);

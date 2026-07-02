@@ -135,8 +135,9 @@ function collectAuthorsFromPosts() {
 
   for (const file of files) {
     const session = Number(file.match(/session-(\d+)/)[1]);
-    const data = matter(fs.readFileSync(path.join(POSTS_DIR, file), 'utf8'))
-      .data;
+    const data = matter(
+      fs.readFileSync(path.join(POSTS_DIR, file), 'utf8')
+    ).data;
     sessionAuthors[session] = {
       name: data.author?.name,
       avatar: data.author?.avatar,
@@ -197,7 +198,10 @@ async function main() {
 
   for (const [alias, canonical] of Object.entries(NAME_ALIASES)) {
     const canonicalSlug = slugify(canonical);
-    if (speakers[canonicalSlug] && !speakers[canonicalSlug].aliases.includes(alias)) {
+    if (
+      speakers[canonicalSlug] &&
+      !speakers[canonicalSlug].aliases.includes(alias)
+    ) {
       speakers[canonicalSlug].aliases.push(alias);
     }
   }
