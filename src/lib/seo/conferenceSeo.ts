@@ -226,7 +226,8 @@ const buildScheduleSubEvents = (
   return conference.schedule
     .filter((event) => ['talk', 'panel', 'competition'].includes(event.type))
     .map((event: ScheduleEvent, index) => {
-      const startDate = scheduleTimeToIso(conference.startDate, event.time);
+      const eventDate = event.date ?? conference.startDate;
+      const startDate = scheduleTimeToIso(eventDate, event.time);
 
       return {
         '@type': 'Event',

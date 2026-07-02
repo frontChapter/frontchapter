@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { Fragment } from 'react';
 import type { ScheduleEvent, ScheduleEventType } from '@lib/conferences';
 import {
   IoCafeOutline,
@@ -72,31 +73,44 @@ const ConferenceTimeline = ({ events }: ConferenceTimelineProps) => {
         />
 
         <ol className="relative space-y-3 md:space-y-4">
-          {events.map((event) => {
+          {events.map((event, index) => {
             const style = typeStyles[event.type] ?? typeStyles.general;
+            const showDayHeader =
+              Boolean(event.day) && event.day !== events[index - 1]?.day;
+            const timeLabel = event.endTime
+              ? `${event.time} — ${event.endTime}`
+              : event.time;
 
             return (
-              <li
-                key={`${event.time}-${event.title}`}
-                className="relative grid grid-cols-[auto_1fr] items-stretch gap-3 md:gap-5"
+              <Fragment
+                key={`${event.day ?? ''}-${event.time}-${event.title}`}
               >
-                <div className="relative z-10 flex w-14 shrink-0 flex-col items-center pt-1 md:w-16">
-                  <time
-                    dateTime={event.time}
-                    className="mb-2 text-xs font-bold tabular-nums text-primary md:text-sm"
-                  >
-                    {event.time}
-                  </time>
-                  <span
-                    className={clsx(
-                      'h-3 w-3 rounded-full md:h-3.5 md:w-3.5',
-                      style.dot
-                    )}
-                    aria-hidden="true"
-                  />
-                </div>
+                {showDayHeader && (
+                  <li className="list-none pt-4 first:pt-0 md:pt-6">
+                    <h3 className="text-center text-sm font-bold text-primary md:text-base">
+                      {event.day}
+                    </h3>
+                  </li>
+                )}
 
-                <article className="min-w-0 rounded-xl border border-border bg-surface-solid px-4 py-3.5 shadow-sm transition-shadow hover:shadow-md md:px-5 md:py-4">
+                <li className="relative grid grid-cols-[auto_1fr] items-stretch gap-3 md:gap-5">
+                  <div className="relative z-10 flex w-14 shrink-0 flex-col items-center pt-1 md:w-16">
+                    <time
+                      dateTime={event.time}
+                      className="mb-2 text-center text-[0.7rem] font-bold leading-tight tabular-nums text-primary md:text-xs"
+                    >
+                      {timeLabel}
+                    </time>
+                    <span
+                      className={clsx(
+                        'h-3 w-3 rounded-full md:h-3.5 md:w-3.5',
+                        style.dot
+                      )}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <article className="min-w-0 rounded-xl border border-border bg-surface-solid px-4 py-3.5 shadow-sm transition-shadow hover:shadow-md md:px-5 md:py-4">
                   <h4 className="text-sm font-semibold leading-snug text-dark md:text-base">
                     {event.title}
                   </h4>
@@ -122,8 +136,9 @@ const ConferenceTimeline = ({ events }: ConferenceTimelineProps) => {
                       {event.description}
                     </p>
                   )}
-                </article>
-              </li>
+                  </article>
+                </li>
+              </Fragment>
             );
           })}
         </ol>

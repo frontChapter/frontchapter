@@ -37,6 +37,9 @@ export type ScheduleEventType =
 
 export interface ScheduleEvent {
   time: string;
+  endTime?: string;
+  day?: string;
+  date?: string;
   title: string;
   subtitle?: string;
   speaker?: string;
