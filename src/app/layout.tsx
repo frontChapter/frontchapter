@@ -2,6 +2,8 @@
 
 import config from '@config/config.json';
 import NextTopLoader from 'nextjs-toploader';
+import Analytics from '../layouts/components/Analytics';
+import SiteVerification from '../layouts/components/SiteVerification';
 import TwSizeIndicator from '../layouts/components/TwSizeIndicator';
 import Footer from '../layouts/partials/Footer';
 import Header from '../layouts/partials/Header';
@@ -28,6 +30,8 @@ function LayoutContent({ children }: RootLayoutProps) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5"
         />
+
+        <SiteVerification />
 
         {/* favicon */}
         <link rel="shortcut icon" href={config.site.favicon} />
@@ -59,6 +63,7 @@ function LayoutContent({ children }: RootLayoutProps) {
         />
       </head>
       <body suppressHydrationWarning={true} className="overflow-x-hidden">
+        <Analytics />
         <NextTopLoader color="#fe6019" height={3} showSpinner={false} />
         <a
           href="#main-content"

@@ -9,38 +9,39 @@
     "logo_height": "34",
     "logo_text": "فرانت‌چپتر"
   },
-
   "settings": {
     "pagination": 12,
     "summary_length": 200,
     "blog_folder": "posts"
   },
-
+  "analytics": {
+    "google_tag_manager_id": "GTM-W92NLXCF",
+    "google_analytics_id": "G-VFEERTE4VL",
+    "google_site_verification": "",
+    "bing_site_verification": "",
+    "yandex_verification": ""
+  },
   "params": {
     "tag_manager_id": "",
     "contact_form_action": "#",
     "footer_content": "فرانت‌چپتر، جامعه‌ای که بهش تعلق داری 🥕",
     "copyright": "ساخته شده با ❤️ توسط فرانت‌چپتر | © 2025 همه حقوق محفوظ است."
   },
-
   "contact_info": {
     "phone": "",
     "email": "info@frontchapter.ir",
     "location": "مازندران، بابلسر، خیابان طالقانی، مرکز نوآوری"
   },
-
   "nav_button": {
     "enable": true,
     "label": "هویجی شو!",
     "link": "#"
   },
-
   "metadata": {
     "meta_author": "frontchapter",
     "meta_image": "/images/logo.svg",
     "meta_description": "کامیونتی فرانت‌اند ایران؛ همایش‌ها، دورهمی‌ها و رویدادهای تخصصی برای برنامه‌نویسان وب. آموزش فرانت‌اند و شبکه‌سازی حرفه‌ای."
   },
-
   "call_to_action": {
     "enable": true,
     "title": "🥕 هویجی شو 🥕",
