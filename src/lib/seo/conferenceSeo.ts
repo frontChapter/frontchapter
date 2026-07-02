@@ -44,6 +44,81 @@ export const scheduleTimeToIso = (
   return `${date}T${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00+03:30`;
 };
 
+const addMinutesToIso = (iso: string, minutes: number): string | undefined => {
+  const match = iso.match(
+    /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})\+03:30$/
+  );
+  if (!match) return undefined;
+
+  const totalMinutes = Number(match[2]) * 60 + Number(match[3]) + minutes;
+  const minutesInDay = ((totalMinutes % (24 * 60)) + 24 * 60) % (24 * 60);
+  const hours = Math.floor(minutesInDay / 60);
+  const mins = minutesInDay % 60;
+
+  return `${match[1]}T${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${match[4]}+03:30`;
+};
+
+const resolveScheduleEndDate = (
+  schedule: ScheduleEvent[],
+  scheduleIndex: number,
+  eventDate: string,
+  conference: ConferenceProfile
+): string | undefined => {
+  const event = schedule[scheduleIndex];
+
+  if (event.endTime) {
+    return scheduleTimeToIso(eventDate, event.endTime);
+  }
+
+  const next = schedule[scheduleIndex + 1];
+  if (next) {
+    const nextDate = next.date ?? eventDate;
+    return scheduleTimeToIso(nextDate, next.time);
+  }
+
+  const startDate = scheduleTimeToIso(eventDate, event.time);
+  if (startDate) {
+    return addMinutesToIso(startDate, 30);
+  }
+
+  if (conference.endDate?.includes('T')) {
+    return conference.endDate;
+  }
+
+  return undefined;
+};
+
+const resolveConferenceEventDates = (conference: ConferenceProfile) => {
+  const schedule = conference.schedule ?? [];
+  let startDate = conference.startDate;
+  let endDate = conference.endDate;
+
+  if (!startDate.includes('T') && schedule.length > 0) {
+    const first = schedule[0];
+    const firstDate = first.date ?? conference.startDate;
+    startDate =
+      scheduleTimeToIso(firstDate, first.time) ?? conference.startDate;
+  }
+
+  if (schedule.length > 0) {
+    const lastIndex = schedule.length - 1;
+    const last = schedule[lastIndex];
+    const lastDate = last.date ?? conference.endDate ?? conference.startDate;
+    const resolvedEnd = resolveScheduleEndDate(
+      schedule,
+      lastIndex,
+      lastDate,
+      conference
+    );
+
+    if (resolvedEnd) {
+      endDate = resolvedEnd;
+    }
+  }
+
+  return { startDate, endDate };
+};
+
 export const parseConferenceLocation = (locationName: string) => {
   const [localityPart, venuePart] = locationName
     .split('—')
@@ -313,17 +388,25 @@ const buildScheduleSubEvents = (
 ): Record<string, unknown>[] => {
   if (!conference.schedule?.length) return [];
 
-  return conference.schedule
-    .filter((event) =>
+  const schedule = conference.schedule;
+  let sessionIndex = 0;
+
+  return schedule
+    .map((event, scheduleIndex) => ({ event, scheduleIndex }))
+    .filter(({ event }) =>
       ['talk', 'panel', 'competition', 'workshop'].includes(event.type)
     )
-    .map((event: ScheduleEvent, index) => {
+    .map(({ event, scheduleIndex }) => {
+      sessionIndex += 1;
       const eventDate = event.date ?? conference.startDate;
       const startDate = scheduleTimeToIso(eventDate, event.time);
-      const endDate = event.endTime
-        ? scheduleTimeToIso(eventDate, event.endTime)
-        : undefined;
-      const sessionUrl = `${eventUrl}#session-${index + 1}`;
+      const endDate = resolveScheduleEndDate(
+        schedule,
+        scheduleIndex,
+        eventDate,
+        conference
+      );
+      const sessionUrl = `${eventUrl}#session-${sessionIndex}`;
       const sessionStartDate = startDate ?? conference.startDate;
 
       return {
@@ -364,7 +447,13 @@ const buildScheduleSubEvents = (
                   name: speaker.name,
                 })),
               }
-            : {}),
+            : event.type === 'competition'
+              ? {
+                  performer: {
+                    '@id': organizationId,
+                  },
+                }
+              : {}),
         superEvent: {
           '@id': `${eventUrl}#event`,
         },
@@ -374,7 +463,9 @@ const buildScheduleSubEvents = (
 
 export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
   const eventUrl = `${SITE_URL}${conferencePath(conference.slug)}`;
-  const isPastEvent = new Date(conference.startDate).getTime() < Date.now();
+  const { startDate: eventStartDate, endDate: eventEndDate } =
+    resolveConferenceEventDates(conference);
+  const isPastEvent = new Date(eventStartDate).getTime() < Date.now();
   const { locality, region, venue } = parseConferenceLocation(
     conference.locationName
   );
@@ -448,8 +539,8 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
       name: pageName,
       alternateName: [`همایش فرانت‌چپتر ${conference.year}`, conference.title],
       description: plainifySync(conference.description),
-      startDate: conference.startDate,
-      ...(conference.endDate ? { endDate: conference.endDate } : {}),
+      startDate: eventStartDate,
+      ...(eventEndDate ? { endDate: eventEndDate } : {}),
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       inLanguage: 'fa-IR',
@@ -464,8 +555,8 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
       ...(attendeeCount ? { maximumAttendeeCapacity: attendeeCount } : {}),
       offers: buildEventOffers(
         eventUrl,
-        conference.startDate,
-        conference.endDate,
+        eventStartDate,
+        eventEndDate,
         isPastEvent
       ),
       ...(subEvents.length ? { subEvent: subEvents } : {}),
