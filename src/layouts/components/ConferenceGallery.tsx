@@ -155,7 +155,7 @@ const ConferenceGallery = ({ conference }: ConferenceGalleryProps) => {
         >
           ✯
         </span>
-        <h2 className="section-title text-h5">
+        <h2 className="section-title text-h5 text-center">
           {conference.galleryTitle ?? 'گالری همایش'}
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-muted md:text-base">

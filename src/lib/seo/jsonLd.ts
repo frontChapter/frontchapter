@@ -1,7 +1,6 @@
 import config from '@config/config.json';
 import social from '@config/social.json';
 import { conferencePath } from '@lib/conferences.paths';
-import type { ConferenceProfile } from '@lib/conferences';
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
@@ -9,6 +8,11 @@ import {
   SITE_URL,
 } from './constants';
 import { plainifySync } from './plainify';
+
+export {
+  buildConferenceJsonLd,
+  buildConferencesListJsonLd,
+} from './conferenceSeo';
 
 export interface CommunityEventInput {
   name: string;
@@ -289,85 +293,5 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
   return {
     '@context': 'https://schema.org',
     '@graph': graph,
-  };
-};
-
-export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
-  const eventUrl = `${SITE_URL}${conferencePath(conference.slug)}`;
-  const isPastEvent = new Date(conference.startDate).getTime() < Date.now();
-  const performers =
-    conference.speakers?.list.map((speaker) => speaker.name) ?? [];
-
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        '@id': `${eventUrl}#breadcrumb`,
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: SITE_NAME,
-            item: SITE_URL,
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'همایش‌ها',
-            item: `${SITE_URL}/conferences/`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name: plainifySync(`${conference.title} (${conference.year})`),
-            item: eventUrl,
-          },
-        ],
-      },
-      {
-        '@type': 'Event',
-        '@id': `${eventUrl}#event`,
-        url: eventUrl,
-        name: `${conference.title} (${conference.year})`,
-        description: plainifySync(conference.description),
-        startDate: conference.startDate,
-        ...(conference.endDate ? { endDate: conference.endDate } : {}),
-        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-        eventStatus: 'https://schema.org/EventScheduled',
-        organizer: {
-          '@id': organizationId,
-        },
-        image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
-        location: {
-          '@type': 'Place',
-          name: conference.locationName,
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: conference.locationName,
-            addressCountry: 'IR',
-          },
-        },
-        ...(performers.length
-          ? {
-              performer: performers.map((name) => ({
-                '@type': 'Person',
-                name,
-              })),
-            }
-          : {}),
-        offers: {
-          '@type': 'Offer',
-          url: eventUrl,
-          price: '0',
-          priceCurrency: 'IRR',
-          availability: isPastEvent
-            ? 'https://schema.org/SoldOut'
-            : 'https://schema.org/InStock',
-          validFrom: conference.startDate,
-          ...(conference.endDate ? { validThrough: conference.endDate } : {}),
-        },
-      },
-    ],
   };
 };

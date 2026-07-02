@@ -1,36 +1,46 @@
 import dateFormat from '@lib/utils/dateFormat';
 import type { ConferenceProfile } from '@lib/conferences';
-import { conferencePath } from '@lib/conferences.paths';
-import { buildPageMetadata } from '@lib/seo/metadata';
+import { buildConferenceMetadata } from '@lib/seo/conferenceSeo';
 import MDXContent from '../app/helper/MDXContent';
 import Banner from './components/Banner';
 import Cta from './components/Cta';
 import ConferenceGallery from './components/ConferenceGallery';
 import ConferenceTimeline from './components/ConferenceTimeline';
 import SpeakersShowcase from './components/SpeakersShowcase';
+import TeamShowcase from './components/TeamShowcase';
 import { StatItem } from './components/YearStatsShowcase';
 
 interface ConferenceSingleProps {
   conference: ConferenceProfile;
 }
 
-export const buildConferenceMetadata = (conference: ConferenceProfile) =>
-  buildPageMetadata({
-    title: conference.title,
-    meta_title: `${conference.title} (${conference.year}) | فرانت‌چپتر`,
-    description: conference.description,
-    canonical: conferencePath(conference.slug),
-  });
+export { buildConferenceMetadata };
 
 const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
+  const speakersFirst = conference.design === 'classic';
+
   const dateLabel =
     conference.endDate && conference.endDate !== conference.startDate
       ? `${dateFormat(conference.startDate)} تا ${dateFormat(conference.endDate)}`
       : dateFormat(conference.startDate);
 
+  const speakersBlock =
+    conference.speakers && conference.speakers.list.length > 0 ? (
+      <div className="fade mt-12">
+        <SpeakersShowcase
+          title={conference.speakers.title}
+          speakers={conference.speakers.list}
+          centered
+        />
+      </div>
+    ) : null;
+
   return (
     <>
-      <section className="section pt-0">
+      <article
+        className="section pt-0"
+        aria-label={`${conference.title} (${conference.year})`}
+      >
         <Banner
           title={`${conference.title} (${conference.year})`}
           parent={{ label: 'همایش‌ها', href: '/conferences/' }}
@@ -41,9 +51,12 @@ const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
               <span className="rounded-full border border-border px-4 py-1.5">
                 {conference.locationName}
               </span>
-              <span className="rounded-full border border-border px-4 py-1.5">
+              <time
+                dateTime={conference.startDate}
+                className="rounded-full border border-border px-4 py-1.5"
+              >
                 {dateLabel}
-              </span>
+              </time>
             </div>
 
             {conference.stats.length > 0 && (
@@ -70,6 +83,8 @@ const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
               </p>
             </div>
 
+            {speakersFirst && speakersBlock}
+
             {conference.extraContent && (
               <div className="fade content mt-12 text-start">
                 <MDXContent
@@ -83,20 +98,25 @@ const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
               </div>
             )}
 
-            {conference.speakers && conference.speakers.list.length > 0 && (
-              <div className="fade mt-12">
-                <SpeakersShowcase
-                  title={conference.speakers.title}
-                  speakers={conference.speakers.list}
+            {!speakersFirst && speakersBlock}
+
+            {conference.team && conference.team.list.length > 0 && (
+              <section className="fade my-8 rounded-2xl border border-border-secondary bg-theme-light p-6 md:my-10 md:p-8">
+                <TeamShowcase
+                  title={conference.team.title}
+                  members={conference.team.list}
+                  titleAs="h2"
+                  titleId="conference-team-heading"
+                  titleIcon="✯"
                   centered
                 />
-              </div>
+              </section>
             )}
 
             <ConferenceGallery conference={conference} />
           </div>
         </div>
-      </section>
+      </article>
       <Cta />
     </>
   );

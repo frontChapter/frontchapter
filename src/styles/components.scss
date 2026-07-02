@@ -230,6 +230,13 @@
   }
 }
 
+.conference-section {
+  .content img,
+  img {
+    @apply rounded-xl;
+  }
+}
+
 //section-title
 .section-title {
   @apply relative;

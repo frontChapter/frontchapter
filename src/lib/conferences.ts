@@ -44,6 +44,23 @@ export interface ScheduleEvent {
   type: ScheduleEventType;
 }
 
+export interface ConferenceSeo {
+  meta_title?: string;
+  meta_description?: string;
+  keywords?: string[];
+  og_image?: string;
+  images?: string[];
+}
+
+export type ConferenceDesign = 'classic' | 'default';
+
+export interface ConferenceTeamMember {
+  name: string;
+  role: string;
+  image: string;
+  linkedin?: string;
+}
+
 export interface ConferenceProfile {
   slug: string;
   title: string;
@@ -66,6 +83,12 @@ export interface ConferenceProfile {
   galleryTitle?: string;
   media?: ConferenceMedia;
   schedule?: ScheduleEvent[];
+  seo?: ConferenceSeo;
+  design?: ConferenceDesign;
+  team?: {
+    title: string;
+    list: ConferenceTeamMember[];
+  };
   extraContent: string;
 }
 
@@ -76,7 +99,16 @@ const getHomepageFrontmatter = (): Frontmatter => {
 
 const getConferencePageData = (
   slug: string
-): { content: string; schedule?: ScheduleEvent[] } => {
+): {
+  content: string;
+  schedule?: ScheduleEvent[];
+  seo?: ConferenceSeo;
+  design?: ConferenceDesign;
+  team?: {
+    title: string;
+    list: ConferenceTeamMember[];
+  };
+} => {
   const filePath = path.join('src/content/conferences', `${slug}.md`);
   if (!fs.existsSync(filePath)) return { content: '' };
 
@@ -84,8 +116,11 @@ const getConferencePageData = (
   const schedule = Array.isArray(data.schedule)
     ? (data.schedule as ScheduleEvent[])
     : undefined;
+  const seo = data.seo as ConferenceSeo | undefined;
+  const design = data.design as ConferenceDesign | undefined;
+  const team = data.team as ConferenceProfile['team'];
 
-  return { content: content.trim(), schedule };
+  return { content: content.trim(), schedule, seo, design, team };
 };
 
 const buildConferenceProfile = (
@@ -116,6 +151,9 @@ const buildConferenceProfile = (
     galleryTitle: year.galleryTitle,
     media: conference.images,
     schedule: pageData.schedule,
+    seo: pageData.seo,
+    design: pageData.design ?? 'default',
+    team: pageData.team,
     extraContent: pageData.content,
   };
 };

@@ -1,10 +1,11 @@
 import GSAPWrapper from '@/src/layouts/components/GSAPWrapper';
-import ConferenceSingle, {
-  buildConferenceMetadata,
-} from '@/src/layouts/ConferenceSingle';
+import ConferenceSingle from '@/src/layouts/ConferenceSingle';
 import JsonLd from '@/src/layouts/partials/JsonLd';
 import { getAllConferences, getConferenceBySlug } from '@lib/conferences';
-import { buildConferenceJsonLd } from '@lib/seo/jsonLd';
+import {
+  buildConferenceJsonLd,
+  buildConferenceMetadata,
+} from '@lib/seo/conferenceSeo';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 

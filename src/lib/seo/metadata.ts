@@ -25,6 +25,7 @@ export interface PageSeoInput {
   image?: string;
   canonical?: string;
   noindex?: boolean;
+  keywords?: string[];
   authors?: { name: string; url?: string }[];
   type?: 'website' | 'article';
   article?: ArticleSeoInput;
@@ -46,6 +47,7 @@ export const buildPageMetadata = ({
   image,
   canonical,
   noindex,
+  keywords,
   authors,
   type = 'website',
   article,
@@ -88,6 +90,7 @@ export const buildPageMetadata = ({
   return {
     title: pageTitle,
     description: pageDescription,
+    ...(keywords?.length ? { keywords } : {}),
     authors: pageAuthors,
     metadataBase: new URL(SITE_URL),
     alternates: {

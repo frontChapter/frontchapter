@@ -4,7 +4,6 @@ import { homeMetadata } from '@lib/seo/metadata';
 import Cta from '../layouts/components/Cta';
 import GSAPWrapper from '../layouts/components/GSAPWrapper';
 import ContinuedStory from '../layouts/partials/ContinuedStory';
-import ExecutiveTeam from '../layouts/partials/ExecutiveTeam';
 import HomeBanner from '../layouts/partials/HomeBanner';
 import JsonLd from '../layouts/partials/JsonLd';
 import StorySection from '../layouts/partials/StorySection';
@@ -27,7 +26,6 @@ const Home = async () => {
     yearThree,
     yearFour,
     continuedStory,
-    executiveTeam,
   } = frontmatter;
 
   const mapSpeakers = (speakers?: { list?: { name: string }[] }) =>
@@ -122,10 +120,6 @@ const Home = async () => {
             speakers={yearFour.speakers}
             events={yearFour.events}
             communityCollaboration={yearFour.communityCollaboration}
-          />
-          <ExecutiveTeam
-            title={executiveTeam.title}
-            list={executiveTeam.list}
           />
           <ContinuedStory
             subtitle={continuedStory.subtitle}
