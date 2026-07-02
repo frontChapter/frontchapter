@@ -40,10 +40,7 @@ const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
 
   return (
     <>
-      <article
-        className="section pt-0"
-        aria-label={pageLabel}
-      >
+      <article className="section pt-0" aria-label={pageLabel}>
         <Banner
           title={pageLabel}
           parent={{ label: 'همایش‌ها', href: '/conferences/' }}
