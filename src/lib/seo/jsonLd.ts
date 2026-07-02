@@ -12,6 +12,12 @@ export interface CommunityEventInput {
   name: string;
   description?: string;
   year?: string;
+  startDate: string;
+  endDate?: string;
+  locationName?: string;
+  performers?: string[];
+  offersUrl?: string;
+  eventAttendanceMode?: 'offline' | 'online' | 'mixed';
 }
 
 const organizationId = `${SITE_URL}/#organization`;
@@ -201,6 +207,12 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
     },
   ];
 
+  const attendanceModeMap = {
+    offline: 'https://schema.org/OfflineEventAttendanceMode',
+    online: 'https://schema.org/OnlineEventAttendanceMode',
+    mixed: 'https://schema.org/MixedEventAttendanceMode',
+  } as const;
+
   if (events.length > 0) {
     graph.push({
       '@type': 'EventSeries',
@@ -212,28 +224,55 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
         '@id': organizationId,
       },
       image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
-      subEvent: events.map((event, index) => ({
-        '@type': 'Event',
-        '@id': `${SITE_URL}/#event-${index + 1}`,
-        name: event.year ? `${event.name} (${event.year})` : event.name,
-        description: event.description
-          ? plainifySync(event.description)
-          : undefined,
-        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-        eventStatus: 'https://schema.org/EventScheduled',
-        organizer: {
-          '@id': organizationId,
-        },
-        image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
-        location: {
-          '@type': 'Place',
-          name: 'ایران',
-          address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'IR',
+      subEvent: events.map((event, index) => {
+        const isPastEvent = new Date(event.startDate).getTime() < Date.now();
+        const attendanceMode =
+          attendanceModeMap[event.eventAttendanceMode ?? 'offline'];
+
+        return {
+          '@type': 'Event',
+          '@id': `${SITE_URL}/#event-${index + 1}`,
+          name: event.year ? `${event.name} (${event.year})` : event.name,
+          description: event.description
+            ? plainifySync(event.description)
+            : undefined,
+          startDate: event.startDate,
+          ...(event.endDate ? { endDate: event.endDate } : {}),
+          eventAttendanceMode: attendanceMode,
+          ...(!isPastEvent
+            ? { eventStatus: 'https://schema.org/EventScheduled' }
+            : {}),
+          organizer: {
+            '@id': organizationId,
           },
-        },
-      })),
+          image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+          location: {
+            '@type': 'Place',
+            name: event.locationName ?? 'ایران',
+            address: {
+              '@type': 'PostalAddress',
+              addressCountry: 'IR',
+            },
+          },
+          ...(event.performers?.length
+            ? {
+                performer: event.performers.map((name) => ({
+                  '@type': 'Person',
+                  name,
+                })),
+              }
+            : {}),
+          offers: {
+            '@type': 'Offer',
+            url: event.offersUrl ?? SITE_URL,
+            price: '0',
+            priceCurrency: 'IRR',
+            availability: isPastEvent
+              ? 'https://schema.org/SoldOut'
+              : 'https://schema.org/InStock',
+          },
+        };
+      }),
     });
   }
 
