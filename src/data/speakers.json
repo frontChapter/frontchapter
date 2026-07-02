@@ -1,0 +1,369 @@
+{
+  "saleh-shojaei": {
+    "slug": "saleh-shojaei",
+    "name": "صالح شجاعی",
+    "avatar": "/images/author/saleh.jpg",
+    "linkedin": "https://www.linkedin.com/in/salehshojaei/",
+    "aliases": [
+      "سید صالح شجاعی"
+    ],
+    "sessions": [
+      1,
+      4,
+      7,
+      9,
+      11,
+      24,
+      25,
+      39,
+      51,
+      52,
+      53,
+      54,
+      55,
+      61,
+      66
+    ]
+  },
+  "fatemeh-khosravi": {
+    "slug": "fatemeh-khosravi",
+    "name": "فاطمه خسروی",
+    "avatar": "/images/author/fatemeh.jpg",
+    "aliases": [],
+    "sessions": [
+      2
+    ]
+  },
+  "omid-hekayati": {
+    "slug": "omid-hekayati",
+    "name": "امید حکایتی",
+    "avatar": "/images/author/omid.jpg",
+    "linkedin": "https://www.linkedin.com/in/omidhekayati/",
+    "aliases": [
+      "امید"
+    ],
+    "sessions": [
+      3,
+      14,
+      28
+    ]
+  },
+  "ali-norouzi": {
+    "slug": "ali-norouzi",
+    "name": "علی نوروزی",
+    "avatar": "/images/author/ali.jpg",
+    "aliases": [],
+    "sessions": [
+      5
+    ]
+  },
+  "sina-karimi": {
+    "slug": "sina-karimi",
+    "name": "سینا کریمی",
+    "avatar": "/images/author/sina.jpg",
+    "aliases": [],
+    "sessions": [
+      6
+    ]
+  },
+  "ali-golkar": {
+    "slug": "ali-golkar",
+    "name": "علی گلکار",
+    "avatar": "/images/author/golkar.jpg",
+    "linkedin": "https://www.linkedin.com/in/aligolkarali/",
+    "aliases": [],
+    "sessions": [
+      8,
+      63
+    ]
+  },
+  "mohammad-saleh-fadaei": {
+    "slug": "mohammad-saleh-fadaei",
+    "name": "محمد صالح فدائی",
+    "avatar": "/images/author/fadaei.jpg",
+    "aliases": [],
+    "sessions": [
+      10,
+      15
+    ]
+  },
+  "abdullah-kashtkar": {
+    "slug": "abdullah-kashtkar",
+    "name": "عبدالله کشتکار",
+    "avatar": "/images/author/abdullah.jpg",
+    "aliases": [],
+    "sessions": [
+      12
+    ]
+  },
+  "pouria-babaali": {
+    "slug": "pouria-babaali",
+    "name": "پوریا باباعلی",
+    "avatar": "/images/author/pouria.jpg",
+    "linkedin": "https://www.linkedin.com/in/pouriya-babaali/",
+    "aliases": [],
+    "sessions": [
+      13
+    ]
+  },
+  "amirhossein-karimi": {
+    "slug": "amirhossein-karimi",
+    "name": "امیرحسین کریمی",
+    "avatar": "/images/author/amirhossein.jpg",
+    "linkedin": "https://www.linkedin.com/in/amirhosseinkarimi/",
+    "aliases": [],
+    "sessions": [
+      17,
+      20
+    ]
+  },
+  "mojtaba-afraz": {
+    "slug": "mojtaba-afraz",
+    "name": "مجتبی افراز",
+    "avatar": "/images/author/mojtaba.jpg",
+    "linkedin": "https://www.linkedin.com/in/mojtaba-afraz/",
+    "aliases": [],
+    "sessions": [
+      18
+    ]
+  },
+  "erfan-safari": {
+    "slug": "erfan-safari",
+    "name": "عرفان صفری",
+    "avatar": "/images/author/erfan.jpg",
+    "aliases": [],
+    "sessions": [
+      19
+    ]
+  },
+  "arfa-maddi": {
+    "slug": "arfa-maddi",
+    "name": "ارفع مددی",
+    "avatar": "/images/author/arfa.jpg",
+    "linkedin": "https://www.linkedin.com/in/arfa-maddi/",
+    "aliases": [],
+    "sessions": [
+      23
+    ]
+  },
+  "kamran-davar": {
+    "slug": "kamran-davar",
+    "name": "کامران داور",
+    "avatar": "/images/author/kamran.jpg",
+    "linkedin": "https://www.linkedin.com/in/kamran-davar-4a4557177/",
+    "aliases": [],
+    "sessions": [
+      27
+    ]
+  },
+  "erfan-yousefi": {
+    "slug": "erfan-yousefi",
+    "name": "عرفان یوسفی",
+    "avatar": "/images/author/erfanyousefi.jpg",
+    "linkedin": "https://www.linkedin.com/in/erfan-yousefi-61466bb5/",
+    "aliases": [],
+    "sessions": [
+      29
+    ]
+  },
+  "hesam-mousavi": {
+    "slug": "hesam-mousavi",
+    "name": "حسام موسوی",
+    "avatar": "/images/author/hesam.jpg",
+    "linkedin": "https://www.linkedin.com/in/hesam-mousavi-305454ab/",
+    "aliases": [],
+    "sessions": [
+      30
+    ]
+  },
+  "alireza-safaei-rad": {
+    "slug": "alireza-safaei-rad",
+    "name": "علیرضا صفایی‌راد",
+    "avatar": "/images/author/alireza_safaei.jpg",
+    "linkedin": "https://www.linkedin.com/in/asafaeirad/",
+    "aliases": [],
+    "sessions": [
+      31,
+      48,
+      49,
+      50
+    ]
+  },
+  "sobhan-aminnejad": {
+    "slug": "sobhan-aminnejad",
+    "name": "سبحان امین‌نژاد",
+    "avatar": "/images/author/sobhan.jpg",
+    "linkedin": "https://www.linkedin.com/in/sobhan-aminnejad/",
+    "aliases": [],
+    "sessions": [
+      32
+    ]
+  },
+  "arman-alighanbari": {
+    "slug": "arman-alighanbari",
+    "name": "آرمان علی‌قنبری",
+    "avatar": "/images/author/arman.jpg",
+    "linkedin": "https://www.linkedin.com/in/arman-alighanbari-5b5090150/",
+    "aliases": [],
+    "sessions": [
+      33
+    ]
+  },
+  "amirali-gholi": {
+    "slug": "amirali-gholi",
+    "name": "امیرعلی قلی",
+    "avatar": "/images/author/amirali_gholi.jpg",
+    "linkedin": "https://www.linkedin.com/in/gholi-dev/",
+    "aliases": [],
+    "sessions": [
+      34
+    ]
+  },
+  "alireza-sadeghi": {
+    "slug": "alireza-sadeghi",
+    "name": "علیرضا صادقی",
+    "avatar": "/images/author/alireza_sadeghi.jpg",
+    "aliases": [],
+    "sessions": [
+      35
+    ]
+  },
+  "sajjad-monshi": {
+    "slug": "sajjad-monshi",
+    "name": "سجاد منشی",
+    "avatar": "/images/author/sajjad.jpg",
+    "linkedin": "https://www.linkedin.com/in/sajjad-maneshi-0406b9187/",
+    "aliases": [],
+    "sessions": [
+      36,
+      42
+    ]
+  },
+  "behnia-azad": {
+    "slug": "behnia-azad",
+    "name": "بهنیا آزاد",
+    "avatar": "/images/author/behnia.jpg",
+    "linkedin": "https://www.linkedin.com/in/behniya-azad/",
+    "aliases": [],
+    "sessions": [
+      37
+    ]
+  },
+  "mohammadhassan-sataryan": {
+    "slug": "mohammadhassan-sataryan",
+    "name": "محمدحسن ستاریان",
+    "avatar": "/images/author/mohammadhassan.jpg",
+    "linkedin": "https://www.linkedin.com/in/mhsattarian/",
+    "aliases": [],
+    "sessions": [
+      38
+    ]
+  },
+  "sadaf-amininia": {
+    "slug": "sadaf-amininia",
+    "name": "صدف امینی‌نیا",
+    "avatar": "/images/author/sadaf.jpg",
+    "linkedin": "https://www.linkedin.com/in/sadafamininia/",
+    "aliases": [],
+    "sessions": [
+      40
+    ]
+  },
+  "armin-sheikhi": {
+    "slug": "armin-sheikhi",
+    "name": "آرمین شیخی",
+    "avatar": "/images/author/armin.jpg",
+    "linkedin": "https://www.linkedin.com/in/armin-shaikhy/",
+    "aliases": [],
+    "sessions": [
+      41,
+      44,
+      47,
+      58,
+      59
+    ]
+  },
+  "nima-rahmati": {
+    "slug": "nima-rahmati",
+    "name": "نیما رحمتی",
+    "avatar": "/images/author/nima.jpg",
+    "linkedin": "https://www.linkedin.com/in/nimacodez/",
+    "aliases": [],
+    "sessions": [
+      43
+    ]
+  },
+  "masoud-beigi": {
+    "slug": "masoud-beigi",
+    "name": "مسعود بیگی",
+    "avatar": "/images/author/masoud.jpg",
+    "linkedin": "https://www.linkedin.com/in/merkousha/",
+    "aliases": [],
+    "sessions": [
+      45,
+      56
+    ]
+  },
+  "hossein-mousavi": {
+    "slug": "hossein-mousavi",
+    "name": "حسین موسوی",
+    "avatar": "/images/author/hossein_mousavi.jpg",
+    "linkedin": "https://www.linkedin.com/in/hossein13m/",
+    "aliases": [],
+    "sessions": [
+      46
+    ]
+  },
+  "mohammad-shirali-zadeh": {
+    "slug": "mohammad-shirali-zadeh",
+    "name": "محمد شیرعلی‌زاده",
+    "avatar": "/images/author/mohammad_shirali.jpg",
+    "linkedin": "https://www.linkedin.com/in/shiralizadeh/",
+    "aliases": [],
+    "sessions": [
+      57,
+      65,
+      67
+    ]
+  },
+  "vahid-mohammadi": {
+    "slug": "vahid-mohammadi",
+    "name": "وحید محمدی",
+    "avatar": "/images/author/vahid.jpg",
+    "linkedin": "https://www.linkedin.com/in/vahidmohammadi/",
+    "aliases": [],
+    "sessions": [
+      62
+    ]
+  },
+  "tahereh-fotouhizadeh": {
+    "slug": "tahereh-fotouhizadeh",
+    "name": "طاهره فتوحی‌زاده",
+    "avatar": "/images/author/saleh.jpg",
+    "linkedin": "https://www.linkedin.com/in/taherefotohizade/",
+    "aliases": [],
+    "sessions": [
+      64
+    ]
+  },
+  "shabnam-mahboobi": {
+    "slug": "shabnam-mahboobi",
+    "name": "شبنم محبوبی",
+    "avatar": "/images/author/saleh.jpg",
+    "linkedin": "https://www.linkedin.com/in/shabnam-ma/",
+    "aliases": [],
+    "sessions": [
+      64
+    ]
+  },
+  "ramin-rezaei": {
+    "slug": "ramin-rezaei",
+    "name": "رامین رضایی",
+    "avatar": "/images/author/ramin.jpg",
+    "linkedin": "https://www.linkedin.com/in/raminr77/",
+    "aliases": [],
+    "sessions": [
+      68
+    ]
+  }
+}

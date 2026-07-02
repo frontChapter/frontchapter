@@ -1,8 +1,16 @@
 import config from '@config/config.json';
 import { splitPostTitle } from '@lib/utils/splitPostTitle';
+import {
+  getSpeakerBySlug,
+  getSpeakerSlugByName,
+  parseAuthorNames,
+  speakerPath,
+} from '@lib/speakers';
 import FormattedDate from './components/FormattedDate';
+import { AuthorNames } from './components/AuthorLink';
 import { markdownify } from '@lib/utils/textConverter';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import MDXContent from '../app/helper/MDXContent';
 import Cta from './components/Cta';
@@ -43,6 +51,38 @@ const PostSingle: React.FC<PostSingleProps> = ({
   let { title, date, image, author } = frontmatter;
   const { disqus } = config as { disqus: { enable: boolean } };
   const titleLines = splitPostTitle(title, 'full');
+  const authorParts = parseAuthorNames(author.name);
+  const primarySpeakerSlug =
+    authorParts.length === 1 ? getSpeakerSlugByName(authorParts[0]) : null;
+  const primarySpeaker = primarySpeakerSlug
+    ? getSpeakerBySlug(primarySpeakerSlug)
+    : undefined;
+
+  const avatar = primarySpeakerSlug ? (
+    <Link
+      href={speakerPath(primarySpeakerSlug)}
+      className="overflow-hidden rounded-full border-2 border-border shadow-[0_0_0_2px] shadow-primary"
+      aria-label={`صفحه ${author.name}`}
+    >
+      <ImageFallback
+        src={author.avatar}
+        width={44}
+        height={44}
+        alt={author.name}
+        fallback="/images/author/abdullah.jpg"
+      />
+    </Link>
+  ) : (
+    <div className="overflow-hidden rounded-full border-2 border-border shadow-[0_0_0_2px] shadow-primary">
+      <ImageFallback
+        src={author.avatar}
+        width={44}
+        height={44}
+        alt={author.name}
+        fallback="/images/author/abdullah.jpg"
+      />
+    </div>
+  );
 
   return (
     <>
@@ -86,20 +126,24 @@ const PostSingle: React.FC<PostSingleProps> = ({
                       })
                     )}
                     <div className="mt-5 flex items-center justify-center sm:justify-start">
-                      <div className="overflow-hidden rounded-full border-2 border-border shadow-[0_0_0_2px] shadow-primary">
-                        <ImageFallback
-                          src={author.avatar}
-                          width={44}
-                          height={44}
-                          alt="author"
-                          fallback="/images/author/abdullah.jpg"
-                        />
-                      </div>
+                      {avatar}
                       <div className="ps-4">
-                        <p className="font-medium text-dark">{author.name}</p>
+                        <p className="font-medium text-dark">
+                          <AuthorNames name={author.name} />
+                        </p>
                         <p className="text-sm text-muted">
                           <FormattedDate date={date} />
                         </p>
+                        {primarySpeaker?.linkedin && (
+                          <a
+                            href={primarySpeaker.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer nofollow"
+                            className="mt-1 inline-block text-sm text-primary hover:underline"
+                          >
+                            لینکدین
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>

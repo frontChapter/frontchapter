@@ -3,6 +3,7 @@ import config from '@config/config.json';
 import { getSinglePage } from '@lib/contentParser';
 import { blogListPath, postPath } from '@lib/seo/blogSeo';
 import { SITE_URL } from '@lib/seo/constants';
+import { getAllSpeakers, speakerPath } from '@lib/speakers';
 import { sortByDate } from '@lib/utils/sortFunctions';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -55,6 +56,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
         : undefined,
       changeFrequency: 'monthly',
       priority: 0.5,
+    });
+  }
+
+  entries.push({
+    url: `${SITE_URL}/speakers/`,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  });
+
+  for (const speaker of getAllSpeakers()) {
+    entries.push({
+      url: `${SITE_URL}${speakerPath(speaker.slug)}`,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     });
   }
 
