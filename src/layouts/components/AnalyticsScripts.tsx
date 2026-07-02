@@ -42,8 +42,8 @@ export const GtmBodyNoscript = () => {
 };
 
 export const Ga4Head = () => {
-  const { gtmId, gaId } = getAnalyticsConfig();
-  if (gtmId || !gaId) return null;
+  const { gaId } = getAnalyticsConfig();
+  if (!gaId) return null;
 
   return (
     <>
