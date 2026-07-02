@@ -52,7 +52,10 @@ export const AuthorNames: React.FC<AuthorNamesProps> = ({
       {parts.map((part, index) => (
         <React.Fragment key={part}>
           {index > 0 && ' و '}
-          <AuthorLink name={part.trim()} linked={Boolean(getSpeakerSlugByName(part.trim()))} />
+          <AuthorLink
+            name={part.trim()}
+            linked={Boolean(getSpeakerSlugByName(part.trim()))}
+          />
         </React.Fragment>
       ))}
     </span>
