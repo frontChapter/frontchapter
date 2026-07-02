@@ -199,6 +199,37 @@
   }
 }
 
+// conference gallery
+.conference-gallery {
+  .conference-video-frame {
+    @apply relative rounded-2xl p-[3px];
+    background: linear-gradient(
+      135deg,
+      rgb(254 96 25 / 0.45),
+      #ffd4bc,
+      rgb(254 96 25 / 0.2)
+    );
+    box-shadow:
+      0 24px 48px -12px rgb(254 96 25 / 0.18),
+      0 8px 20px -8px rgb(0 0 0 / 0.08);
+
+    &::before {
+      @apply absolute -inset-3 -z-10 rounded-[1.75rem] opacity-70 blur-2xl content-[''];
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgb(254 96 25 / 0.12),
+        transparent 70%
+      );
+    }
+  }
+
+  .conference-gallery-image {
+    &::after {
+      @apply pointer-events-none absolute inset-0 z-[15] rounded-xl ring-1 ring-inset ring-white/25 content-[''];
+    }
+  }
+}
+
 //section-title
 .section-title {
   @apply relative;

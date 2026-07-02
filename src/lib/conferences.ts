@@ -27,6 +27,23 @@ export interface ConferenceMedia {
   gallery: Array<{ src: string; label: string }>;
 }
 
+export type ScheduleEventType =
+  | 'talk'
+  | 'break'
+  | 'general'
+  | 'panel'
+  | 'competition'
+  | 'closing';
+
+export interface ScheduleEvent {
+  time: string;
+  title: string;
+  subtitle?: string;
+  speaker?: string;
+  description?: string;
+  type: ScheduleEventType;
+}
+
 export interface ConferenceProfile {
   slug: string;
   title: string;
@@ -48,6 +65,7 @@ export interface ConferenceProfile {
   };
   galleryTitle?: string;
   media?: ConferenceMedia;
+  schedule?: ScheduleEvent[];
   extraContent: string;
 }
 
@@ -56,10 +74,18 @@ const getHomepageFrontmatter = (): Frontmatter => {
   return matter(pageData).data;
 };
 
-const getConferenceExtraContent = (slug: string): string => {
+const getConferencePageData = (
+  slug: string
+): { content: string; schedule?: ScheduleEvent[] } => {
   const filePath = path.join('src/content/conferences', `${slug}.md`);
-  if (!fs.existsSync(filePath)) return '';
-  return matter(fs.readFileSync(filePath, 'utf-8')).content.trim();
+  if (!fs.existsSync(filePath)) return { content: '' };
+
+  const { data, content } = matter(fs.readFileSync(filePath, 'utf-8'));
+  const schedule = Array.isArray(data.schedule)
+    ? (data.schedule as ScheduleEvent[])
+    : undefined;
+
+  return { content: content.trim(), schedule };
 };
 
 const buildConferenceProfile = (
@@ -72,6 +98,8 @@ const buildConferenceProfile = (
   if (!conference?.title || !conference.startDate) {
     return null;
   }
+
+  const pageData = getConferencePageData(entry.slug);
 
   return {
     slug: entry.slug,
@@ -87,7 +115,8 @@ const buildConferenceProfile = (
     video: year.video,
     galleryTitle: year.galleryTitle,
     media: conference.images,
-    extraContent: getConferenceExtraContent(entry.slug),
+    schedule: pageData.schedule,
+    extraContent: pageData.content,
   };
 };
 

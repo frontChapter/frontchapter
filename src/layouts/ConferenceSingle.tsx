@@ -2,9 +2,11 @@ import dateFormat from '@lib/utils/dateFormat';
 import type { ConferenceProfile } from '@lib/conferences';
 import { conferencePath } from '@lib/conferences.paths';
 import { buildPageMetadata } from '@lib/seo/metadata';
+import MDXContent from '../app/helper/MDXContent';
 import Banner from './components/Banner';
 import Cta from './components/Cta';
 import ConferenceGallery from './components/ConferenceGallery';
+import ConferenceTimeline from './components/ConferenceTimeline';
 import SpeakersShowcase from './components/SpeakersShowcase';
 import { StatItem } from './components/YearStatsShowcase';
 
@@ -67,6 +69,19 @@ const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
                 {conference.description}
               </p>
             </div>
+
+            {conference.extraContent && (
+              <div className="fade content mt-12 text-start">
+                <MDXContent
+                  content={conference.extraContent}
+                  components={{
+                    ConferenceTimeline: () => (
+                      <ConferenceTimeline events={conference.schedule ?? []} />
+                    ),
+                  }}
+                />
+              </div>
+            )}
 
             {conference.speakers && conference.speakers.list.length > 0 && (
               <div className="fade mt-12">
