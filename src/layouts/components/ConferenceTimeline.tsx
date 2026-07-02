@@ -89,9 +89,7 @@ const ConferenceTimeline = ({ events }: ConferenceTimelineProps) => {
               : event.time;
 
             return (
-              <Fragment
-                key={`${event.day ?? ''}-${event.time}-${event.title}`}
-              >
+              <Fragment key={`${event.day ?? ''}-${event.time}-${event.title}`}>
                 {showDayHeader && (
                   <li className="list-none pt-4 first:pt-0 md:pt-6">
                     <h3 className="text-center text-sm font-bold text-primary md:text-base">
@@ -118,31 +116,31 @@ const ConferenceTimeline = ({ events }: ConferenceTimelineProps) => {
                   </div>
 
                   <article className="min-w-0 rounded-xl border border-border bg-surface-solid px-4 py-3.5 shadow-sm transition-shadow hover:shadow-md md:px-5 md:py-4">
-                  <h4 className="text-sm font-semibold leading-snug text-dark md:text-base">
-                    {event.title}
-                  </h4>
+                    <h4 className="text-sm font-semibold leading-snug text-dark md:text-base">
+                      {event.title}
+                    </h4>
 
-                  {event.subtitle && (
-                    <p className="mt-1 text-xs leading-relaxed text-primary/85 md:text-sm">
-                      {event.subtitle}
-                    </p>
-                  )}
+                    {event.subtitle && (
+                      <p className="mt-1 text-xs leading-relaxed text-primary/85 md:text-sm">
+                        {event.subtitle}
+                      </p>
+                    )}
 
-                  {event.speaker && (
-                    <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-muted md:text-sm">
-                      <IoMegaphoneOutline
-                        className="h-3.5 w-3.5 shrink-0 text-primary/70"
-                        aria-hidden="true"
-                      />
-                      {event.speaker}
-                    </p>
-                  )}
+                    {event.speaker && (
+                      <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-muted md:text-sm">
+                        <IoMegaphoneOutline
+                          className="h-3.5 w-3.5 shrink-0 text-primary/70"
+                          aria-hidden="true"
+                        />
+                        {event.speaker}
+                      </p>
+                    )}
 
-                  {event.description && (
-                    <p className="mt-2 text-xs leading-relaxed text-text/85 md:text-sm">
-                      {event.description}
-                    </p>
-                  )}
+                    {event.description && (
+                      <p className="mt-2 text-xs leading-relaxed text-text/85 md:text-sm">
+                        {event.description}
+                      </p>
+                    )}
                   </article>
                 </li>
               </Fragment>

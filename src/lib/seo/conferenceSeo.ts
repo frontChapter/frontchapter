@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import type { ConferenceProfile, ConferenceSeo, ScheduleEvent } from '@lib/conferences';
+import type { ConferenceProfile, ScheduleEvent } from '@lib/conferences';
 import { conferencePath } from '@lib/conferences.paths';
 import type { Stat } from '@/src/types/content';
 import {
@@ -63,13 +63,18 @@ const getAttendeeCount = (stats: Stat[]): number | undefined => {
 
   if (!inPersonStat) return undefined;
 
-  const digits = persianDigitsToEnglish(inPersonStat.value).replace(/[^\d]/g, '');
+  const digits = persianDigitsToEnglish(inPersonStat.value).replace(
+    /[^\d]/g,
+    ''
+  );
   const count = Number(digits);
 
   return Number.isNaN(count) ? undefined : count;
 };
 
-export const getConferenceImages = (conference: ConferenceProfile): string[] => {
+export const getConferenceImages = (
+  conference: ConferenceProfile
+): string[] => {
   const images = new Set<string>();
 
   const addImage = (path?: string) => {
@@ -204,9 +209,7 @@ const buildSpeakerPerformers = (conference: ConferenceProfile) =>
     '@type': 'Person',
     name: speaker.name,
     ...(speaker.role ? { jobTitle: speaker.role } : {}),
-    ...(speaker.image
-      ? { image: resolveAbsoluteUrl(speaker.image) }
-      : {}),
+    ...(speaker.image ? { image: resolveAbsoluteUrl(speaker.image) } : {}),
     ...(speaker.company
       ? {
           worksFor: {
@@ -245,7 +248,8 @@ const buildScheduleSubEvents = (
         eventStatus: 'https://schema.org/EventScheduled',
         location: {
           '@type': 'Place',
-          name: parseConferenceLocation(conference.locationName).venue ??
+          name:
+            parseConferenceLocation(conference.locationName).venue ??
             conference.locationName,
         },
         ...(event.speaker
@@ -327,10 +331,7 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
       '@id': `${eventUrl}#event`,
       url: eventUrl,
       name: pageName,
-      alternateName: [
-        `همایش فرانت‌چپتر ${conference.year}`,
-        conference.title,
-      ],
+      alternateName: [`همایش فرانت‌چپتر ${conference.year}`, conference.title],
       description: plainifySync(conference.description),
       startDate: conference.startDate,
       ...(conference.endDate ? { endDate: conference.endDate } : {}),
@@ -370,9 +371,7 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
         },
       },
       ...(performers.length ? { performer: performers } : {}),
-      ...(attendeeCount
-        ? { maximumAttendeeCapacity: attendeeCount }
-        : {}),
+      ...(attendeeCount ? { maximumAttendeeCapacity: attendeeCount } : {}),
       offers: {
         '@type': 'Offer',
         url: eventUrl,

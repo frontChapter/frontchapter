@@ -36,9 +36,7 @@ const ConferenceTravelCards = () => (
           <Icon className="h-6 w-6" aria-hidden="true" />
         </span>
         <h4 className="text-base font-bold text-dark">{title}</h4>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          {description}
-        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">{description}</p>
       </article>
     ))}
   </div>
