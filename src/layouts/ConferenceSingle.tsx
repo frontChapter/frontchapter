@@ -1,5 +1,6 @@
 import dateFormat from '@lib/utils/dateFormat';
 import type { ConferenceProfile } from '@lib/conferences';
+import { formatConferenceLabel } from '@lib/conferences';
 import { buildConferenceMetadata } from '@lib/seo/conferenceSeo';
 import MDXContent from '../app/helper/MDXContent';
 import Banner from './components/Banner';
@@ -35,14 +36,16 @@ const ConferenceSingle = ({ conference }: ConferenceSingleProps) => {
       </div>
     ) : null;
 
+  const pageLabel = formatConferenceLabel(conference.title, conference.year);
+
   return (
     <>
       <article
         className="section pt-0"
-        aria-label={`${conference.title} (${conference.year})`}
+        aria-label={pageLabel}
       >
         <Banner
-          title={`${conference.title} (${conference.year})`}
+          title={pageLabel}
           parent={{ label: 'همایش‌ها', href: '/conferences/' }}
         />
         <div className="container">

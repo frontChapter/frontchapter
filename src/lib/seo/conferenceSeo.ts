@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ConferenceProfile, ScheduleEvent } from '@lib/conferences';
+import { formatConferenceLabel } from '@lib/conferences';
 import { conferencePath } from '@lib/conferences.paths';
 import type { Stat } from '@/src/types/content';
 import {
@@ -166,7 +167,7 @@ export const buildConferenceMetaDescription = (
 
   const locationLabel = [locality, venue].filter(Boolean).join('، ');
   const description = [
-    `${conference.title} (${conference.year})`,
+    `${formatConferenceLabel(conference.title, conference.year)}`,
     locationLabel ? `در ${locationLabel}` : '',
     speakerCount > 0 ? `با ${speakerCount} سخنران` : '',
     talkSample ? `؛ ${talkSample}` : '',
@@ -183,7 +184,7 @@ export const buildConferenceMetadata = (
 ): Metadata => {
   const pageTitle =
     conference.seo?.meta_title ??
-    `${conference.title} (${conference.year}) | فرانت‌چپتر`;
+    `${formatConferenceLabel(conference.title, conference.year)} | فرانت‌چپتر`;
   const description = buildConferenceMetaDescription(conference);
   const ogImage = getConferenceOgImage(conference);
   const keywords = buildConferenceKeywords(conference);
@@ -278,7 +279,9 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
   const keywords = buildConferenceKeywords(conference);
   const performers = buildSpeakerPerformers(conference);
   const subEvents = buildScheduleSubEvents(conference);
-  const pageName = plainifySync(`${conference.title} (${conference.year})`);
+  const pageName = plainifySync(
+    formatConferenceLabel(conference.title, conference.year)
+  );
 
   const graph: Record<string, unknown>[] = [
     {
@@ -450,7 +453,7 @@ export const buildConferencesListJsonLd = (
       hasPart: conferences.map((conference) => ({
         '@type': 'Event',
         '@id': `${SITE_URL}${conferencePath(conference.slug)}#event`,
-        name: `${conference.title} (${conference.year})`,
+        name: formatConferenceLabel(conference.title, conference.year),
         url: `${SITE_URL}${conferencePath(conference.slug)}`,
         startDate: conference.startDate,
       })),

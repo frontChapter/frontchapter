@@ -7,6 +7,17 @@ import type { GalleryImage, Speaker, Stat } from '../types/content';
 
 export { conferencePath };
 
+export const formatConferenceLabel = (title: string, year: string): string => {
+  const trimmedTitle = title.trim();
+  const trimmedYear = year.trim();
+
+  if (!trimmedYear || trimmedTitle.includes(trimmedYear)) {
+    return trimmedTitle;
+  }
+
+  return `${trimmedTitle} (${trimmedYear})`;
+};
+
 type YearKey = 'yearOne' | 'yearThree' | 'yearFour';
 
 interface ConferenceRegistryEntry {
