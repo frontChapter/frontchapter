@@ -2,7 +2,11 @@
 
 import config from '@config/config.json';
 import NextTopLoader from 'nextjs-toploader';
-import Analytics from '../layouts/components/Analytics';
+import {
+  Ga4Head,
+  GtmBodyNoscript,
+  GtmHead,
+} from '../layouts/components/AnalyticsScripts';
 import SiteVerification from '../layouts/components/SiteVerification';
 import TwSizeIndicator from '../layouts/components/TwSizeIndicator';
 import Footer from '../layouts/partials/Footer';
@@ -25,6 +29,9 @@ function LayoutContent({ children }: RootLayoutProps) {
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       <head>
+        <GtmHead />
+        <Ga4Head />
+
         {/* responsive meta */}
         <meta
           name="viewport"
@@ -63,7 +70,7 @@ function LayoutContent({ children }: RootLayoutProps) {
         />
       </head>
       <body suppressHydrationWarning={true} className="overflow-x-hidden">
-        <Analytics />
+        <GtmBodyNoscript />
         <NextTopLoader color="#fe6019" height={3} showSpinner={false} />
         <a
           href="#main-content"
