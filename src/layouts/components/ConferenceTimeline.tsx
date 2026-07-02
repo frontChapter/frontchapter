@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { Fragment } from 'react';
 import type { ScheduleEvent, ScheduleEventType } from '@lib/conferences';
 import {
+  IoBookOutline,
   IoCafeOutline,
   IoChatbubblesOutline,
   IoFlagOutline,
@@ -45,6 +46,11 @@ const typeStyles: Record<
     dot: 'bg-primary shadow-[0_0_0_4px_rgba(254,96,25,0.12)]',
     iconColor: 'text-primary',
   },
+  workshop: {
+    icon: IoBookOutline,
+    dot: 'bg-primary/50 shadow-[0_0_0_4px_rgba(254,96,25,0.08)]',
+    iconColor: 'text-primary',
+  },
   closing: {
     icon: IoFlagOutline,
     dot: 'bg-primary shadow-[0_0_0_4px_rgba(254,96,25,0.12)]',
@@ -58,6 +64,7 @@ const typeLabels: Record<ScheduleEventType, string> = {
   general: 'عمومی',
   panel: 'پنل',
   competition: 'مسابقه',
+  workshop: 'کارگاه',
   closing: 'اختتامیه',
 };
 

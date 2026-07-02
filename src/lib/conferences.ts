@@ -33,6 +33,7 @@ export type ScheduleEventType =
   | 'general'
   | 'panel'
   | 'competition'
+  | 'workshop'
   | 'closing';
 
 export interface ScheduleEvent {
