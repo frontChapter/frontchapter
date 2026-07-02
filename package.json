@@ -23,8 +23,8 @@
     "export": "next build",
     "postexport": "echo 'frontchapter.ir' > out/CNAME",
     "build:pages": "next build && echo 'frontchapter.ir' > out/CNAME && touch out/.nojekyll",
-    "predeploy": "pnpm run build:pages",
-    "deploy": "gh-pages -d out --dotfiles",
+    "deploy": "echo '⚠️  Deploy via push to main — local deploy causes GitHub Pages conflicts.' && exit 1",
+    "deploy:local": "pnpm run build:pages && gh-pages -d out --dotfiles",
     "lint": "next lint",
     "start": "next start"
   },
