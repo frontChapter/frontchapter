@@ -10,6 +10,7 @@ import LazyVideo from '../components/LazyVideo';
 import SectionDecorations from '../components/SectionDecorations';
 import SpeakersShowcase, { Speaker } from '../components/SpeakersShowcase';
 import YearStatsShowcase from '../components/YearStatsShowcase';
+import ConferencePageLink from '../components/ConferencePageLink';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 import { useYearStatsAnimations } from '../../hooks/useYearStatsAnimations';
 import type { Stat } from '../../types/content';
@@ -48,6 +49,7 @@ export interface YearFourStatsProps {
       }>;
     };
   };
+  conferenceSlug?: string;
   events: Array<{
     title: string;
     description: string;
@@ -70,6 +72,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
   birthday,
   communityCollaboration,
   conference,
+  conferenceSlug,
   events,
   speakers,
 }) => {
@@ -151,6 +154,9 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
               <p className="text-text leading-relaxed text-base md:text-lg">
                 {conference.description}
               </p>
+              {conferenceSlug && (
+                <ConferencePageLink slug={conferenceSlug} className="mt-5" />
+              )}
             </div>
 
             {/* Media Gallery */}

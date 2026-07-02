@@ -11,6 +11,7 @@ import SectionDecorations from '../components/SectionDecorations';
 import SectionHeading from '../components/SectionHeading';
 import SpeakersShowcase from '../components/SpeakersShowcase';
 import YearStatsShowcase from '../components/YearStatsShowcase';
+import ConferencePageLink from '../components/ConferencePageLink';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 
 export interface YearOneStatsProps {
@@ -32,6 +33,7 @@ export interface YearOneStatsProps {
     poster?: string;
   };
   galleryTitle?: string;
+  conferenceSlug?: string;
   speakers?: {
     title: string;
     list: Speaker[];
@@ -47,6 +49,7 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
   images,
   video,
   galleryTitle = 'تصاویر لحظات ماندگار',
+  conferenceSlug,
   speakers,
 }) => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -141,6 +144,9 @@ const YearOneStats: React.FC<YearOneStatsProps> = ({
             <p className="text-text leading-relaxed text-base md:text-lg">
               {conference.description}
             </p>
+            {conferenceSlug && (
+              <ConferencePageLink slug={conferenceSlug} className="mt-4" />
+            )}
           </article>
 
           {speakers && speakers.list.length > 0 && (

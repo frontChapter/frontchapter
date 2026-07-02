@@ -11,6 +11,7 @@ import LazyVideo from '../components/LazyVideo';
 import SectionDecorations from '../components/SectionDecorations';
 import SpeakersShowcase from '../components/SpeakersShowcase';
 import YearStatsShowcase from '../components/YearStatsShowcase';
+import ConferencePageLink from '../components/ConferencePageLink';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 import { useYearStatsAnimations } from '../../hooks/useYearStatsAnimations';
 import type { Speaker, Stat } from '../../types/content';
@@ -31,6 +32,7 @@ export interface YearThreeStatsProps {
       }>;
     };
   };
+  conferenceSlug?: string;
   magazine: {
     title: string;
     subtitle: string;
@@ -67,6 +69,7 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
   year,
   stats,
   conference,
+  conferenceSlug,
   magazine,
   festival,
   speakers,
@@ -139,6 +142,9 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
             <p className="text-text !leading-loose text-base md:text-lg">
               {conference.description}
             </p>
+            {conferenceSlug && (
+              <ConferencePageLink slug={conferenceSlug} className="mt-5" />
+            )}
           </div>
 
           {/* Media Gallery */}

@@ -8,9 +8,13 @@ import ImageFallback from './ImageFallback';
 
 interface BannerProps {
   title: string;
+  parent?: {
+    label: string;
+    href: string;
+  };
 }
 
-const Banner = ({ title }: BannerProps) => {
+const Banner = ({ title, parent }: BannerProps) => {
   const banner = useRef<HTMLDivElement>(null);
 
   //banner animation
@@ -82,6 +86,16 @@ const Banner = ({ title }: BannerProps) => {
                 خانه
               </Link>
             </li>
+            {parent && (
+              <>
+                <li className="mx-2">/</li>
+                <li>
+                  <Link className="text-primary" href={parent.href}>
+                    {parent.label}
+                  </Link>
+                </li>
+              </>
+            )}
             <li className="mx-2">/</li>
             <li className="capitalize">{title}</li>
           </ul>

@@ -3,6 +3,7 @@ import config from '@config/config.json';
 import { getSinglePage } from '@lib/contentParser';
 import { blogListPath, postPath } from '@lib/seo/blogSeo';
 import { SITE_URL } from '@lib/seo/constants';
+import { getAllConferences, conferencePath } from '@lib/conferences';
 import { getAllSpeakers, speakerPath } from '@lib/speakers';
 import { sortByDate } from '@lib/utils/sortFunctions';
 
@@ -64,6 +65,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
     priority: 0.6,
   });
+
+  entries.push({
+    url: `${SITE_URL}/conferences/`,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  });
+
+  for (const conference of getAllConferences()) {
+    entries.push({
+      url: `${SITE_URL}${conferencePath(conference.slug)}`,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    });
+  }
 
   for (const speaker of getAllSpeakers()) {
     entries.push({

@@ -42,6 +42,7 @@ const Home = async () => {
       endDate: yearOne.conference.endDate,
       locationName: yearOne.conference.locationName,
       performers: mapSpeakers(yearOne.speakers),
+      slug: '1400',
     },
     {
       name: yearThree.conference.title,
@@ -51,6 +52,7 @@ const Home = async () => {
       endDate: yearThree.conference.endDate,
       locationName: yearThree.conference.locationName,
       performers: mapSpeakers(yearThree.speakers),
+      slug: '1402',
     },
     {
       name: yearFour.conference?.title ?? 'همایش فرانت‌چپتر',
@@ -60,6 +62,7 @@ const Home = async () => {
       endDate: yearFour.conference.endDate,
       locationName: yearFour.conference.locationName,
       performers: mapSpeakers(yearFour.speakers),
+      slug: '1403',
     },
     {
       name: yearThree.festival.title,
@@ -86,6 +89,7 @@ const Home = async () => {
             stats={yearOne.stats}
             gatherings={yearOne.gatherings}
             conference={yearOne.conference}
+            conferenceSlug="1400"
             images={yearOne.images}
             video={yearOne.video}
             galleryTitle={yearOne.galleryTitle}
@@ -103,6 +107,7 @@ const Home = async () => {
             year={yearThree.year}
             stats={yearThree.stats}
             conference={yearThree.conference}
+            conferenceSlug="1402"
             speakers={yearThree.speakers}
             magazine={yearThree.magazine}
             festival={yearThree.festival}
@@ -113,6 +118,7 @@ const Home = async () => {
             stats={yearFour.stats}
             birthday={yearFour.birthday}
             conference={yearFour.conference}
+            conferenceSlug="1403"
             speakers={yearFour.speakers}
             events={yearFour.events}
             communityCollaboration={yearFour.communityCollaboration}

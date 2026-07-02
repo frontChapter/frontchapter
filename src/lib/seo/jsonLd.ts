@@ -1,5 +1,7 @@
 import config from '@config/config.json';
 import social from '@config/social.json';
+import { conferencePath } from '@lib/conferences.paths';
+import type { ConferenceProfile } from '@lib/conferences';
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
@@ -18,6 +20,7 @@ export interface CommunityEventInput {
   performers?: string[];
   offersUrl?: string;
   eventAttendanceMode?: 'offline' | 'online' | 'mixed';
+  slug?: string;
 }
 
 const organizationId = `${SITE_URL}/#organization`;
@@ -228,10 +231,16 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
         const isPastEvent = new Date(event.startDate).getTime() < Date.now();
         const attendanceMode =
           attendanceModeMap[event.eventAttendanceMode ?? 'offline'];
+        const eventUrl = event.slug
+          ? `${SITE_URL}${conferencePath(event.slug)}`
+          : `${SITE_URL}/#event-${index + 1}`;
 
         return {
           '@type': 'Event',
-          '@id': `${SITE_URL}/#event-${index + 1}`,
+          '@id': event.slug
+            ? `${eventUrl}#event`
+            : `${SITE_URL}/#event-${index + 1}`,
+          url: eventUrl,
           name: event.year ? `${event.name} (${event.year})` : event.name,
           description: event.description
             ? plainifySync(event.description)
@@ -239,9 +248,7 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
           startDate: event.startDate,
           ...(event.endDate ? { endDate: event.endDate } : {}),
           eventAttendanceMode: attendanceMode,
-          ...(!isPastEvent
-            ? { eventStatus: 'https://schema.org/EventScheduled' }
-            : {}),
+          eventStatus: 'https://schema.org/EventScheduled',
           organizer: {
             '@id': organizationId,
           },
@@ -251,6 +258,7 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
             name: event.locationName ?? 'ایران',
             address: {
               '@type': 'PostalAddress',
+              addressLocality: event.locationName ?? 'ایران',
               addressCountry: 'IR',
             },
           },
@@ -264,12 +272,14 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
             : {}),
           offers: {
             '@type': 'Offer',
-            url: event.offersUrl ?? SITE_URL,
+            url: event.offersUrl ?? eventUrl,
             price: '0',
             priceCurrency: 'IRR',
             availability: isPastEvent
               ? 'https://schema.org/SoldOut'
               : 'https://schema.org/InStock',
+            validFrom: event.startDate,
+            ...(event.endDate ? { validThrough: event.endDate } : {}),
           },
         };
       }),
@@ -279,5 +289,85 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
   return {
     '@context': 'https://schema.org',
     '@graph': graph,
+  };
+};
+
+export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
+  const eventUrl = `${SITE_URL}${conferencePath(conference.slug)}`;
+  const isPastEvent = new Date(conference.startDate).getTime() < Date.now();
+  const performers =
+    conference.speakers?.list.map((speaker) => speaker.name) ?? [];
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${eventUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'همایش‌ها',
+            item: `${SITE_URL}/conferences/`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: plainifySync(`${conference.title} (${conference.year})`),
+            item: eventUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'Event',
+        '@id': `${eventUrl}#event`,
+        url: eventUrl,
+        name: `${conference.title} (${conference.year})`,
+        description: plainifySync(conference.description),
+        startDate: conference.startDate,
+        ...(conference.endDate ? { endDate: conference.endDate } : {}),
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        organizer: {
+          '@id': organizationId,
+        },
+        image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+        location: {
+          '@type': 'Place',
+          name: conference.locationName,
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: conference.locationName,
+            addressCountry: 'IR',
+          },
+        },
+        ...(performers.length
+          ? {
+              performer: performers.map((name) => ({
+                '@type': 'Person',
+                name,
+              })),
+            }
+          : {}),
+        offers: {
+          '@type': 'Offer',
+          url: eventUrl,
+          price: '0',
+          priceCurrency: 'IRR',
+          availability: isPastEvent
+            ? 'https://schema.org/SoldOut'
+            : 'https://schema.org/InStock',
+          validFrom: conference.startDate,
+          ...(conference.endDate ? { validThrough: conference.endDate } : {}),
+        },
+      },
+    ],
   };
 };
