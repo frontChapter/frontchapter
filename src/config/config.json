@@ -53,7 +53,9 @@
   },
   "disqus": {
     "enable": true,
-    "shortname": "themefisher-template",
-    "settings": {}
+    "shortname": "frontchapter",
+    "settings": {
+      "language": "fa"
+    }
   }
 }

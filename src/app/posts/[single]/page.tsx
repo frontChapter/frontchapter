@@ -38,6 +38,7 @@ const Article = async ({ params }: { params: { single: string } }) => {
       <JsonLd data={jsonLd} />
       <GSAPWrapper>
         <PostSingle
+          slug={single}
           frontmatter={{
             title: frontmatter.title,
             date: frontmatter.date,

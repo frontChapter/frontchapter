@@ -38,12 +38,14 @@ interface RecentPost {
 }
 
 interface PostSingleProps {
+  slug: string;
   frontmatter: Frontmatter;
   content: string;
   recentPosts: RecentPost[];
 }
 
 const PostSingle: React.FC<PostSingleProps> = ({
+  slug,
   frontmatter,
   content,
   recentPosts,
@@ -155,7 +157,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
               {disqus.enable && (
                 <div className="fade row justify-center ">
                   <div className="lg:col-8">
-                    <DisqussEmbed />
+                    <DisqussEmbed slug={slug} title={title} />
                   </div>
                 </div>
               )}
