@@ -231,6 +231,14 @@
 }
 
 .conference-section {
+  h3 {
+    @apply mb-4 mt-2 text-h5 font-semibold text-dark md:mb-5;
+  }
+
+  p {
+    @apply my-4 leading-relaxed text-text md:my-5;
+  }
+
   .content img,
   img {
     @apply rounded-xl;

@@ -2,6 +2,7 @@ import Accordion from './Accordion';
 import Blockquote from './Blockquote';
 import Button from './Button';
 import Code from './Code';
+import ConferenceFigure from './ConferenceFigure';
 import ConferenceSection from './ConferenceSection';
 import ConferenceTravelCards from './ConferenceTravelCards';
 import Notice from './Notice';
@@ -21,6 +22,7 @@ const shortcodes = {
   Youtube,
   Blockquote,
   ConferenceSection,
+  ConferenceFigure,
   ConferenceTravelCards,
 };
 
