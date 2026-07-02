@@ -222,8 +222,94 @@ const buildSpeakerPerformers = (conference: ConferenceProfile) =>
     ...(speaker.linkedin ? { sameAs: [speaker.linkedin] } : {}),
   })) ?? [];
 
+const buildEventLocation = (
+  conference: ConferenceProfile,
+  locality: string,
+  region?: string,
+  venue?: string
+) => ({
+  '@type': 'Place',
+  name: venue ?? conference.locationName,
+  ...(venue
+    ? {
+        containedInPlace: {
+          '@type': 'City',
+          name: locality,
+          ...(region
+            ? {
+                containedInPlace: {
+                  '@type': 'AdministrativeArea',
+                  name: region,
+                },
+              }
+            : {}),
+        },
+      }
+    : {}),
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: locality,
+    ...(region ? { addressRegion: region } : {}),
+    addressCountry: 'IR',
+  },
+});
+
+const buildEventOffers = (
+  url: string,
+  startDate: string,
+  endDate: string | undefined,
+  isPastEvent: boolean
+) => ({
+  '@type': 'Offer',
+  url,
+  price: '0',
+  priceCurrency: 'IRR',
+  availability: isPastEvent
+    ? 'https://schema.org/SoldOut'
+    : 'https://schema.org/InStock',
+  validFrom: startDate,
+  ...(endDate ? { validThrough: endDate } : {}),
+});
+
+const buildScheduleEventDescription = (
+  event: ScheduleEvent,
+  conferenceLabel: string
+) => {
+  if (event.description) {
+    return plainifySync(event.description);
+  }
+
+  const title = event.subtitle
+    ? `${event.title} — ${event.subtitle}`
+    : event.title;
+  const parts = [`${title}، بخشی از ${conferenceLabel}`];
+
+  if (event.speaker) {
+    parts.push(`با ${event.speaker}`);
+  }
+
+  return plainifySync(parts.join(' — '));
+};
+
 const buildScheduleSubEvents = (
-  conference: ConferenceProfile
+  conference: ConferenceProfile,
+  {
+    eventUrl,
+    conferenceLabel,
+    images,
+    isPastEvent,
+    locality,
+    region,
+    venue,
+  }: {
+    eventUrl: string;
+    conferenceLabel: string;
+    images: string[];
+    isPastEvent: boolean;
+    locality: string;
+    region?: string;
+    venue?: string;
+  }
 ): Record<string, unknown>[] => {
   if (!conference.schedule?.length) return [];
 
@@ -234,25 +320,36 @@ const buildScheduleSubEvents = (
     .map((event: ScheduleEvent, index) => {
       const eventDate = event.date ?? conference.startDate;
       const startDate = scheduleTimeToIso(eventDate, event.time);
+      const endDate = event.endTime
+        ? scheduleTimeToIso(eventDate, event.endTime)
+        : undefined;
+      const sessionUrl = `${eventUrl}#session-${index + 1}`;
+      const sessionStartDate = startDate ?? conference.startDate;
 
       return {
         '@type': 'Event',
-        '@id': `${SITE_URL}${conferencePath(conference.slug)}#session-${index + 1}`,
+        '@id': sessionUrl,
+        url: sessionUrl,
         name: event.subtitle
           ? `${event.title} — ${event.subtitle}`
           : event.title,
-        ...(event.description
-          ? { description: plainifySync(event.description) }
-          : {}),
+        description: buildScheduleEventDescription(event, conferenceLabel),
         ...(startDate ? { startDate } : {}),
+        ...(endDate ? { endDate } : {}),
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
         eventStatus: 'https://schema.org/EventScheduled',
-        location: {
-          '@type': 'Place',
-          name:
-            parseConferenceLocation(conference.locationName).venue ??
-            conference.locationName,
+        isAccessibleForFree: true,
+        organizer: {
+          '@id': organizationId,
         },
+        image: images,
+        location: buildEventLocation(conference, locality, region, venue),
+        offers: buildEventOffers(
+          sessionUrl,
+          sessionStartDate,
+          endDate,
+          isPastEvent
+        ),
         ...(event.speaker
           ? {
               performer: {
@@ -260,9 +357,16 @@ const buildScheduleSubEvents = (
                 name: event.speaker,
               },
             }
-          : {}),
+          : event.type === 'panel' && conference.speakers?.list.length
+            ? {
+                performer: conference.speakers.list.map((speaker) => ({
+                  '@type': 'Person',
+                  name: speaker.name,
+                })),
+              }
+            : {}),
         superEvent: {
-          '@id': `${SITE_URL}${conferencePath(conference.slug)}#event`,
+          '@id': `${eventUrl}#event`,
         },
       };
     });
@@ -278,10 +382,18 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
   const attendeeCount = getAttendeeCount(conference.stats);
   const keywords = buildConferenceKeywords(conference);
   const performers = buildSpeakerPerformers(conference);
-  const subEvents = buildScheduleSubEvents(conference);
   const pageName = plainifySync(
     formatConferenceLabel(conference.title, conference.year)
   );
+  const subEvents = buildScheduleSubEvents(conference, {
+    eventUrl,
+    conferenceLabel: pageName,
+    images,
+    isPastEvent,
+    locality,
+    region,
+    venue,
+  });
 
   const graph: Record<string, unknown>[] = [
     {
@@ -347,45 +459,15 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
         '@id': organizationId,
       },
       image: images,
-      location: {
-        '@type': 'Place',
-        name: venue ?? conference.locationName,
-        ...(venue
-          ? {
-              containedInPlace: {
-                '@type': 'City',
-                name: locality,
-                ...(region
-                  ? {
-                      containedInPlace: {
-                        '@type': 'AdministrativeArea',
-                        name: region,
-                      },
-                    }
-                  : {}),
-              },
-            }
-          : {}),
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: locality,
-          ...(region ? { addressRegion: region } : {}),
-          addressCountry: 'IR',
-        },
-      },
+      location: buildEventLocation(conference, locality, region, venue),
       ...(performers.length ? { performer: performers } : {}),
       ...(attendeeCount ? { maximumAttendeeCapacity: attendeeCount } : {}),
-      offers: {
-        '@type': 'Offer',
-        url: eventUrl,
-        price: '0',
-        priceCurrency: 'IRR',
-        availability: isPastEvent
-          ? 'https://schema.org/SoldOut'
-          : 'https://schema.org/InStock',
-        validFrom: conference.startDate,
-        ...(conference.endDate ? { validThrough: conference.endDate } : {}),
-      },
+      offers: buildEventOffers(
+        eventUrl,
+        conference.startDate,
+        conference.endDate,
+        isPastEvent
+      ),
       ...(subEvents.length ? { subEvent: subEvents } : {}),
     },
   ];
