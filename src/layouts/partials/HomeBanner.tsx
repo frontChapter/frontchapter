@@ -291,7 +291,7 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                       content: bannerData.subtitle,
                       tag: 'p',
                       className:
-                        'mx-auto max-w-2xl text-base font-light text-muted md:text-lg',
+                        'mx-auto max-w-2xl text-base text-dark/75 md:text-lg',
                     })}
                   </div>
                   <div ref={btnRef} className="banner-btn opacity-0">

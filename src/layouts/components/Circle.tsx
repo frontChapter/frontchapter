@@ -12,7 +12,7 @@ const Circle = React.forwardRef<HTMLDivElement, CircleProps>(
     return (
       <div
         ref={ref}
-        className={`absolute ${className} ${fill ? 'bg-primary' : 'bg-[#ffe6db]'} rounded-full`}
+        className={`absolute ${className} ${fill ? 'bg-primary' : 'bg-[var(--color-circle-soft)]'} rounded-full`}
         style={{ width: `${width}px`, height: `${height}px` }}
         {...props}
       ></div>

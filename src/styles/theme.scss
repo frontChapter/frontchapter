@@ -14,6 +14,7 @@
   --color-nav-hover: #ffece4;
   --color-muted: #64748b;
   --color-subtle: #94a3b8;
+  --color-circle-soft: #ffe6db;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,5 +34,6 @@
     --color-nav-hover: #2d2419;
     --color-muted: #94a3b8;
     --color-subtle: #64748b;
+    --color-circle-soft: #4a3428;
   }
 }

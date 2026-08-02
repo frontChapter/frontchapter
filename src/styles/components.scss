@@ -203,20 +203,57 @@
   }
 }
 
+// Dark mode: peach dashes/circles wash out hero type — dim decor, boost title/subtitle contrast
 @media (prefers-color-scheme: dark) {
-  .banner-single {
-    .banner-bg > span,
-    .banner-bg > img {
-      opacity: 0.28;
+  .bg-theme {
+    &::before,
+    &::after {
+      opacity: 0.22;
+    }
+  }
+
+  .banner {
+    .banner-heading h1,
+    .banner-content h1,
+    .banner-regular-title {
+      color: #f8fafc;
+      text-shadow: 0 2px 22px rgba(0, 0, 0, 0.7);
+    }
+
+    .banner-subtitle p {
+      color: #e2e8f0;
+      font-weight: 400;
+    }
+
+    .breadcrumb {
+      color: #e2e8f0;
+
+      a {
+        color: #fe6019;
+      }
+
+      li:last-child {
+        color: #f8fafc;
+      }
     }
 
     .banner-bg .circle {
-      opacity: 0.45;
+      opacity: 0.4;
     }
 
-    .banner-regular-title {
-      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.65);
+    .banner-bg > span,
+    .banner-bg > img {
+      opacity: 0.25;
     }
+
+    .banner-video-frame {
+      @apply border-surface-solid;
+    }
+  }
+
+  // Decorative circles on any themed panel (About, ShortIntro, CTA…)
+  .bg-theme .circle {
+    opacity: 0.4;
   }
 }
 
