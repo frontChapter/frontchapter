@@ -1,0 +1,11 @@
+# Project-local RTK filters — take precedence over user-global filters.
+# Docs: https://github.com/rtk-ai/rtk#custom-filters
+schema_version = 1
+
+# Example:
+# [filters.my-tool]
+# description = "Compact my-tool output"
+# match_command = "^my-tool\\b"
+# strip_ansi = true
+# strip_lines_matching = ["^\\s*$"]
+# max_lines = 40
