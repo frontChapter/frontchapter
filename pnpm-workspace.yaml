@@ -1,2 +1,7 @@
 packages:
   - '.'
+allowBuilds:
+  '@parcel/watcher': true
+  sharp: true
+  swiper: true
+  unrs-resolver: true
