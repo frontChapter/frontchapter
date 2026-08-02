@@ -1,0 +1,22 @@
+---
+description: Use FrontChapter extracted design system — never purple search defaults
+alwaysApply: true
+---
+
+# FrontChapter design system
+
+For any UI/UX, styling, landing, or visual work in this repo:
+
+1. **Read first:** `design-system/frontchapter/MASTER.md`
+2. Optionally check `design-system/frontchapter/pages/[page].md` for overrides
+3. **Do not** invent a new palette from `ui-ux-pro-max` `--design-system` search output — that script suggested purple/community defaults that contradict this brand
+4. Tokens live in code: `src/config/theme.json`, `src/styles/theme.scss`, `tailwind.config.js`
+
+**Locked brand:**
+- Primary: `#fe6019`
+- Surfaces: cream `#fffaf3` / peach `#ffece4`
+- Font: `DanaVF` (local), not Google Font replacements
+- Dark mode via `prefers-color-scheme` variables in `theme.scss`
+- RTL for Persian
+
+Only update `MASTER.md` when those source files change.
