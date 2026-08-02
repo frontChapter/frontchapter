@@ -196,6 +196,27 @@
     .bg-theme {
       @apply h-full w-full;
     }
+
+    .banner-regular-title {
+      text-shadow: 0 1px 18px color-mix(in srgb, var(--color-body) 55%, transparent);
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .banner-single {
+    .banner-bg > span,
+    .banner-bg > img {
+      opacity: 0.28;
+    }
+
+    .banner-bg .circle {
+      opacity: 0.45;
+    }
+
+    .banner-regular-title {
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.65);
+    }
   }
 }
 

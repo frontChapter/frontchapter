@@ -78,9 +78,10 @@ const Banner = ({ title, parent }: BannerProps) => {
           {markdownify({
             content: title,
             tag: 'h1',
-            className: 'mb-8 banner-regular-title opacity-0',
+            className:
+              'mb-8 banner-regular-title relative z-[1] text-dark opacity-0',
           })}
-          <ul className="breadcrumb flex items-center justify-center opacity-0">
+          <ul className="breadcrumb relative z-[1] flex items-center justify-center opacity-0">
             <li>
               <Link className="text-primary" href="/">
                 خانه
@@ -88,7 +89,9 @@ const Banner = ({ title, parent }: BannerProps) => {
             </li>
             {parent && (
               <>
-                <li className="mx-2">/</li>
+                <li className="mx-2 text-muted" aria-hidden>
+                  /
+                </li>
                 <li>
                   <Link className="text-primary" href={parent.href}>
                     {parent.label}
@@ -96,8 +99,10 @@ const Banner = ({ title, parent }: BannerProps) => {
                 </li>
               </>
             )}
-            <li className="mx-2">/</li>
-            <li className="capitalize">{title}</li>
+            <li className="mx-2 text-muted" aria-hidden>
+              /
+            </li>
+            <li className="font-medium capitalize text-dark">{title}</li>
           </ul>
           <div className="bg-theme banner-bg col-12 absolute left-0 top-0 bg-theme-light before:hidden after:hidden">
             <ImageFallback

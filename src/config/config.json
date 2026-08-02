@@ -23,13 +23,13 @@
   },
   "params": {
     "tag_manager_id": "",
-    "contact_form_action": "#",
+    "contact_form_action": "https://formsubmit.co/ajax/frontchapter.ir@gmail.com",
     "footer_content": "فرانت‌چپتر، جامعه‌ای که بهش تعلق داری 🥕",
     "copyright": "ساخته شده با ❤️ توسط فرانت‌چپتر | © 2025 همه حقوق محفوظ است."
   },
   "contact_info": {
     "phone": "",
-    "email": "info@frontchapter.ir",
+    "email": "frontchapter.ir@gmail.com",
     "location": "مازندران، بابلسر، خیابان طالقانی، مرکز نوآوری"
   },
   "nav_button": {
