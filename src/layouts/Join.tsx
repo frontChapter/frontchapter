@@ -36,7 +36,7 @@ type TelegramAuthWindow = Window & {
 };
 
 const TELEGRAM_BOT_USERNAME =
-  process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'FrontChapterMagic';
+  process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'frontChapterMagicBot';
 
 type FormState = {
   expertise: string;
