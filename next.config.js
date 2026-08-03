@@ -18,7 +18,9 @@ if (isGithubActions) {
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
+  // Static export only for production builds (GH Pages).
+  // next.devs stays dynamic so new /members/[slug] works without rebuild.
+  ...(process.env.NODE_ENV === 'production' ? { output: 'export' } : {}),
   images: {
     unoptimized: true,
   },

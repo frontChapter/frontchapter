@@ -17,8 +17,12 @@ export async function generateStaticParams() {
   try {
     const members = await listPublicMembers();
     return staticParamsFromMembers(members);
-  } catch {
-    // ponytail: empty params if Supabase unreachable at build — directory still client-fetches
+  } catch (e) {
+    console.error(
+      '[members/[slug]] generateStaticParams failed — production export will omit profiles:',
+      e
+    );
+    // Production export with [] = no member pages. Dev can still hit dynamic routes.
     return [];
   }
 }
