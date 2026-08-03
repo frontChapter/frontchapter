@@ -120,6 +120,8 @@ const Join = () => {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [unmuting, setUnmuting] = useState(false);
+  const [unmuteHint, setUnmuteHint] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
 
   const finishTelegramLogin = useCallback(async (idToken: string) => {
@@ -257,6 +259,39 @@ const Join = () => {
     await getSupabase().auth.signOut();
   };
 
+  /** Ask bot to lift Telegram group mute after profile is complete */
+  const requestUnmute = async () => {
+    const supabase = getSupabase();
+    const { data, error: fnErr } = await supabase.functions.invoke(
+      'telegram-bot',
+      { body: { action: 'unmute' } }
+    );
+    if (fnErr) throw fnErr;
+    if (data && data.unmuted === false && data.reason) {
+      throw new Error(String(data.reason));
+    }
+  };
+
+  // Retry unmute when landing on success (covers failed/missed invoke)
+  useEffect(() => {
+    if (step !== 'done' || !member?.profile_completed_at) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        await requestUnmute();
+        if (!cancelled) setUnmuteHint('دسترسی چت گروه باز شد ✅');
+      } catch {
+        if (!cancelled) {
+          setUnmuteHint('');
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, member?.profile_completed_at]);
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.expertise.trim()) {
@@ -279,13 +314,10 @@ const Join = () => {
       const updated = data as Member;
       setMember(updated);
       if (session) await loadMember(session.user.id);
-      // Open Telegram group chat if they were muted pending profile
       try {
-        await supabase.functions.invoke('telegram-bot', {
-          body: { action: 'unmute' },
-        });
+        await requestUnmute();
       } catch {
-        // non-fatal — user can still use the site
+        // non-fatal — done-step effect + button retry
       }
       setStep('done');
     } catch (err) {
@@ -586,6 +618,29 @@ const Join = () => {
                 <div className="mt-6 flex flex-wrap gap-3">
                   <CarrotButton
                     type="button"
+                    variant="primary"
+                    loading={unmuting}
+                    onClick={async () => {
+                      setUnmuting(true);
+                      setUnmuteHint('');
+                      try {
+                        await requestUnmute();
+                        setUnmuteHint('دسترسی چت گروه باز شد ✅');
+                      } catch (err) {
+                        setUnmuteHint(
+                          err instanceof Error
+                            ? err.message
+                            : 'باز کردن چت ناموفق بود'
+                        );
+                      } finally {
+                        setUnmuting(false);
+                      }
+                    }}
+                  >
+                    باز کردن چت گروه
+                  </CarrotButton>
+                  <CarrotButton
+                    type="button"
                     variant="secondary"
                     onClick={() => setStep('profile')}
                   >
@@ -595,6 +650,9 @@ const Join = () => {
                     خروج
                   </CarrotButton>
                 </div>
+                {unmuteHint ? (
+                  <p className="mt-3 mb-0 text-sm text-muted">{unmuteHint}</p>
+                ) : null}
               </div>
             </div>
           ) : null}

@@ -130,6 +130,7 @@ async function muteUser(chatId: number, userId: number) {
     chat_id: chatId,
     user_id: userId,
     permissions: MUTED,
+    use_independent_chat_permissions: true,
   });
 }
 
@@ -138,6 +139,7 @@ async function unmuteUser(chatId: number, userId: number) {
     chat_id: chatId,
     user_id: userId,
     permissions: OPEN,
+    use_independent_chat_permissions: true,
   });
 }
 
@@ -171,7 +173,11 @@ async function gateNewMember(
   const done = await isProfileComplete(db, user.id);
 
   if (done) {
-    await unmuteUser(chatId, user.id);
+    try {
+      await unmuteUser(chatId, user.id);
+    } catch (e) {
+      console.error('unmute failed', e);
+    }
     await tg('sendMessage', {
       chat_id: chatId,
       text:
@@ -182,15 +188,21 @@ async function gateNewMember(
     return;
   }
 
-  await muteUser(chatId, user.id);
+  // Welcome first — mute can fail if rights race; still show the CTA
   await tg('sendMessage', {
     chat_id: chatId,
     text: welcomeText(name),
     disable_web_page_preview: true,
     reply_markup: {
-      inline_keyboard: [[{ text: 'میخوام هویج نشان باشم 🥕', url: JOIN_URL }]],
+      inline_keyboard: [[{ text: 'میخوام هویج نشان بشم!', url: JOIN_URL }]],
     },
   });
+
+  try {
+    await muteUser(chatId, user.id);
+  } catch (e) {
+    console.error('mute failed', e);
+  }
 }
 
 /** chat_member: left/kicked → member|restricted (first enter only) */
@@ -292,9 +304,14 @@ async function handleUnmute(req: Request) {
 
 async function handleWebhook(update: Record<string, unknown>) {
   const db = adminDb();
+  console.log(
+    'update keys',
+    Object.keys(update).filter((k) => k !== 'update_id')
+  );
 
   const joined = memberJoinedFromChatMember(update);
   if (joined) {
+    console.log('gate via chat_member', joined.user.id);
     await gateNewMember(db, joined.chatId, joined.user);
     return;
   }
@@ -303,7 +320,14 @@ async function handleWebhook(update: Record<string, unknown>) {
   if (msg) {
     await rememberChatId(db, msg.chat!.id!);
 
-    // Join gating is via chat_member only (avoids double welcome).
+    if (msg.new_chat_members?.length) {
+      for (const u of msg.new_chat_members) {
+        console.log('gate via new_chat_members', u.id);
+        await gateNewMember(db, msg.chat!.id!, u);
+      }
+      return;
+    }
+
     // admin helper: /chatid
     const text = (msg.text || '').trim();
     if (text === '/chatid' || text.startsWith('/chatid@')) {
@@ -311,6 +335,17 @@ async function handleWebhook(update: Record<string, unknown>) {
         chat_id: msg.chat!.id!,
         text: `chat_id: \`${msg.chat!.id}\``,
         parse_mode: 'Markdown',
+      });
+    }
+
+    // admin helper: /gate_test — re-run gate on the sender (debug)
+    if (
+      (text === '/gate_test' || text.startsWith('/gate_test@')) &&
+      msg.from?.id
+    ) {
+      await gateNewMember(db, msg.chat!.id!, {
+        id: msg.from.id,
+        first_name: 'تست',
       });
     }
   }
