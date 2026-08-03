@@ -46,10 +46,16 @@ interface Video {
   poster: string;
 }
 
+interface Brand {
+  name: string;
+  logo: string;
+  url?: string;
+}
+
 interface Clients {
   subtitle: string;
   title: string;
-  brands: string[];
+  brands: Brand[];
 }
 
 interface CoreTeamMember {
@@ -85,9 +91,9 @@ interface ExecutiveTeam {
   }[];
 }
 
-interface Country {
-  flag?: string;
+interface Place {
   name: string;
+  year?: string;
   location: string;
 }
 
@@ -95,7 +101,13 @@ interface OurOffice {
   subtitle: string;
   title: string;
   content: string;
-  countries: Country[];
+  countries: Place[];
+}
+
+interface Continued {
+  subtitle: string;
+  title: string;
+  description: string;
 }
 
 interface Frontmatter {
@@ -108,6 +120,7 @@ interface Frontmatter {
   core_team: CoreTeam;
   executive_team: ExecutiveTeam;
   our_office: OurOffice;
+  continued?: Continued;
 }
 
 interface AboutProps {
@@ -128,176 +141,149 @@ const About: React.FC<AboutProps> = ({ data }) => {
     core_team,
     executive_team,
     our_office,
+    continued,
   } = frontmatter;
 
   return (
     <>
-      <section className="section pt-0">
+      <main id="main-content">
         <Banner title={title} />
-        {/* About */}
-        <div className="section container">
-          <div className="row items-center justify-center">
-            <div className="animate md:col-6 md:order-2 lg:col-5">
-              <div className="about-image relative p-[60px]">
-                <ImageFallback
-                  className="animate relative w-full rounded-2xl"
-                  src={about_us.image}
-                  fallback="/images/fallback.png"
-                  width={425}
-                  height={487}
-                  alt=""
-                />
-                <Circle
-                  className="left-4 top-4 z-[-1]"
-                  width={85}
-                  height={85}
-                />
-                <Circle
-                  width={37}
-                  height={37}
-                  fill={false}
-                  className="right-10 top-20 z-[-1]"
-                />
-                <Circle
-                  className="right-12 top-1/2 -z-[1]"
-                  width={24}
-                  height={24}
-                />
-                <Circle
-                  className="bottom-6 right-6 z-[-1]"
-                  width={85}
-                  height={85}
-                />
-                <Circle
-                  className="left-12 top-1/2 z-[-1]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="bottom-12 left-8 z-[1]"
-                  width={47}
-                  height={47}
-                  fill={false}
-                />
+
+        {/* Story */}
+        <section
+          className="section relative overflow-hidden"
+          aria-labelledby="about-story-heading"
+        >
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-theme-light/80 via-transparent to-transparent" />
+          <div className="container relative">
+            <div className="row items-center justify-center gap-y-10">
+              <div className="animate md:col-6 lg:col-5 md:order-2">
+                <div className="relative mx-auto max-w-md">
+                  <div className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-br from-primary/15 via-border-secondary to-transparent" />
+                  <ImageFallback
+                    className="relative w-full rounded-2xl shadow-[0_20px_50px_var(--color-shadow)]"
+                    src={about_us.image}
+                    fallback="/images/fallback.png"
+                    width={520}
+                    height={580}
+                    alt="لحظه‌ای از همایش فرانت‌چپتر"
+                    priority
+                  />
+                </div>
+              </div>
+              <div className="animate md:col-6 lg:col-5 md:order-1">
+                <p className="text-sm font-medium tracking-wider text-primary">
+                  {about_us.subtitle}
+                </p>
+                {markdownify({
+                  content: about_us.title,
+                  tag: 'h2',
+                  className: 'section-title mt-4',
+                  id: 'about-story-heading',
+                })}
+                {markdownify({
+                  content: about_us.content,
+                  tag: 'p',
+                  className: 'mt-8 text-base leading-loose text-text',
+                })}
               </div>
             </div>
-            <div className="animate md:col-6 md:order-1 lg:col-4">
-              <p>{about_us.subtitle}</p>
-              {markdownify({
-                content: about_us.title,
-                tag: 'h2',
-                className: 'section-title bar-left mt-4',
-              })}
-              {markdownify({
-                content: about_us.content,
-                tag: 'p',
-                className: 'mt-10',
-              })}
-            </div>
           </div>
-        </div>
+        </section>
 
         {/* Works */}
-        <div className="section container">
-          <div className="animate text-center">
-            <p>{works.subtitle}</p>
-            {markdownify({
-              content: works.title,
-              tag: 'h2',
-              className: 'section-title mt-4',
-            })}
-            {markdownify({
-              content: works.content,
-              tag: 'p',
-              className: 'mt-10',
-            })}
-          </div>
-          <div className="row mt-10 justify-center">
-            {works.list.map((work, index) => (
-              <div key={`work-${index}`} className="mt-10 md:col-6 lg:col-5">
-                <div className="animate text-center md:px-6 xl:px-12">
+        <section
+          className="section bg-theme-light/40"
+          aria-labelledby="about-works-heading"
+        >
+          <div className="container">
+            <header className="animate mx-auto max-w-2xl text-center">
+              <p className="text-sm font-medium tracking-wider text-primary">
+                {works.subtitle}
+              </p>
+              {markdownify({
+                content: works.title,
+                tag: 'h2',
+                className: 'section-title mt-4',
+                id: 'about-works-heading',
+              })}
+              {markdownify({
+                content: works.content,
+                tag: 'p',
+                className: 'mt-6 text-base leading-relaxed text-text',
+              })}
+            </header>
+            <ul className="mt-14 grid gap-6 md:grid-cols-2">
+              {works.list.map((work, index) => (
+                <li
+                  key={`work-${index}`}
+                  className="animate group rounded-2xl border border-border bg-surface-solid p-6 transition duration-300 hover:border-primary/40 hover:shadow-[0_12px_40px_rgba(254,96,25,0.08)] md:p-8"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
                   {markdownify({
                     content: work.title,
                     tag: 'h3',
-                    className: 'h4',
+                    className: 'mt-4 text-xl font-semibold text-dark',
                   })}
                   {markdownify({
                     content: work.content,
                     tag: 'p',
-                    className: 'mt-2',
+                    className: 'mt-3 text-text leading-relaxed',
                   })}
-                </div>
-              </div>
-            ))}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        </section>
 
         {/* Mission */}
-        <div className="section container">
-          <div className="row items-center justify-center">
-            <div className="animate md:col-6 lg:col-5">
-              <div className="about-image relative p-[60px]">
-                <ImageFallback
-                  className="animate relative w-full rounded-2xl"
-                  src={mission.image}
-                  fallback="/images/fallback.png"
-                  width={425}
-                  height={487}
-                  alt=""
-                />
-                <Circle
-                  className="left-4 top-4 z-[-1]"
-                  width={85}
-                  height={85}
-                />
-                <Circle
-                  width={37}
-                  height={37}
-                  fill={false}
-                  className="right-10 top-20 z-[-1]"
-                />
-                <Circle
-                  className="right-12 top-1/2 -z-[1]"
-                  width={24}
-                  height={24}
-                />
-                <Circle
-                  className="bottom-6 right-6 z-[-1]"
-                  width={85}
-                  height={85}
-                />
-                <Circle
-                  className="left-12 top-1/2 z-[-1]"
-                  width={20}
-                  height={20}
-                />
-                <Circle
-                  className="bottom-12 left-8 z-[1]"
-                  width={47}
-                  height={47}
-                  fill={false}
-                />
+        <section
+          className="section"
+          aria-labelledby="about-mission-heading"
+        >
+          <div className="container">
+            <div className="row items-center justify-center gap-y-10">
+              <div className="animate md:col-6 lg:col-5">
+                <div className="relative mx-auto max-w-md">
+                  <div className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-tl from-primary/15 via-border-secondary to-transparent" />
+                  <ImageFallback
+                    className="relative w-full rounded-2xl shadow-[0_20px_50px_var(--color-shadow)]"
+                    src={mission.image}
+                    fallback="/images/fallback.png"
+                    width={520}
+                    height={580}
+                    alt="جمع شرکت‌کنندگان فرانت‌چپتر"
+                  />
+                </div>
+              </div>
+              <div className="animate md:col-6 lg:col-5">
+                <p className="text-sm font-medium tracking-wider text-primary">
+                  {mission.subtitle}
+                </p>
+                {markdownify({
+                  content: mission.title,
+                  tag: 'h2',
+                  className: 'section-title mt-4',
+                  id: 'about-mission-heading',
+                })}
+                {markdownify({
+                  content: mission.content,
+                  tag: 'p',
+                  className: 'mt-8 text-base leading-loose text-text',
+                })}
               </div>
             </div>
-            <div className="animate md:col-6 lg:col-4">
-              <p>{mission.subtitle}</p>
-              {markdownify({
-                content: mission.title,
-                tag: 'h2',
-                className: 'section-title bar-left mt-4',
-              })}
-              {markdownify({
-                content: mission.content,
-                tag: 'p',
-                className: 'mt-10',
-              })}
-            </div>
           </div>
-        </div>
+        </section>
 
         {/* Video */}
-        <div className="container-xl relative">
-          <div className="bg-theme absolute left-0 top-0 w-full">
+        <section
+          className="container-xl relative overflow-hidden"
+          aria-labelledby="about-video-heading"
+        >
+          <div className="bg-theme absolute inset-0 w-full">
             <Circle
               className="left-[7%] top-[21%]"
               width={32}
@@ -308,24 +294,6 @@ const About: React.FC<AboutProps> = ({ data }) => {
               className="left-[30%] top-[10%]"
               width={20}
               height={20}
-              fill={false}
-            />
-            <Circle
-              className="bottom-[35%] left-[4%]"
-              width={20}
-              height={20}
-              fill={false}
-            />
-            <Circle
-              className="bottom-[11%] left-[10%]"
-              width={37}
-              height={37}
-              fill={false}
-            />
-            <Circle
-              className="bottom-[48%] left-[44%]"
-              width={37}
-              height={37}
               fill={false}
             />
             <Circle
@@ -341,184 +309,270 @@ const About: React.FC<AboutProps> = ({ data }) => {
               fill={false}
             />
           </div>
-          <div className="row items-center justify-center py-[90px]">
+          <div className="row relative items-center justify-center py-16 md:py-24">
             <div className="md:col-6 xl:col-4">
               <div className="animate p-5">
-                <p>{video.subtitle}</p>
+                <p className="text-sm font-medium tracking-wider text-primary">
+                  {video.subtitle}
+                </p>
                 {markdownify({
                   content: video.title,
                   tag: 'h2',
-                  className: 'mt-4 section-title bar-left',
+                  className: 'mt-4 section-title',
+                  id: 'about-video-heading',
                 })}
                 {markdownify({
                   content: video.description,
                   tag: 'p',
-                  className: 'mt-10',
+                  className: 'mt-8 text-text leading-relaxed',
                 })}
               </div>
             </div>
             <div className="md:col-6 xl:col-5">
-              <div className="px-4 ">
+              <div className="animate px-4">
                 <LazyVideo
                   src={video.src}
                   poster={video.poster}
                   controls
-                  className="rounded-2xl"
+                  className="rounded-2xl shadow-[0_20px_50px_var(--color-shadow)]"
                 />
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* Clients */}
-        <div className="section container">
-          <div className="animate text-center">
-            <p>{clients.subtitle}</p>
-            {markdownify({
-              content: clients.title,
-              tag: 'h2',
-              className: 'section-title mt-4',
-            })}
+        <section
+          className="section"
+          aria-labelledby="about-clients-heading"
+        >
+          <div className="container">
+            <header className="animate mx-auto max-w-2xl text-center">
+              <p className="text-sm font-medium tracking-wider text-primary">
+                {clients.subtitle}
+              </p>
+              {markdownify({
+                content: clients.title,
+                tag: 'h2',
+                className: 'section-title mt-4',
+                id: 'about-clients-heading',
+              })}
+            </header>
+            <div className="animate mt-12">
+              <Swiper
+                loop={clients.brands.length > 4}
+                slidesPerView={2}
+                breakpoints={{
+                  640: { slidesPerView: 3 },
+                  992: { slidesPerView: 5 },
+                }}
+                spaceBetween={16}
+                modules={[Autoplay]}
+                autoplay={{ delay: 2800, disableOnInteraction: false }}
+                dir="ltr"
+                className="!pb-2"
+              >
+                {clients.brands.map((brand, index) => {
+                  const logo = (
+                    <div className="relative h-12 w-full">
+                      <ImageFallback
+                        className="object-contain"
+                        src={brand.logo}
+                        fallback="/images/fallback.png"
+                        sizes="140px"
+                        alt={`لوگوی ${brand.name}`}
+                        fill={true}
+                        priority={index < 5}
+                      />
+                    </div>
+                  );
+
+                  return (
+                    <SwiperSlide
+                      className="flex h-24 items-center justify-center rounded-xl border border-border/70 bg-surface-solid px-6 py-5 grayscale transition duration-300 hover:border-primary/30 hover:grayscale-0"
+                      key={`brand-${brand.name}`}
+                    >
+                      {brand.url ? (
+                        <a
+                          href={brand.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full"
+                          aria-label={`وب‌سایت ${brand.name}`}
+                        >
+                          {logo}
+                        </a>
+                      ) : (
+                        logo
+                      )}
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
           </div>
-          <div className="animate from-right col-12 mt-16">
-            <Swiper
-              loop={true}
-              slidesPerView={3}
-              breakpoints={{
-                992: {
-                  slidesPerView: 5,
-                },
-              }}
-              spaceBetween={20}
-              modules={[Autoplay]}
-              autoplay={{ delay: 3000 }}
-              dir="ltr"
-            >
-              {clients.brands.map((brand, index) => (
-                <SwiperSlide
-                  className=" h-20 cursor-pointer px-6 py-6 grayscale  transition hover:grayscale-0 lg:px-10"
-                  key={`brand-${index}`}
-                >
-                  <div className="relative h-full">
-                    <ImageFallback
-                      className="object-contain"
-                      src={brand}
-                      fallback="/images/fallback.png"
-                      sizes="100vw"
-                      alt=""
-                      fill={true}
-                      priority={true}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </div>
+        </section>
 
         {/* Core Team */}
-        <div className="section container">
-          <div className="animate text-center">
-            <p>{core_team.subtitle}</p>
-            {markdownify({
-              content: core_team.title,
-              tag: 'h2',
-              className: 'section-title mt-4',
-            })}
-          </div>
-          <div className="row justify-center mt-10">
-            {core_team.list.map((member, index) => (
-              <div
-                key={`core-member-${index}`}
-                className="animate mt-10 text-center md:col-6 lg:col-4"
-              >
-                <ImageFallback
-                  className="mx-auto rounded-full shadow-[10px_10px_0] shadow-primary/10"
-                  src={member.image}
-                  fallback="/images/fallback.png"
-                  width={200}
-                  height={200}
-                  alt={`${member.name} در فرانت‌چپتر`}
-                />
-                <h3 className="mt-8 h4">{member.name}</h3>
-                <p className="mt-2 font-semibold text-primary">{member.role}</p>
-                {markdownify({
-                  content: member.bio,
-                  tag: 'p',
-                  className: 'mt-4 text-text leading-relaxed',
-                })}
-                {member.social && (
-                  <SocialFixed
-                    source={member.social}
-                    className="social-icons mt-4 flex justify-center gap-2"
+        <section
+          className="section bg-theme-light/40"
+          aria-labelledby="about-core-team-heading"
+        >
+          <div className="container">
+            <header className="animate mx-auto max-w-2xl text-center">
+              <p className="text-sm font-medium tracking-wider text-primary">
+                {core_team.subtitle}
+              </p>
+              {markdownify({
+                content: core_team.title,
+                tag: 'h2',
+                className: 'section-title mt-4',
+                id: 'about-core-team-heading',
+              })}
+            </header>
+            <ul className="row mt-6 justify-center">
+              {core_team.list.map((member, index) => (
+                <li
+                  key={`core-member-${index}`}
+                  className="animate mt-10 text-center md:col-6 lg:col-4"
+                >
+                  <ImageFallback
+                    className="mx-auto rounded-full shadow-[10px_10px_0] shadow-primary/10"
+                    src={member.image}
+                    fallback="/images/fallback.png"
+                    width={200}
+                    height={200}
+                    alt={`${member.name}، ${member.role} فرانت‌چپتر`}
                   />
-                )}
-              </div>
-            ))}
+                  <h3 className="mt-8 h4">{member.name}</h3>
+                  <p className="mt-2 font-semibold text-primary">{member.role}</p>
+                  {markdownify({
+                    content: member.bio,
+                    tag: 'p',
+                    className: 'mt-4 text-text leading-relaxed',
+                  })}
+                  {member.social && (
+                    <SocialFixed
+                      source={member.social}
+                      className="social-icons mt-4 flex justify-center gap-2"
+                    />
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        </section>
 
         {/* Executive Team */}
-        <div className="section container">
-          <div className="animate text-center">
-            <p>{executive_team.subtitle}</p>
-            {markdownify({
-              content: executive_team.title,
-              tag: 'h2',
-              className: 'section-title mt-4',
-            })}
-            {markdownify({
-              content: executive_team.content,
-              tag: 'p',
-              className: 'mt-10',
-            })}
-          </div>
-          <div className="row justify-center mt-6">
-            <div className="lg:col-11">
-              <TeamShowcase
-                title=""
-                members={executive_team.list}
-                centered
-                titleAs="h2"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Office */}
-        <div className="section container">
-          <div className="animate text-center">
-            <p>{our_office.subtitle}</p>
-            {markdownify({
-              content: our_office.title,
-              tag: 'h2',
-              className: 'section-title mt-4',
-            })}
-            {markdownify({
-              content: our_office.content,
-              tag: 'p',
-              className: 'mt-16',
-            })}
-          </div>
-          <div className="row justify-center">
-            <div className="lg:col-10">
-              <div className="row  justify-center">
-                {our_office.countries.map((country, index) => (
-                  <div
-                    key={`country-${index}`}
-                    className="animate mt-10 md:col-6 xl:col-3"
-                  >
-                    <div className="rounded-xl p-5 shadow-[0_4px_25px_rgba(0,0,0,.05)]">
-                      <h5 className="h4">{country.name}</h5>
-                      <p className="mt-2">{country.location}</p>
-                    </div>
-                  </div>
-                ))}
+        <section
+          className="section"
+          aria-labelledby="about-exec-team-heading"
+        >
+          <div className="container">
+            <header className="animate mx-auto max-w-2xl text-center">
+              <p className="text-sm font-medium tracking-wider text-primary">
+                {executive_team.subtitle}
+              </p>
+              {markdownify({
+                content: executive_team.title,
+                tag: 'h2',
+                className: 'section-title mt-4',
+                id: 'about-exec-team-heading',
+              })}
+              {markdownify({
+                content: executive_team.content,
+                tag: 'p',
+                className: 'mt-6 text-base leading-relaxed text-text',
+              })}
+            </header>
+            <div className="row mt-10 justify-center">
+              <div className="lg:col-11">
+                <TeamShowcase
+                  title=""
+                  members={executive_team.list}
+                  centered
+                />
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Journey */}
+        <section
+          className="section bg-theme-light/40"
+          aria-labelledby="about-journey-heading"
+        >
+          <div className="container">
+            <header className="animate mx-auto max-w-2xl text-center">
+              <p className="text-sm font-medium tracking-wider text-primary">
+                {our_office.subtitle}
+              </p>
+              {markdownify({
+                content: our_office.title,
+                tag: 'h2',
+                className: 'section-title mt-4',
+                id: 'about-journey-heading',
+              })}
+              {markdownify({
+                content: our_office.content,
+                tag: 'p',
+                className: 'mt-6 text-base leading-relaxed text-text',
+              })}
+            </header>
+            <ol className="relative mx-auto mt-14 max-w-xl space-y-5">
+              <div
+                className="absolute start-3 top-2 bottom-2 w-px bg-gradient-to-b from-primary/40 via-primary/15 to-transparent"
+                aria-hidden
+              />
+              {our_office.countries.map((place, index) => (
+                <li
+                  key={`place-${index}`}
+                  className="animate relative ms-10 rounded-2xl border border-border bg-surface-solid p-5 shadow-[0_8px_30px_var(--color-shadow)]"
+                >
+                  <span
+                    className="absolute -start-[1.9rem] top-6 h-3.5 w-3.5 rounded-full border-2 border-primary bg-body"
+                    aria-hidden
+                  />
+                  {place.year && (
+                    <span className="text-sm font-bold text-primary">
+                      {place.year}
+                    </span>
+                  )}
+                  <h3 className="mt-1 text-xl font-semibold text-dark">
+                    {place.name}
+                  </h3>
+                  <p className="mt-2 text-text leading-relaxed">
+                    {place.location}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* Continued story */}
+        {continued && (
+          <section
+            className="section"
+            aria-labelledby="about-continued-heading"
+          >
+            <div className="container">
+              <div className="animate mx-auto max-w-3xl text-center">
+                <p className="font-medium text-primary">{continued.subtitle}</p>
+                <h2
+                  id="about-continued-heading"
+                  className="mt-4 text-3xl font-bold leading-tight text-dark md:text-4xl"
+                >
+                  {continued.title}
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-text md:px-8">
+                  {continued.description}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
       <Cta />
     </>
   );

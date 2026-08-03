@@ -295,3 +295,93 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
     '@graph': graph,
   };
 };
+
+export interface AboutPersonInput {
+  name: string;
+  role: string;
+  image?: string;
+  sameAs?: string[];
+}
+
+export interface AboutJsonLdInput {
+  title: string;
+  description: string;
+  image?: string;
+  people?: AboutPersonInput[];
+}
+
+export const buildAboutJsonLd = ({
+  title,
+  description,
+  image,
+  people = [],
+}: AboutJsonLdInput) => {
+  const aboutUrl = `${SITE_URL}/about/`;
+  const pageDescription = plainifySync(description || DEFAULT_DESCRIPTION);
+  const pageTitle = plainifySync(title);
+  const imageUrl = image
+    ? resolveAbsoluteUrl(image)
+    : `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+
+  const employee = people.map((person) => {
+    const sameAs = person.sameAs?.filter(Boolean) ?? [];
+    return {
+      '@type': 'Person',
+      name: person.name,
+      jobTitle: person.role,
+      worksFor: { '@id': organizationId },
+      ...(person.image
+        ? { image: resolveAbsoluteUrl(person.image) }
+        : {}),
+      ...(sameAs.length ? { sameAs } : {}),
+    };
+  });
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${aboutUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: pageTitle,
+            item: aboutUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'AboutPage',
+        '@id': `${aboutUrl}#webpage`,
+        url: aboutUrl,
+        name: pageTitle,
+        description: pageDescription,
+        inLanguage: 'fa-IR',
+        isPartOf: { '@id': websiteId },
+        about: { '@id': organizationId },
+        primaryImageOfPage: {
+          '@type': 'ImageObject',
+          url: imageUrl,
+        },
+        publisher: { '@id': organizationId },
+      },
+      {
+        '@type': 'Organization',
+        '@id': organizationId,
+        name: SITE_NAME,
+        alternateName: 'Front Chapter',
+        url: SITE_URL,
+        description: pageDescription,
+        ...(employee.length ? { employee } : {}),
+      },
+    ],
+  };
+};
