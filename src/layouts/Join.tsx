@@ -13,10 +13,7 @@ import {
   type Member,
   type MemberStats,
 } from '@lib/membership/types';
-import {
-  getSupabase,
-  TELEGRAM_OIDC_PROVIDER,
-} from '@lib/supabase/client';
+import { getSupabase, TELEGRAM_OIDC_PROVIDER } from '@lib/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import Image from 'next/image';
 import { FormEvent, useCallback, useEffect, useState } from 'react';
@@ -460,9 +457,7 @@ const Join = () => {
                       <h2 className="h4 mb-0 text-dark">
                         {member.display_name}
                       </h2>
-                      <CarrotBadge accent>
-                        {LEVEL_LABELS[levelKey]}
-                      </CarrotBadge>
+                      <CarrotBadge accent>{LEVEL_LABELS[levelKey]}</CarrotBadge>
                     </div>
                     {member.username ? (
                       <p className="mb-1 text-sm text-muted">
