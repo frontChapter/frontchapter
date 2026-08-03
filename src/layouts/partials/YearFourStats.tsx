@@ -251,7 +251,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
 
             {/* Modern Card Layout */}
             <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-7">
-              {communityCollaboration.collaborations.map((collab, index) => (
+              {communityCollaboration.collaborations.map((collab) => (
                 <article
                   key={`${collab.community}-${collab.title}`}
                   className="collab-card group"
