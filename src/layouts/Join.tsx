@@ -16,27 +16,38 @@ import {
 import { getSupabase } from '@lib/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import Image from 'next/image';
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 
 type Step = 'loading' | 'login' | 'profile' | 'done';
 
-type TelegramWidgetUser = {
-  id: number;
-  first_name?: string;
-  last_name?: string;
-  username?: string;
-  photo_url?: string;
-  auth_date: number;
-  hash: string;
+type TelegramLoginResult = {
+  id_token?: string;
+  user?: Record<string, unknown>;
+  error?: string;
 };
 
-type TelegramAuthWindow = Window & {
-  // eslint-disable-next-line no-unused-vars -- callback signature for Telegram widget
-  onFrontChapterTelegramAuth?: (user: TelegramWidgetUser) => void;
+type TelegramAuthOptions = {
+  client_id: number | string;
+  scope?: Array<'profile' | 'phone' | 'write'>;
+  lang?: string;
 };
 
-const TELEGRAM_BOT_USERNAME =
-  process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'frontChapterMagicBot';
+type TelegramLoginApi = {
+  auth: (
+    // eslint-disable-next-line no-unused-vars -- Telegram SDK signature
+    opts: TelegramAuthOptions,
+    // eslint-disable-next-line no-unused-vars -- Telegram SDK signature
+    cb: (data: TelegramLoginResult) => void
+  ) => void;
+};
+
+type TelegramWindow = Window & {
+  Telegram?: { Login?: TelegramLoginApi };
+};
+
+const TELEGRAM_CLIENT_ID =
+  process.env.NEXT_PUBLIC_TELEGRAM_CLIENT_ID || '8954964070';
+const TELEGRAM_LOGIN_SCRIPT = 'https://oauth.telegram.org/js/telegram-login.js';
 
 type FormState = {
   expertise: string;
@@ -68,6 +79,39 @@ function formFromMember(m: Member | null): FormState {
   };
 }
 
+function loadTelegramLoginScript(): Promise<TelegramLoginApi> {
+  return new Promise((resolve, reject) => {
+    const w = window as TelegramWindow;
+    if (w.Telegram?.Login?.auth) {
+      resolve(w.Telegram.Login);
+      return;
+    }
+
+    const onReady = () => {
+      const api = (window as TelegramWindow).Telegram?.Login;
+      if (api?.auth) resolve(api);
+      else reject(new Error('Telegram Login SDK failed to load'));
+    };
+
+    const existing = document.querySelector<HTMLScriptElement>(
+      `script[src^="${TELEGRAM_LOGIN_SCRIPT}"]`
+    );
+    if (existing) {
+      if ((window as TelegramWindow).Telegram?.Login?.auth) onReady();
+      else existing.addEventListener('load', onReady);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `${TELEGRAM_LOGIN_SCRIPT}?3`;
+    script.async = true;
+    script.onload = onReady;
+    script.onerror = () =>
+      reject(new Error('Telegram Login SDK failed to load'));
+    document.head.appendChild(script);
+  });
+}
+
 const Join = () => {
   const [step, setStep] = useState<Step>('loading');
   const [session, setSession] = useState<Session | null>(null);
@@ -77,9 +121,8 @@ const Join = () => {
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
-  const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  const finishTelegramLogin = useCallback(async (user: TelegramWidgetUser) => {
+  const finishTelegramLogin = useCallback(async (idToken: string) => {
     setLoggingIn(true);
     setError('');
     try {
@@ -93,7 +136,7 @@ const Join = () => {
           'Content-Type': 'application/json',
           apikey: key,
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({ id_token: idToken }),
       });
       const payload = await res.json();
       if (!res.ok || payload.error) {
@@ -111,6 +154,39 @@ const Join = () => {
       setLoggingIn(false);
     }
   }, []);
+
+  const loginWithTelegram = useCallback(async () => {
+    setLoggingIn(true);
+    setError('');
+    try {
+      const login = await loadTelegramLoginScript();
+      login.auth(
+        {
+          client_id: Number(TELEGRAM_CLIENT_ID),
+          scope: ['profile', 'write'],
+          lang: 'fa',
+        },
+        (data) => {
+          if (data.error) {
+            setError(data.error);
+            setLoggingIn(false);
+            return;
+          }
+          if (!data.id_token) {
+            setError('توکن تلگرام دریافت نشد');
+            setLoggingIn(false);
+            return;
+          }
+          void finishTelegramLogin(data.id_token);
+        }
+      );
+    } catch (e) {
+      setError(
+        e instanceof Error ? e.message : 'بارگذاری ورود تلگرام ناموفق بود'
+      );
+      setLoggingIn(false);
+    }
+  }, [finishTelegramLogin]);
 
   const loadMember = useCallback(async (userId: string) => {
     const supabase = getSupabase();
@@ -176,34 +252,6 @@ const Join = () => {
     };
   }, [loadMember]);
 
-  // Mount official Telegram Login Widget (hash auth — not broken OIDC)
-  useEffect(() => {
-    if (step !== 'login') return;
-    const host = widgetRef.current;
-    if (!host) return;
-
-    const w = window as TelegramAuthWindow;
-    w.onFrontChapterTelegramAuth = (user) => {
-      void finishTelegramLogin(user);
-    };
-
-    host.innerHTML = '';
-    const script = document.createElement('script');
-    script.src = 'https://telegram.org/js/telegram-widget.js?22';
-    script.async = true;
-    script.setAttribute('data-telegram-login', TELEGRAM_BOT_USERNAME);
-    script.setAttribute('data-size', 'large');
-    script.setAttribute('data-radius', '12');
-    script.setAttribute('data-request-access', 'write');
-    script.setAttribute('data-onauth', 'onFrontChapterTelegramAuth(user)');
-    host.appendChild(script);
-
-    return () => {
-      delete w.onFrontChapterTelegramAuth;
-      host.innerHTML = '';
-    };
-  }, [step, finishTelegramLogin]);
-
   const logout = async () => {
     setError('');
     await getSupabase().auth.signOut();
@@ -247,7 +295,6 @@ const Join = () => {
       <Banner title="هویجی شو!" />
       <div className="container">
         <div className="animate mx-auto max-w-xl">
-          {/* Step indicator */}
           <ol className="mb-8 flex items-center justify-center gap-3 text-sm">
             <li
               className={
@@ -297,16 +344,15 @@ const Join = () => {
                 با اکانت تلگرام وارد شو، پروفایلت را کامل کن و در فهرست عمومی
                 اعضا دیده شو. عضویت خودکار است — بدون تأیید دستی.
               </p>
-              {loggingIn ? (
-                <div className="flex justify-center py-4">
-                  <CarrotLoader variant="grow" label="در حال ورود…" />
-                </div>
-              ) : (
-                <div
-                  ref={widgetRef}
-                  className="flex min-h-[48px] items-center justify-center"
-                />
-              )}
+              <CarrotButton
+                type="button"
+                variant="community"
+                className="w-full sm:w-auto"
+                loading={loggingIn}
+                onClick={loginWithTelegram}
+              >
+                ورود با تلگرام
+              </CarrotButton>
             </div>
           ) : null}
 

@@ -1,7 +1,9 @@
-// Telegram Login Widget → Supabase session
-// Bypasses broken Telegram OIDC on Supabase Cloud (auth#2534).
+// @ts-nocheck
+// Telegram Login (new OIDC JS) → Supabase session
+// Verifies id_token with filtered JWKS (drops secp256k1 — breaks jose/go-jose).
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.111.0';
+import { createClient } from 'npm:@supabase/supabase-js@2';
+import * as jose from 'npm:jose@5';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -9,66 +11,91 @@ const cors = {
     'authorization, x-client-info, apikey, content-type',
 };
 
-type TgPayload = {
-  id: number | string;
-  first_name?: string;
-  last_name?: string;
-  username?: string;
-  photo_url?: string;
-  auth_date: number | string;
-  hash: string;
+// Hosted copy without ES256K/secp256k1 — see public/oidc/
+const JWKS_URL = 'https://frontchapter.ir/oidc/telegram-jwks.json';
+const ISSUER = 'https://oauth.telegram.org';
+
+type IdTokenBody = { id_token: string };
+
+type Profile = {
+  telegramId: string;
+  displayName: string;
+  username: string | null;
+  photoUrl: string | null;
 };
 
-async function sha256(data: Uint8Array): Promise<ArrayBuffer> {
-  return crypto.subtle.digest('SHA-256', data);
+async function profileFromIdToken(
+  idToken: string,
+  clientId: string
+): Promise<Profile> {
+  const JWKS = jose.createRemoteJWKSet(new URL(JWKS_URL));
+  const { payload } = await jose.jwtVerify(idToken, JWKS, {
+    issuer: ISSUER,
+    audience: clientId,
+  });
+
+  const telegramId = String(payload.id ?? '');
+  if (!telegramId) throw new Error('id_token missing id claim');
+
+  const displayName =
+    (typeof payload.name === 'string' && payload.name.trim()) ||
+    (typeof payload.preferred_username === 'string' &&
+      payload.preferred_username) ||
+    'Member';
+
+  return {
+    telegramId,
+    displayName,
+    username:
+      typeof payload.preferred_username === 'string'
+        ? payload.preferred_username
+        : null,
+    photoUrl: typeof payload.picture === 'string' ? payload.picture : null,
+  };
 }
 
-async function hmacHex(key: ArrayBuffer, message: string): Promise<string> {
-  const cryptoKey = await crypto.subtle.importKey(
-    'raw',
-    key,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  const sig = await crypto.subtle.sign(
-    'HMAC',
-    cryptoKey,
-    new TextEncoder().encode(message)
-  );
-  return [...new Uint8Array(sig)]
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
+async function mintSession(
+  admin: ReturnType<typeof createClient>,
+  profile: Profile
+) {
+  const email = `tg_${profile.telegramId}@users.telegram.local`;
+  const meta = {
+    id: Number(profile.telegramId),
+    name: profile.displayName,
+    preferred_username: profile.username,
+    picture: profile.photoUrl,
+    provider: 'telegram_login',
+  };
 
-function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let out = 0;
-  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  return out === 0;
-}
+  const { data: created, error: createErr } = await admin.auth.admin.createUser({
+    email,
+    email_confirm: true,
+    user_metadata: meta,
+  });
 
-async function verifyTelegram(payload: TgPayload, botToken: string) {
-  const { hash, ...rest } = payload;
-  if (!hash) return false;
+  if (createErr && !/already|registered|exists/i.test(createErr.message)) {
+    throw createErr;
+  }
 
-  const checkString = Object.keys(rest)
-    .filter((k) => {
-      const v = rest[k as keyof typeof rest];
-      return v !== undefined && v !== null && v !== '';
-    })
-    .sort()
-    .map((k) => `${k}=${rest[k as keyof typeof rest]}`)
-    .join('\n');
+  let userId = created?.user?.id;
+  if (!userId) {
+    const { data: existingLink, error: findErr } =
+      await admin.auth.admin.generateLink({ type: 'magiclink', email });
+    if (findErr) throw findErr;
+    userId = existingLink.user.id;
+    await admin.auth.admin.updateUserById(userId, { user_metadata: meta });
+  }
 
-  const secret = await sha256(new TextEncoder().encode(botToken));
-  const computed = await hmacHex(secret, checkString);
-  if (!timingSafeEqual(computed, String(hash))) return false;
+  const { data: link, error: sessionErr } = await admin.auth.admin.generateLink({
+    type: 'magiclink',
+    email,
+  });
+  if (sessionErr) throw sessionErr;
 
-  const authDate = Number(payload.auth_date);
-  if (!Number.isFinite(authDate)) return false;
-  if (Math.abs(Date.now() / 1000 - authDate) > 86400) return false;
-  return true;
+  const hashed = link.properties.hashed_token;
+  if (!hashed) throw new Error('no hashed_token from generateLink');
+
+  return { token_hash: hashed, user_id: userId ?? link.user.id };
 }
 
 Deno.serve(async (req) => {
@@ -77,77 +104,34 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const botToken = Deno.env.get('TELEGRAM_BOT_TOKEN');
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-    if (!botToken || !supabaseUrl || !serviceKey) {
+    const clientId =
+      Deno.env.get('TELEGRAM_CLIENT_ID') || '8954964070';
+    if (!supabaseUrl || !serviceKey) {
       return new Response(JSON.stringify({ error: 'server misconfigured' }), {
         status: 500,
         headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
-    const body = (await req.json()) as TgPayload;
-    if (!(await verifyTelegram(body, botToken))) {
-      return new Response(JSON.stringify({ error: 'invalid telegram auth' }), {
-        status: 401,
+    const body = (await req.json()) as IdTokenBody;
+    if (!body?.id_token || typeof body.id_token !== 'string') {
+      return new Response(JSON.stringify({ error: 'id_token required' }), {
+        status: 400,
         headers: { ...cors, 'Content-Type': 'application/json' },
       });
     }
 
-    const telegramId = String(body.id);
-    const email = `tg_${telegramId}@users.telegram.local`;
-    const displayName =
-      [body.first_name, body.last_name].filter(Boolean).join(' ').trim() ||
-      body.username ||
-      'Member';
-
-    const meta = {
-      id: Number(telegramId),
-      name: displayName,
-      preferred_username: body.username ?? null,
-      picture: body.photo_url ?? null,
-      provider: 'telegram_widget',
-    };
-
+    const profile = await profileFromIdToken(body.id_token, clientId);
     const admin = createClient(supabaseUrl, serviceKey, {
       auth: { autoRefreshToken: false, persistSession: false },
     });
+    const session = await mintSession(admin, profile);
 
-    const { data: created, error: createErr } =
-      await admin.auth.admin.createUser({
-        email,
-        email_confirm: true,
-        user_metadata: meta,
-      });
-
-    if (createErr && !/already|registered|exists/i.test(createErr.message)) {
-      throw createErr;
-    }
-
-    let userId = created?.user?.id;
-    if (!userId) {
-      const { data: existingLink, error: findErr } =
-        await admin.auth.admin.generateLink({ type: 'magiclink', email });
-      if (findErr) throw findErr;
-      userId = existingLink.user.id;
-      await admin.auth.admin.updateUserById(userId, { user_metadata: meta });
-    }
-
-    const { data: link, error: sessionErr } =
-      await admin.auth.admin.generateLink({ type: 'magiclink', email });
-    if (sessionErr) throw sessionErr;
-
-    const hashed = link.properties.hashed_token;
-    if (!hashed) throw new Error('no hashed_token from generateLink');
-
-    return new Response(
-      JSON.stringify({
-        token_hash: hashed,
-        user_id: userId ?? link.user.id,
-      }),
-      { headers: { ...cors, 'Content-Type': 'application/json' } }
-    );
+    return new Response(JSON.stringify(session), {
+      headers: { ...cors, 'Content-Type': 'application/json' },
+    });
   } catch (e) {
     const message = e instanceof Error ? e.message : 'login failed';
     return new Response(JSON.stringify({ error: message }), {
