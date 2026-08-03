@@ -31,6 +31,7 @@ type TelegramWidgetUser = {
 };
 
 type TelegramAuthWindow = Window & {
+  // eslint-disable-next-line no-unused-vars -- callback signature for Telegram widget
   onFrontChapterTelegramAuth?: (user: TelegramWidgetUser) => void;
 };
 
