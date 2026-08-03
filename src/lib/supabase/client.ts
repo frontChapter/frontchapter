@@ -24,5 +24,3 @@ export function getSupabase(): SupabaseClient {
   }
   return client;
 }
-
-export const TELEGRAM_OIDC_PROVIDER = 'custom:telegram' as const;

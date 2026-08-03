@@ -13,12 +13,31 @@ import {
   type Member,
   type MemberStats,
 } from '@lib/membership/types';
-import { getSupabase, TELEGRAM_OIDC_PROVIDER } from '@lib/supabase/client';
+import { getSupabase } from '@lib/supabase/client';
 import type { Session } from '@supabase/supabase-js';
 import Image from 'next/image';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 type Step = 'loading' | 'login' | 'profile' | 'done';
+
+type TelegramWidgetUser = {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  photo_url?: string;
+  auth_date: number;
+  hash: string;
+};
+
+declare global {
+  interface Window {
+    onFrontChapterTelegramAuth?: (user: TelegramWidgetUser) => void;
+  }
+}
+
+const TELEGRAM_BOT_USERNAME =
+  process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'FrontChapterMagic';
 
 type FormState = {
   expertise: string;
@@ -59,6 +78,40 @@ const Join = () => {
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
   const [loggingIn, setLoggingIn] = useState(false);
+  const widgetRef = useRef<HTMLDivElement | null>(null);
+
+  const finishTelegramLogin = useCallback(async (user: TelegramWidgetUser) => {
+    setLoggingIn(true);
+    setError('');
+    try {
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+      if (!url || !key) throw new Error('Supabase env missing');
+
+      const res = await fetch(`${url}/functions/v1/telegram-login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: key,
+        },
+        body: JSON.stringify(user),
+      });
+      const payload = await res.json();
+      if (!res.ok || payload.error) {
+        throw new Error(payload.error || 'ورود ناموفق بود');
+      }
+
+      const supabase = getSupabase();
+      const { error: otpErr } = await supabase.auth.verifyOtp({
+        token_hash: payload.token_hash,
+        type: 'magiclink',
+      });
+      if (otpErr) throw otpErr;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'ورود با تلگرام ناموفق بود');
+      setLoggingIn(false);
+    }
+  }, []);
 
   const loadMember = useCallback(async (userId: string) => {
     const supabase = getSupabase();
@@ -124,30 +177,32 @@ const Join = () => {
     };
   }, [loadMember]);
 
-  const loginWithTelegram = async () => {
-    setLoggingIn(true);
-    setError('');
-    try {
-      const supabase = getSupabase();
-      const redirectTo = `${window.location.origin}/auth/callback/`;
-      // Custom OIDC identifier; client typings still list built-in providers only
-      const { error: oauthErr } = await supabase.auth.signInWithOAuth({
-        provider: TELEGRAM_OIDC_PROVIDER,
-        options: {
-          redirectTo,
-          scopes: 'openid profile',
-        },
-      } as Parameters<typeof supabase.auth.signInWithOAuth>[0]);
-      if (oauthErr) throw oauthErr;
-    } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : 'ورود با تلگرام ناموفق بود. از آدرس HTTPS سایت استفاده کن.'
-      );
-      setLoggingIn(false);
-    }
-  };
+  // Mount official Telegram Login Widget (hash auth — not broken OIDC)
+  useEffect(() => {
+    if (step !== 'login') return;
+    const host = widgetRef.current;
+    if (!host) return;
+
+    window.onFrontChapterTelegramAuth = (user) => {
+      void finishTelegramLogin(user);
+    };
+
+    host.innerHTML = '';
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.async = true;
+    script.setAttribute('data-telegram-login', TELEGRAM_BOT_USERNAME);
+    script.setAttribute('data-size', 'large');
+    script.setAttribute('data-radius', '12');
+    script.setAttribute('data-request-access', 'write');
+    script.setAttribute('data-onauth', 'onFrontChapterTelegramAuth(user)');
+    host.appendChild(script);
+
+    return () => {
+      delete window.onFrontChapterTelegramAuth;
+      host.innerHTML = '';
+    };
+  }, [step, finishTelegramLogin]);
 
   const logout = async () => {
     setError('');
@@ -242,20 +297,16 @@ const Join = () => {
                 با اکانت تلگرام وارد شو، پروفایلت را کامل کن و در فهرست عمومی
                 اعضا دیده شو. عضویت خودکار است — بدون تأیید دستی.
               </p>
-              <CarrotButton
-                type="button"
-                variant="community"
-                className="w-full sm:w-auto"
-                loading={loggingIn}
-                onClick={loginWithTelegram}
-              >
-                ورود با تلگرام
-              </CarrotButton>
-              <p className="mt-6 text-xs leading-relaxed text-subtle">
-                ورود فقط روی HTTPS کار می‌کند (مثلاً{' '}
-                <span className="font-medium text-muted">frontchapter.ir</span>
-                ). تلگرام آدرس‌های http://localhost را نمی‌پذیرد.
-              </p>
+              {loggingIn ? (
+                <div className="flex justify-center py-4">
+                  <CarrotLoader variant="grow" label="در حال ورود…" />
+                </div>
+              ) : (
+                <div
+                  ref={widgetRef}
+                  className="flex min-h-[48px] items-center justify-center"
+                />
+              )}
             </div>
           ) : null}
 
