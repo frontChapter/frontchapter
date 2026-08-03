@@ -4,7 +4,6 @@ import MemberSingle, {
 } from '@/src/layouts/MemberSingle';
 import {
   getMemberActivities,
-  getMemberTitles,
   getPublicMemberBySlug,
   listPublicMembers,
   staticParamsFromMembers,
@@ -42,19 +41,12 @@ const MemberPage = async ({ params }: { params: Params }) => {
   const member = await getPublicMemberBySlug(params.slug);
   if (!member) notFound();
 
-  const [activities, titles] = await Promise.all([
-    getMemberActivities(member.id),
-    getMemberTitles(member.id),
-  ]);
+  const activities = await getMemberActivities(member.id);
 
   return (
     <GSAPWrapper>
       <main id="main-content">
-        <MemberSingle
-          member={member}
-          activities={activities}
-          titles={titles}
-        />
+        <MemberSingle member={member} activities={activities} />
       </main>
     </GSAPWrapper>
   );

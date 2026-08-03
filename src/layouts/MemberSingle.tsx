@@ -12,7 +12,6 @@ import {
 import type {
   MemberActivity,
   MemberProfile,
-  MemberTitle,
 } from '@lib/membership/fetch';
 import { memberPath, memberSlug } from '@lib/membership/slug';
 import {
@@ -53,10 +52,9 @@ export function buildMemberMetadata(m: MemberProfile): Metadata {
 type Props = {
   member: MemberProfile;
   activities: MemberActivity[];
-  titles: MemberTitle[];
 };
 
-const MemberSingle = ({ member: m, activities, titles }: Props) => {
+const MemberSingle = ({ member: m, activities }: Props) => {
   const level = (m.level_key || 'badge') as LevelKey;
   const badges = Array.isArray(m.badges) ? m.badges : [];
 
@@ -208,22 +206,6 @@ const MemberSingle = ({ member: m, activities, titles }: Props) => {
                 </ol>
               )}
             </section>
-
-            {titles.length > 0 ? (
-              <section className="member-plot__panel">
-                <h2 className="member-plot__heading">هویج فعال ماه</h2>
-                <ul className="member-plot__titles list-none p-0">
-                  {titles.map((t) => (
-                    <li key={t.year_month}>
-                      <span>{t.year_month}</span>
-                      <span>
-                        رتبه {t.rank} · {t.score} امتیاز
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
           </div>
 
           <div className="mt-12 text-center">

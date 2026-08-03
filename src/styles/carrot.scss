@@ -845,14 +845,6 @@
       @apply mb-0 text-xs text-muted;
     }
   }
-
-  &__titles {
-    @apply m-0 space-y-3;
-
-    li {
-      @apply flex items-center justify-between gap-3 text-sm text-dark;
-    }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

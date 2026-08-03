@@ -9,12 +9,6 @@ export type MemberActivity = {
   created_at: string;
 };
 
-export type MemberTitle = {
-  year_month: string;
-  rank: number;
-  score: number;
-};
-
 export type MemberProfile = MemberStats & {
   telegram_id: number;
   telegram_joined_at: string | null;
@@ -79,20 +73,6 @@ export async function getMemberActivities(
 
   if (error) throw error;
   return (data as MemberActivity[]) ?? [];
-}
-
-export async function getMemberTitles(
-  memberId: string
-): Promise<MemberTitle[]> {
-  const { data, error } = await client()
-    .from('monthly_active_titles')
-    .select('year_month, rank, score')
-    .eq('member_id', memberId)
-    .order('year_month', { ascending: false })
-    .limit(12);
-
-  if (error) throw error;
-  return (data as MemberTitle[]) ?? [];
 }
 
 export function staticParamsFromMembers(
