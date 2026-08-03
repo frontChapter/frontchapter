@@ -11,9 +11,9 @@ Think: Duolingo character discipline (jobs, not stickers) + Linear motion restra
 
 ## Do / don’t
 
-**Do:** hover/press/loading motion on CTAs · loader & progress for waits · one mascot in empty/error/success · quiet growth dividers
+**Do:** hover/press/loading motion on CTAs · loader & progress for waits · one mascot in empty/error/success · quiet growth dividers · living header mascot (`LivingCarrot`) beside static wordmark
 
-**Don’t:** carrot SVG inside every button · hero sticker wallpaper · badge icons · watermark mascots · bouncing décor on cards
+**Don’t:** carrot SVG inside every button · hero sticker wallpaper · badge icons · watermark mascots · bouncing décor on cards · animate the FrontChapter wordmark
 
 ---
 

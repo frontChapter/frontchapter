@@ -158,76 +158,77 @@ const Header: React.FC = () => {
             style={isRTL ? { direction: 'rtl' } : { direction: 'ltr' }}
           >
             {main.map((menu, i) => {
-              const active = !menu.hasChildren && isNavActive(pathname, menu.url);
+              const active =
+                !menu.hasChildren && isNavActive(pathname, menu.url);
               return (
-              <React.Fragment key={`menu-${i}`}>
-                {menu.hasChildren && menu.children ? (
-                  <li className="nav-item nav-dropdown group relative">
-                    <span className="nav-link inline-flex items-center">
-                      {menu.name}
-                      {isRTL ? (
-                        <svg
-                          className="h-4 w-4 fill-current"
-                          viewBox="0 0 20 20"
-                          style={{ transform: 'scaleX(-1)' }}
-                        >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                        </svg>
-                      ) : (
-                        <svg
-                          className="h-4 w-4 fill-current"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                        </svg>
-                      )}
-                    </span>
-                    <ul
-                      className={clsx(
-                        'nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500',
-                        'group-hover:block group-hover:max-h-[106px] group-hover:py-2',
-                        'lg:invisible lg:absolute lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100',
-                        isRTL ? 'lg:left-1/2' : 'lg:right-1/2'
-                      )}
-                    >
-                      {menu.children.map((child, j) => {
-                        const childActive = isNavActive(pathname, child.url);
-                        return (
-                          <li
-                            className="nav-dropdown-item"
-                            key={`children-${j}`}
+                <React.Fragment key={`menu-${i}`}>
+                  {menu.hasChildren && menu.children ? (
+                    <li className="nav-item nav-dropdown group relative">
+                      <span className="nav-link inline-flex items-center">
+                        {menu.name}
+                        {isRTL ? (
+                          <svg
+                            className="h-4 w-4 fill-current"
+                            viewBox="0 0 20 20"
+                            style={{ transform: 'scaleX(-1)' }}
                           >
-                            <Link
-                              href={child.url}
-                              className={clsx(
-                                'nav-dropdown-link block transition-all',
-                                childActive && 'active',
-                                isRTL && 'lg:text-right'
-                              )}
-                              aria-current={childActive ? 'page' : undefined}
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          </svg>
+                        ) : (
+                          <svg
+                            className="h-4 w-4 fill-current"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          </svg>
+                        )}
+                      </span>
+                      <ul
+                        className={clsx(
+                          'nav-dropdown-list hidden max-h-0 w-full overflow-hidden border border-border-secondary py-0 transition-all duration-500',
+                          'group-hover:block group-hover:max-h-[106px] group-hover:py-2',
+                          'lg:invisible lg:absolute lg:block lg:w-auto lg:-translate-x-1/2 lg:group-hover:visible lg:group-hover:opacity-100',
+                          isRTL ? 'lg:left-1/2' : 'lg:right-1/2'
+                        )}
+                      >
+                        {menu.children.map((child, j) => {
+                          const childActive = isNavActive(pathname, child.url);
+                          return (
+                            <li
+                              className="nav-dropdown-item"
+                              key={`children-${j}`}
                             >
-                              {child.name}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </li>
-                ) : (
-                  <li className="nav-item">
-                    <Link
-                      href={menu.url}
-                      className={clsx('nav-link', active && 'active')}
-                      aria-current={active ? 'page' : undefined}
-                    >
-                      {active && (
-                        <span className="nav-active-dot" aria-hidden="true" />
-                      )}
-                      {menu.name}
-                    </Link>
-                  </li>
-                )}
-              </React.Fragment>
+                              <Link
+                                href={child.url}
+                                className={clsx(
+                                  'nav-dropdown-link block transition-all',
+                                  childActive && 'active',
+                                  isRTL && 'lg:text-right'
+                                )}
+                                aria-current={childActive ? 'page' : undefined}
+                              >
+                                {child.name}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </li>
+                  ) : (
+                    <li className="nav-item">
+                      <Link
+                        href={menu.url}
+                        className={clsx('nav-link', active && 'active')}
+                        aria-current={active ? 'page' : undefined}
+                      >
+                        {active && (
+                          <span className="nav-active-dot" aria-hidden="true" />
+                        )}
+                        {menu.name}
+                      </Link>
+                    </li>
+                  )}
+                </React.Fragment>
               );
             })}
             {(config as Config).nav_button.enable && (
