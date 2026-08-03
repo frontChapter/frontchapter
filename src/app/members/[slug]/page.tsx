@@ -1,7 +1,5 @@
 import GSAPWrapper from '@/src/layouts/components/GSAPWrapper';
-import MemberSingle, {
-  buildMemberMetadata,
-} from '@/src/layouts/MemberSingle';
+import MemberSingle, { buildMemberMetadata } from '@/src/layouts/MemberSingle';
 import {
   getMemberActivities,
   getPublicMemberBySlug,
