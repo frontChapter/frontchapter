@@ -59,9 +59,7 @@ const CarrotEmptyState = ({
         />
       </div>
       <h1 className="carrot-state__title">{title ?? preset.title}</h1>
-      <p className="carrot-state__desc">
-        {description ?? preset.description}
-      </p>
+      <p className="carrot-state__desc">{description ?? preset.description}</p>
       {children}
       {action ?? (
         <CarrotButton href={actionHref} variant="primary">

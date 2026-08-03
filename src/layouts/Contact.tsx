@@ -300,10 +300,7 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
 
                 {status === 'loading' ? (
                   <div className="mb-5 flex justify-center py-2">
-                    <CarrotLoader
-                      variant="grow"
-                      label="در حال ارسال پیام…"
-                    />
+                    <CarrotLoader variant="grow" label="در حال ارسال پیام…" />
                   </div>
                 ) : null}
 

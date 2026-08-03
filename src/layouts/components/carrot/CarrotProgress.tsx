@@ -11,9 +11,7 @@ type Props = {
 /** Growth-as-progress — soil bar fills with primary (no carrot icon spam) */
 const CarrotProgress = ({ value, label, className }: Props) => {
   const indeterminate = value === undefined;
-  const clamped = indeterminate
-    ? undefined
-    : Math.max(0, Math.min(100, value));
+  const clamped = indeterminate ? undefined : Math.max(0, Math.min(100, value));
 
   return (
     <div
@@ -23,9 +21,7 @@ const CarrotProgress = ({ value, label, className }: Props) => {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={clamped}
-      aria-valuetext={
-        indeterminate ? 'در حال پیشرفت' : `${clamped} درصد`
-      }
+      aria-valuetext={indeterminate ? 'در حال پیشرفت' : `${clamped} درصد`}
     >
       <div className="carrot-progress__track">
         <div
@@ -33,14 +29,10 @@ const CarrotProgress = ({ value, label, className }: Props) => {
             'carrot-progress__fill',
             indeterminate && 'carrot-progress__fill--indeterminate'
           )}
-          style={
-            clamped !== undefined ? { width: `${clamped}%` } : undefined
-          }
+          style={clamped !== undefined ? { width: `${clamped}%` } : undefined}
         />
       </div>
-      {label ? (
-        <span className="carrot-progress__label">{label}</span>
-      ) : null}
+      {label ? <span className="carrot-progress__label">{label}</span> : null}
     </div>
   );
 };

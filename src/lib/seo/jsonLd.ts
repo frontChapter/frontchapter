@@ -330,9 +330,7 @@ export const buildAboutJsonLd = ({
       name: person.name,
       jobTitle: person.role,
       worksFor: { '@id': organizationId },
-      ...(person.image
-        ? { image: resolveAbsoluteUrl(person.image) }
-        : {}),
+      ...(person.image ? { image: resolveAbsoluteUrl(person.image) } : {}),
       ...(sameAs.length ? { sameAs } : {}),
     };
   });

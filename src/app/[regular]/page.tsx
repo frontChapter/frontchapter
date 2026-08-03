@@ -49,7 +49,8 @@ export async function generateMetadata({
 const collectSameAs = (social?: Record<string, string | undefined>) =>
   social
     ? Object.values(social).filter(
-        (url): url is string => typeof url === 'string' && url.startsWith('http')
+        (url): url is string =>
+          typeof url === 'string' && url.startsWith('http')
       )
     : [];
 

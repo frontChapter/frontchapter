@@ -1,7 +1,15 @@
 /** Low-contrast leaf/growth line pattern — décor only inside CarrotBackground */
 const CarrotPattern = ({ className }: { className?: string }) => (
-  <div className={className ? `carrot-pattern ${className}` : 'carrot-pattern'} aria-hidden="true">
-    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+  <div
+    className={className ? `carrot-pattern ${className}` : 'carrot-pattern'}
+    aria-hidden="true"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="100%"
+      height="100%"
+      preserveAspectRatio="xMidYMid slice"
+    >
       <defs>
         <pattern
           id="carrot-growth-pattern"

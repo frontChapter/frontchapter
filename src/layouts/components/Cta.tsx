@@ -1,10 +1,6 @@
 import config from '@config/config.json';
 import { markdownify } from '@lib/utils/textConverter';
-import {
-  CarrotBackground,
-  CarrotBadge,
-  CarrotButton,
-} from './carrot';
+import { CarrotBackground, CarrotBadge, CarrotButton } from './carrot';
 import ImageFallback from './ImageFallback';
 
 function Cta() {

@@ -9,11 +9,7 @@ type Props = {
 };
 
 /** Cream brand surface — pattern only, no watermark carrot */
-const CarrotBackground = ({
-  children,
-  className,
-  pattern = true,
-}: Props) => (
+const CarrotBackground = ({ children, className, pattern = true }: Props) => (
   <div className={clsx('carrot-bg', className)}>
     {pattern ? <CarrotPattern /> : null}
     <div className="carrot-bg__content">{children}</div>

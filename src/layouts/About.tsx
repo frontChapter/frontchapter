@@ -239,10 +239,7 @@ const About: React.FC<AboutProps> = ({ data }) => {
         </section>
 
         {/* Mission */}
-        <section
-          className="section"
-          aria-labelledby="about-mission-heading"
-        >
+        <section className="section" aria-labelledby="about-mission-heading">
           <div className="container">
             <div className="row items-center justify-center gap-y-10">
               <div className="animate md:col-6 lg:col-5">
@@ -342,10 +339,7 @@ const About: React.FC<AboutProps> = ({ data }) => {
         </section>
 
         {/* Clients */}
-        <section
-          className="section"
-          aria-labelledby="about-clients-heading"
-        >
+        <section className="section" aria-labelledby="about-clients-heading">
           <div className="container">
             <header className="animate mx-auto max-w-2xl text-center">
               <p className="text-sm font-medium tracking-wider text-primary">
@@ -445,7 +439,9 @@ const About: React.FC<AboutProps> = ({ data }) => {
                     alt={`${member.name}، ${member.role} فرانت‌چپتر`}
                   />
                   <h3 className="mt-8 h4">{member.name}</h3>
-                  <p className="mt-2 font-semibold text-primary">{member.role}</p>
+                  <p className="mt-2 font-semibold text-primary">
+                    {member.role}
+                  </p>
                   {markdownify({
                     content: member.bio,
                     tag: 'p',
@@ -464,10 +460,7 @@ const About: React.FC<AboutProps> = ({ data }) => {
         </section>
 
         {/* Executive Team */}
-        <section
-          className="section"
-          aria-labelledby="about-exec-team-heading"
-        >
+        <section className="section" aria-labelledby="about-exec-team-heading">
           <div className="container">
             <header className="animate mx-auto max-w-2xl text-center">
               <p className="text-sm font-medium tracking-wider text-primary">
@@ -487,11 +480,7 @@ const About: React.FC<AboutProps> = ({ data }) => {
             </header>
             <div className="row mt-10 justify-center">
               <div className="lg:col-11">
-                <TeamShowcase
-                  title=""
-                  members={executive_team.list}
-                  centered
-                />
+                <TeamShowcase title="" members={executive_team.list} centered />
               </div>
             </div>
           </div>

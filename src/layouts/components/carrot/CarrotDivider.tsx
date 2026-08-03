@@ -11,11 +11,7 @@ type Props = {
 /** Section rhythm — single small mark only when variant=carrot */
 const CarrotDivider = ({ variant = 'growth', className }: Props) => (
   <div
-    className={clsx(
-      'carrot-divider',
-      `carrot-divider--${variant}`,
-      className
-    )}
+    className={clsx('carrot-divider', `carrot-divider--${variant}`, className)}
     role="separator"
     aria-hidden="true"
   >
