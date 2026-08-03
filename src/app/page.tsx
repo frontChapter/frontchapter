@@ -97,6 +97,9 @@ const Home = async () => {
             galleryTitle={yearOne.galleryTitle}
             speakers={yearOne.speakers}
           />
+          <div className="container">
+            <CarrotDivider variant="growth" />
+          </div>
           <YearTwoStats
             title={yearTwo.title}
             year={yearTwo.year}
@@ -104,6 +107,9 @@ const Home = async () => {
             memories={yearTwo.memories}
             images={yearTwo.images}
           />
+          <div className="container">
+            <CarrotDivider variant="growth" />
+          </div>
           <YearThreeStats
             title={yearThree.title}
             year={yearThree.year}
@@ -114,6 +120,9 @@ const Home = async () => {
             magazine={yearThree.magazine}
             festival={yearThree.festival}
           />
+          <div className="container">
+            <CarrotDivider variant="carrot" />
+          </div>
           <YearFourStats
             title={yearFour.title}
             year={yearFour.year}

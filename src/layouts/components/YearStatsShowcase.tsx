@@ -34,10 +34,10 @@ export const StatItem: React.FC<StatItemProps> = ({
       className
     )}
   >
-    <p className="mb-1.5 font-bold text-2xl text-primary transition-transform duration-300 hover:scale-105 sm:text-3xl md:mb-2 md:text-4xl tabular-nums">
+    <p className="stat-item__value mb-1.5 text-2xl font-bold text-primary transition-transform duration-300 hover:scale-105 sm:text-3xl md:mb-2 md:text-4xl">
       {value}
     </p>
-    <p className="max-w-[9rem] text-balance text-text text-sm leading-snug sm:max-w-none sm:text-base md:text-lg md:leading-relaxed">
+    <p className="max-w-[9rem] text-balance text-sm leading-snug text-text sm:max-w-none sm:text-base md:text-lg md:leading-relaxed">
       {label}
     </p>
   </div>

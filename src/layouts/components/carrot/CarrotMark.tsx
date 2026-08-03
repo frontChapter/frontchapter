@@ -9,7 +9,15 @@ type Props = {
   pose?: CarrotMarkPose;
   className?: string;
   title?: string;
-} & Omit<SVGProps<SVGSVGElement>, 'children'>;
+} & Omit<SVGProps<SVGSVGElement>, 'children' | 'width' | 'height'>;
+
+/** viewBox is 100×198 — pin both axes so flex can’t inflate the SVG */
+const HEIGHT: Record<CarrotMarkSize, number> = {
+  sm: 18,
+  md: 28,
+  lg: 56,
+  xl: 88,
+};
 
 /** Brand carrot SVG — single source for ticks, loaders, states */
 const CarrotMark = ({
@@ -17,13 +25,18 @@ const CarrotMark = ({
   pose = 'idle',
   className,
   title,
+  style,
   ...rest
 }: Props) => {
   const decorative = !title;
+  const height = HEIGHT[size];
+  const width = Math.round(height * (100 / 198));
 
   return (
     <svg
       viewBox="654 0 100 198"
+      width={width}
+      height={height}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={clsx(
@@ -32,6 +45,7 @@ const CarrotMark = ({
         pose !== 'idle' && `carrot-mark--${pose}`,
         className
       )}
+      style={{ width, height, flexShrink: 0, ...style }}
       role={decorative ? undefined : 'img'}
       aria-hidden={decorative ? true : undefined}
       aria-label={title}

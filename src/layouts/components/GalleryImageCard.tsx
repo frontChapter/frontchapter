@@ -5,7 +5,7 @@ import Image from 'next/image';
 import React from 'react';
 import type { GalleryImage } from '../../types/content';
 import GalleryClickOverlay from './GalleryClickOverlay';
-import ZoomIcon from './ZoomIcon';
+import ZoomCarrotChip from './ZoomCarrotChip';
 
 export interface GalleryImageCardProps {
   image: GalleryImage;
@@ -87,21 +87,17 @@ const GalleryImageCard: React.FC<GalleryImageCardProps> = ({
         {showZoomIcon && onClick && (
           <>
             <div
-              className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none"
+              className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 md:flex"
               aria-hidden="true"
             >
-              <span className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-2 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
-                <ZoomIcon />
-              </span>
+              <ZoomCarrotChip />
             </div>
             {showMobileZoom && (
               <div
-                className="absolute inset-0 flex md:hidden items-center justify-center opacity-0 active:opacity-100 transition-opacity duration-300 z-30 pointer-events-none"
+                className="absolute inset-0 z-30 flex items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none active:opacity-100 md:hidden"
                 aria-hidden="true"
               >
-                <span className="w-8 h-8 p-1.5 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
-                  <ZoomIcon />
-                </span>
+                <ZoomCarrotChip size="sm" />
               </div>
             )}
           </>

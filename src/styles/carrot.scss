@@ -1,34 +1,45 @@
 /* Carrot Design System — interaction language, not icon spam */
 
 // --- Mark (only for loader / empty / success / optional divider) ---
+// Flat selectors — nested &--* + @apply has been dropped by PostCSS before.
 .carrot-mark {
-  @apply inline-block shrink-0;
+  display: inline-block;
+  flex-shrink: 0;
   transform-origin: center bottom;
+  overflow: visible;
+  vertical-align: middle;
+}
 
-  &--sm {
-    height: 1.125rem;
-    width: auto;
-  }
-  &--md {
-    height: 1.75rem;
-    width: auto;
-  }
-  &--lg {
-    height: 3.5rem;
-    width: auto;
-  }
-  &--xl {
-    height: 5.5rem;
-    width: auto;
-  }
+.carrot-mark--sm {
+  height: 18px !important;
+  width: 9px !important;
+  max-width: 9px;
+}
 
-  &--wiggle {
-    animation: carrot-wiggle 2.4s ease-in-out infinite;
-  }
+.carrot-mark--md {
+  height: 28px !important;
+  width: 14px !important;
+  max-width: 14px;
+}
 
-  &--grow {
-    animation: carrot-grow 1.8s ease-in-out infinite;
-  }
+.carrot-mark--lg {
+  height: 56px !important;
+  width: 28px !important;
+  max-width: 28px;
+}
+
+.carrot-mark--xl {
+  height: 88px !important;
+  width: 44px !important;
+  max-width: 44px;
+}
+
+.carrot-mark--wiggle {
+  animation: carrot-wiggle 2.4s ease-in-out infinite;
+}
+
+.carrot-mark--grow {
+  animation: carrot-grow 1.8s ease-in-out infinite;
 }
 
 @keyframes carrot-wiggle {
@@ -167,6 +178,11 @@
 
   &__dot {
     @apply h-1.5 w-1.5 shrink-0 rounded-full bg-primary/50;
+  }
+
+  // Guard: mark must never flex-grow with the lines
+  .carrot-mark {
+    flex: 0 0 auto;
   }
 
   &--growth &__line {
@@ -434,6 +450,134 @@
   }
 }
 
+// --- Gallery zoom carrot (hover only) ---
+.zoom-carrot-chip {
+  @apply flex items-center justify-center rounded-full text-white;
+  background: rgb(255 255 255 / 0.22);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25);
+  transition: transform 0.3s ease, background 0.3s ease;
+
+  .group:hover & {
+    background: rgb(254 96 25 / 0.92);
+    transform: scale(1.06);
+  }
+}
+
+.zoom-carrot {
+  display: block;
+  transform-origin: center bottom;
+  color: #fafafa;
+
+  &__leaves {
+    transform-origin: 128px 40px;
+  }
+
+  .group:hover & {
+    animation: zoom-carrot-pop 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+
+  .group:hover &__leaves {
+    animation: zoom-carrot-leaves 0.5s ease-out;
+  }
+}
+
+@keyframes zoom-carrot-pop {
+  0% {
+    transform: scale(0.88) rotate(0deg);
+  }
+  40% {
+    transform: scale(1.12) rotate(-6deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes zoom-carrot-leaves {
+  0% {
+    transform: rotate(0deg);
+  }
+  40% {
+    transform: rotate(-12deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+// --- Year stats personality ---
+.stat-item {
+  position: relative;
+
+  &__value {
+    position: relative;
+    display: inline-block;
+  }
+
+  &__value::after {
+    content: '';
+    position: absolute;
+    inset-inline: 12%;
+    bottom: -0.2rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.35s ease;
+    opacity: 0.55;
+  }
+
+  &:hover .stat-item__value::after {
+    transform: scaleX(1);
+  }
+}
+
+// --- Brand text link (conference / community reports) ---
+.carrot-text-link {
+  @apply relative inline-flex items-center gap-2 font-medium text-primary transition-colors;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -2px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: inline-end;
+    transition: transform 0.3s ease;
+    opacity: 0.45;
+  }
+
+  &:hover {
+    @apply text-primary/80;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+
+  &:focus-visible {
+    @apply rounded outline-none ring-2 ring-primary/40 ring-offset-2;
+  }
+}
+
+// --- Community collab card ---
+.collab-card {
+  @apply flex flex-col overflow-hidden rounded-2xl bg-surface-solid shadow transition-all duration-300;
+
+  &:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+
+  &__accent {
+    @apply ml-2 inline-block h-2 w-2 shrink-0 rounded-full;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .carrot-mark--wiggle,
   .carrot-mark--grow,
@@ -442,7 +586,9 @@
   .carrot-loader--leaves .carrot-mark,
   .carrot-progress__fill--indeterminate,
   .carrot-btn__grow,
-  .carrot-state--success .carrot-state__mark {
+  .carrot-state--success .carrot-state__mark,
+  .group:hover .zoom-carrot,
+  .group:hover .zoom-carrot__leaves {
     animation: none;
   }
 
@@ -453,11 +599,25 @@
 
   .carrot-btn--primary:hover:not(:disabled),
   .carrot-btn--community:hover:not(:disabled),
-  .carrot-btn:active:not(:disabled) {
+  .carrot-btn:active:not(:disabled),
+  .collab-card:hover,
+  .zoom-carrot-chip,
+  .group:hover .zoom-carrot-chip {
     transform: none;
   }
 
   .carrot-btn:hover:not(:disabled)::before {
     height: 0;
+  }
+
+  .carrot-btn:hover:not(:disabled)::before,
+  .stat-item__value::after,
+  .carrot-text-link::after {
+    transition: none;
+  }
+
+  .stat-item:hover .stat-item__value::after,
+  .carrot-text-link:hover::after {
+    transform: scaleX(1);
   }
 }

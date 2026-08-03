@@ -12,6 +12,7 @@ import SectionDecorations from '../components/SectionDecorations';
 import SpeakersShowcase, { Speaker } from '../components/SpeakersShowcase';
 import YearStatsShowcase from '../components/YearStatsShowcase';
 import ConferencePageLink from '../components/ConferencePageLink';
+import ZoomCarrotChip from '../components/ZoomCarrotChip';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 import { useYearStatsAnimations } from '../../hooks/useYearStatsAnimations';
 import type { Stat } from '../../types/content';
@@ -147,9 +148,10 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
             {/* Title and Description */}
             <div className="text-center max-w-3xl mx-auto">
               <h3 className="font-bold text-2xl md:text-3xl text-primary mb-5 inline-flex items-center flex-wrap justify-center">
-                <span className="text-2xl md:text-3xl text-primary/40 me-2">
-                  ✯
-                </span>
+                <span
+                  className="me-2.5 inline-block h-2 w-2 shrink-0 rounded-full bg-primary/50 shadow-[0_0_0_3px] shadow-primary/15"
+                  aria-hidden="true"
+                />
                 {conference.title}
               </h3>
               <p className="text-text leading-relaxed text-base md:text-lg">
@@ -206,25 +208,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           {image.label}
                         </span>
                       </div>
-                      <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
-                        <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
-                          <svg
-                            width="256"
-                            height="256"
-                            viewBox="0 0 256 256"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M151.14 72H102.86C72.3666 72 57.12 72 50.6194 82.2645C44.1187 92.529 50.3074 106.831 62.685 135.435L92.8515 205.149C107.521 239.05 114.855 256 127 256C132.269 256 136.632 252.81 141.082 246.43C143.496 242.968 143.502 238.377 141.58 234.604L131.217 214.257C128.961 209.83 127.834 207.616 128.796 205.985C129.758 204.354 132.192 204.354 137.06 204.354H153.635C158.413 204.354 162.743 201.465 164.683 196.982L175.788 171.318C178.493 165.067 175.759 157.748 169.676 154.955L128.787 136.182C123.376 133.697 125.103 125.393 131.031 125.393H187.731C192.535 125.393 196.906 122.478 198.759 117.929C205.86 100.5 208.394 90.1812 203.381 82.2645C196.88 72 181.633 72 151.14 72Z"
-                              fill="#FAFAFA"
-                            />
-                            <path
-                              d="M128.075 63.9808C116.95 64.0307 107.637 61.5 99.3718 55.2065C92.264 49.7941 88.0122 42.4149 85.6601 33.7213C84.5315 29.5505 83.7994 25.3028 84.0488 20.917C84.1246 19.5817 84.5379 18.8738 85.896 18.9084C94.5134 19.1222 102.673 20.9438 109.749 26.4512C110.534 27.063 110.716 26.6816 110.901 26.0735C111.245 24.9521 111.497 23.7999 111.823 22.6721C113.621 16.4709 117.097 11.3016 120.964 6.37032C122.624 4.25418 124.441 2.29552 126.33 0.403418C126.864 -0.131696 127.207 -0.138099 127.734 0.405976C134.215 7.11538 139.978 14.3177 142.516 23.7603C142.599 24.0688 142.652 24.385 142.714 24.6986C143.155 27.0004 143.39 27.0657 145.159 25.7151C148.885 22.8705 153.161 21.342 157.592 20.259C161.065 19.4089 164.558 18.6754 168.171 18.8904C169.4 18.9634 169.993 19.4409 169.999 20.7531C170.065 33.0096 166.479 43.8297 157.923 52.371C152.203 58.0817 145.239 61.5446 137.381 62.9799C133.947 63.6097 130.524 64.1051 128.075 63.9808Z"
-                              fill="#FAFAFA"
-                            />
-                          </svg>
-                        </span>
+                      <div
+                        className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 md:flex"
+                        aria-hidden="true"
+                      >
+                        <ZoomCarrotChip />
                       </div>
                       <GalleryClickOverlay
                         label={image.label}
@@ -253,7 +241,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
           <div className="max-w-6xl mx-auto relative">
             {/* Title Section */}
             <div className="text-center mb-12 md:mb-16 pt-4">
-              <h3 className="font-bold text-2xl md:text-3xl text-[#FF5C39]">
+              <h3 className="text-2xl font-bold text-primary md:text-3xl">
                 {communityCollaboration.title}
               </h3>
               <p className="text-text text-sm md:text-base max-w-2xl mx-auto mt-5 leading-loose">
@@ -262,11 +250,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
             </div>
 
             {/* Modern Card Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-7">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-7">
               {communityCollaboration.collaborations.map((collab, index) => (
-                <div
-                  key={index}
-                  className="group bg-surface-solid rounded-2xl overflow-hidden shadow hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-1"
+                <article
+                  key={`${collab.community}-${collab.title}`}
+                  className="collab-card group"
                 >
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
@@ -274,13 +262,13 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       alt={`رویداد مشترک فرانت‌چپتر و ${collab.community}`}
                       width={600}
                       height={450}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                     <div className="absolute top-0 right-0">
                       <div
-                        className={`px-4 py-2 font-medium rounded-bl-xl`}
+                        className="rounded-bl-xl px-4 py-2 font-medium"
                         style={{
                           backgroundColor: collab.color,
                           color:
@@ -292,22 +280,24 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                     </div>
                   </div>
 
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="font-bold text-xl text-right mb-4 text-dark group-hover:text-[#FF5C39] transition-colors">
-                      <span className="ml-2" style={{ color: collab.color }}>
-                        ◆
-                      </span>
+                  <div className="flex flex-grow flex-col p-6">
+                    <h3 className="mb-4 flex items-start text-right text-xl font-bold text-dark transition-colors group-hover:text-primary">
+                      <span
+                        className="collab-card__accent mt-2"
+                        style={{ backgroundColor: collab.color }}
+                        aria-hidden="true"
+                      />
                       {collab.title}
                     </h3>
 
-                    <div className="flex items-center mt-auto mb-4">
-                      <div className="mr-3 text-right flex-grow">
-                        <span className="text-muted text-sm">ارائه‌دهنده</span>
+                    <div className="mb-4 mt-auto flex items-center">
+                      <div className="mr-3 flex-grow text-right">
+                        <span className="text-sm text-muted">ارائه‌دهنده</span>
                         <p className="font-medium text-dark">
                           {collab.presenter}
                         </p>
                       </div>
-                      <div className="bg-theme-light p-2 rounded-full">
+                      <div className="rounded-full bg-theme-light p-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -318,6 +308,7 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          aria-hidden="true"
                         >
                           <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
                           <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
@@ -327,16 +318,14 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-slate-100">
+                    <div className="border-t border-slate-100 pt-4">
                       <Link
                         href={collab.link}
                         {...externalLinkProps(collab.link)}
-                        className="inline-flex items-center font-medium transition-colors"
-                        style={{
-                          color: collab.color,
-                        }}
+                        className="carrot-text-link"
+                        style={{ color: collab.color }}
                       >
-                        <span className="ml-2">مشاهده گزارش کامل</span>
+                        <span>مشاهده گزارش کامل</span>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="18"
@@ -347,13 +336,14 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
+                          aria-hidden="true"
                         >
                           <path d="M19 12H5M12 19l-7-7 7-7"></path>
                         </svg>
                       </Link>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
@@ -367,10 +357,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
         <div className="flex flex-col max-w-5xl mx-auto gap-6">
           {/* Title and Description */}
           <div className="text-center max-w-3xl mx-auto">
-            <h3 className="font-bold text-2xl md:text-3xl text-primary mb-3 inline-flex items-center flex-wrap justify-center">
-              <span className="text-2xl md:text-3xl text-primary/40 me-2">
-                ✯
-              </span>
+            <h3 className="mb-3 inline-flex flex-wrap items-center justify-center text-2xl font-bold text-primary md:text-3xl">
+              <span
+                className="me-2.5 inline-block h-2 w-2 shrink-0 rounded-full bg-primary/50 shadow-[0_0_0_3px] shadow-primary/15"
+                aria-hidden="true"
+              />
               {birthday.title}
             </h3>
             <p className="text-text leading-relaxed text-base md:text-lg py-4">
@@ -390,25 +381,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />
-              <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
-                <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
-                  <svg
-                    width="256"
-                    height="256"
-                    viewBox="0 0 256 256"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M151.14 72H102.86C72.3666 72 57.12 72 50.6194 82.2645C44.1187 92.529 50.3074 106.831 62.685 135.435L92.8515 205.149C107.521 239.05 114.855 256 127 256C132.269 256 136.632 252.81 141.082 246.43C143.496 242.968 143.502 238.377 141.58 234.604L131.217 214.257C128.961 209.83 127.834 207.616 128.796 205.985C129.758 204.354 132.192 204.354 137.06 204.354H153.635C158.413 204.354 162.743 201.465 164.683 196.982L175.788 171.318C178.493 165.067 175.759 157.748 169.676 154.955L128.787 136.182C123.376 133.697 125.103 125.393 131.031 125.393H187.731C192.535 125.393 196.906 122.478 198.759 117.929C205.86 100.5 208.394 90.1812 203.381 82.2645C196.88 72 181.633 72 151.14 72Z"
-                      fill="#FAFAFA"
-                    />
-                    <path
-                      d="M128.075 63.9808C116.95 64.0307 107.637 61.5 99.3718 55.2065C92.264 49.7941 88.0122 42.4149 85.6601 33.7213C84.5315 29.5505 83.7994 25.3028 84.0488 20.917C84.1246 19.5817 84.5379 18.8738 85.896 18.9084C94.5134 19.1222 102.673 20.9438 109.749 26.4512C110.534 27.063 110.716 26.6816 110.901 26.0735C111.245 24.9521 111.497 23.7999 111.823 22.6721C113.621 16.4709 117.097 11.3016 120.964 6.37032C122.624 4.25418 124.441 2.29552 126.33 0.403418C126.864 -0.131696 127.207 -0.138099 127.734 0.405976C134.215 7.11538 139.978 14.3177 142.516 23.7603C142.599 24.0688 142.652 24.385 142.714 24.6986C143.155 27.0004 143.39 27.0657 145.159 25.7151C148.885 22.8705 153.161 21.342 157.592 20.259C161.065 19.4089 164.558 18.6754 168.171 18.8904C169.4 18.9634 169.993 19.4409 169.999 20.7531C170.065 33.0096 166.479 43.8297 157.923 52.371C152.203 58.0817 145.239 61.5446 137.381 62.9799C133.947 63.6097 130.524 64.1051 128.075 63.9808Z"
-                      fill="#FAFAFA"
-                    />
-                  </svg>
-                </span>
+              <div
+                className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 md:flex"
+                aria-hidden="true"
+              >
+                <ZoomCarrotChip />
               </div>
               <GalleryClickOverlay
                 label={birthday.title}
@@ -447,25 +424,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                             {event.title}
                           </span>
                         </div>
-                        <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
-                          <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
-                            <svg
-                              width="256"
-                              height="256"
-                              viewBox="0 0 256 256"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M151.14 72H102.86C72.3666 72 57.12 72 50.6194 82.2645C44.1187 92.529 50.3074 106.831 62.685 135.435L92.8515 205.149C107.521 239.05 114.855 256 127 256C132.269 256 136.632 252.81 141.082 246.43C143.496 242.968 143.502 238.377 141.58 234.604L131.217 214.257C128.961 209.83 127.834 207.616 128.796 205.985C129.758 204.354 132.192 204.354 137.06 204.354H153.635C158.413 204.354 162.743 201.465 164.683 196.982L175.788 171.318C178.493 165.067 175.759 157.748 169.676 154.955L128.787 136.182C123.376 133.697 125.103 125.393 131.031 125.393H187.731C192.535 125.393 196.906 122.478 198.759 117.929C205.86 100.5 208.394 90.1812 203.381 82.2645C196.88 72 181.633 72 151.14 72Z"
-                                fill="#FAFAFA"
-                              />
-                              <path
-                                d="M128.075 63.9808C116.95 64.0307 107.637 61.5 99.3718 55.2065C92.264 49.7941 88.0122 42.4149 85.6601 33.7213C84.5315 29.5505 83.7994 25.3028 84.0488 20.917C84.1246 19.5817 84.5379 18.8738 85.896 18.9084C94.5134 19.1222 102.673 20.9438 109.749 26.4512C110.534 27.063 110.716 26.6816 110.901 26.0735C111.245 24.9521 111.497 23.7999 111.823 22.6721C113.621 16.4709 117.097 11.3016 120.964 6.37032C122.624 4.25418 124.441 2.29552 126.33 0.403418C126.864 -0.131696 127.207 -0.138099 127.734 0.405976C134.215 7.11538 139.978 14.3177 142.516 23.7603C142.599 24.0688 142.652 24.385 142.714 24.6986C143.155 27.0004 143.39 27.0657 145.159 25.7151C148.885 22.8705 153.161 21.342 157.592 20.259C161.065 19.4089 164.558 18.6754 168.171 18.8904C169.4 18.9634 169.993 19.4409 169.999 20.7531C170.065 33.0096 166.479 43.8297 157.923 52.371C152.203 58.0817 145.239 61.5446 137.381 62.9799C133.947 63.6097 130.524 64.1051 128.075 63.9808Z"
-                                fill="#FAFAFA"
-                              />
-                            </svg>
-                          </span>
+                        <div
+                          className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 md:flex"
+                          aria-hidden="true"
+                        >
+                          <ZoomCarrotChip />
                         </div>
                         <GalleryClickOverlay
                           label={event.title}
@@ -533,25 +496,11 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                             {event.title}
                           </span>
                         </div>
-                        <div className="absolute inset-0 hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30 pointer-events-none">
-                          <span className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-3 rounded-full backdrop-blur-md flex items-center justify-center bg-white/20">
-                            <svg
-                              width="256"
-                              height="256"
-                              viewBox="0 0 256 256"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M151.14 72H102.86C72.3666 72 57.12 72 50.6194 82.2645C44.1187 92.529 50.3074 106.831 62.685 135.435L92.8515 205.149C107.521 239.05 114.855 256 127 256C132.269 256 136.632 252.81 141.082 246.43C143.496 242.968 143.502 238.377 141.58 234.604L131.217 214.257C128.961 209.83 127.834 207.616 128.796 205.985C129.758 204.354 132.192 204.354 137.06 204.354H153.635C158.413 204.354 162.743 201.465 164.683 196.982L175.788 171.318C178.493 165.067 175.759 157.748 169.676 154.955L128.787 136.182C123.376 133.697 125.103 125.393 131.031 125.393H187.731C192.535 125.393 196.906 122.478 198.759 117.929C205.86 100.5 208.394 90.1812 203.381 82.2645C196.88 72 181.633 72 151.14 72Z"
-                                fill="#FAFAFA"
-                              />
-                              <path
-                                d="M128.075 63.9808C116.95 64.0307 107.637 61.5 99.3718 55.2065C92.264 49.7941 88.0122 42.4149 85.6601 33.7213C84.5315 29.5505 83.7994 25.3028 84.0488 20.917C84.1246 19.5817 84.5379 18.8738 85.896 18.9084C94.5134 19.1222 102.673 20.9438 109.749 26.4512C110.534 27.063 110.716 26.6816 110.901 26.0735C111.245 24.9521 111.497 23.7999 111.823 22.6721C113.621 16.4709 117.097 11.3016 120.964 6.37032C122.624 4.25418 124.441 2.29552 126.33 0.403418C126.864 -0.131696 127.207 -0.138099 127.734 0.405976C134.215 7.11538 139.978 14.3177 142.516 23.7603C142.599 24.0688 142.652 24.385 142.714 24.6986C143.155 27.0004 143.39 27.0657 145.159 25.7151C148.885 22.8705 153.161 21.342 157.592 20.259C161.065 19.4089 164.558 18.6754 168.171 18.8904C169.4 18.9634 169.993 19.4409 169.999 20.7531C170.065 33.0096 166.479 43.8297 157.923 52.371C152.203 58.0817 145.239 61.5446 137.381 62.9799C133.947 63.6097 130.524 64.1051 128.075 63.9808Z"
-                                fill="#FAFAFA"
-                              />
-                            </svg>
-                          </span>
+                        <div
+                          className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 md:flex"
+                          aria-hidden="true"
+                        >
+                          <ZoomCarrotChip />
                         </div>
                         <GalleryClickOverlay
                           label={event.title}

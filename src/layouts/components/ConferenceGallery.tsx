@@ -9,7 +9,7 @@ import GalleryImageCard from './GalleryImageCard';
 import ImageLightbox from './ImageLightbox';
 import LazyVideo from './LazyVideo';
 import SectionDecorations from './SectionDecorations';
-import ZoomIcon from './ZoomIcon';
+import ZoomCarrotChip from './ZoomCarrotChip';
 
 interface ConferenceGalleryProps {
   conference: ConferenceProfile;
@@ -73,10 +73,11 @@ const ConferenceGalleryImage = ({
           </span>
         </figcaption>
       )}
-      <div className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:flex">
-        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/25 p-3 backdrop-blur-md">
-          <ZoomIcon />
-        </span>
+      <div
+        className="absolute inset-0 z-30 hidden items-center justify-center opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100 md:flex"
+        aria-hidden="true"
+      >
+        <ZoomCarrotChip />
       </div>
       <GalleryClickOverlay label={label} onClick={onClick} />
     </figure>
@@ -150,11 +151,9 @@ const ConferenceGallery = ({ conference }: ConferenceGalleryProps) => {
 
       <header className="relative mb-8 text-center md:mb-10">
         <span
-          className="mb-2 inline-block text-xl text-primary/35"
+          className="mb-3 inline-block h-2 w-2 rounded-full bg-primary/50 shadow-[0_0_0_3px] shadow-primary/15"
           aria-hidden="true"
-        >
-          ✯
-        </span>
+        />
         <h2 className="section-title text-h5 text-center">
           {conference.galleryTitle ?? 'گالری همایش'}
         </h2>
