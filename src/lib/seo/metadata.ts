@@ -109,8 +109,13 @@ export const buildPageMetadata = ({
   };
 };
 
-export const homeMetadata = buildPageMetadata({
-  title: DEFAULT_TITLE,
-  description: DEFAULT_DESCRIPTION,
-  image: DEFAULT_OG_IMAGE,
-});
+export const homeMetadata: Metadata = {
+  ...buildPageMetadata({
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    image: DEFAULT_OG_IMAGE,
+  }),
+  other: {
+    enamad: '48006262',
+  },
+};
