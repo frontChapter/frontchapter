@@ -62,22 +62,49 @@
   }
 }
 
+.carrot-mark--empty {
+  opacity: 0.22;
+  filter: grayscale(1);
+}
+
+// Classic carrot pips (level meter) — outline vs solid, not F-logo
+.carrot-pip {
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.carrot-pip--lit .carrot-pip__body {
+  fill: #fe6019;
+  stroke: none;
+}
+
+.carrot-pip--lit .carrot-pip__leaf {
+  fill: #22c55e;
+  stroke: none;
+}
+
+.carrot-pip--dim .carrot-pip__body {
+  fill: color-mix(in srgb, var(--color-border-secondary) 70%, transparent);
+  stroke: #fe6019;
+  stroke-width: 1.1;
+  stroke-opacity: 0.35;
+}
+
+.carrot-pip--dim .carrot-pip__leaf {
+  fill: none;
+  stroke: #22c55e;
+  stroke-width: 1;
+  stroke-opacity: 0.35;
+}
+
 // --- Loader ---
 .carrot-loader {
   @apply inline-flex flex-col items-center justify-center gap-3;
 
-  &__soil {
-    @apply relative flex h-10 w-12 items-end justify-center overflow-hidden rounded-b-md;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      var(--color-border-secondary) 35%,
-      #3d2f24 100%
-    );
-  }
-
   &__mark {
-    @apply relative z-[1];
+    @apply relative flex items-center justify-center;
+    // no soil box — that looked like a half-loaded image
   }
 
   &--grow .carrot-loader__mark {
@@ -99,16 +126,16 @@
 
 @keyframes carrot-rise {
   0% {
-    transform: translateY(18px) scaleY(0.7);
-    opacity: 0.5;
+    transform: translateY(10px) scale(0.85);
+    opacity: 0.45;
   }
   55% {
-    transform: translateY(0) scaleY(1);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
   100% {
-    transform: translateY(18px) scaleY(0.7);
-    opacity: 0.5;
+    transform: translateY(10px) scale(0.85);
+    opacity: 0.45;
   }
 }
 
@@ -132,6 +159,36 @@
   }
   50% {
     transform: rotate(6deg);
+  }
+}
+
+// --- Level meter (n/5 carrots) ---
+.carrot-level {
+  @apply flex flex-col items-center gap-1.5;
+
+  &__row {
+    @apply flex items-end gap-0.5;
+    direction: ltr; // filled grow left→right regardless of page RTL
+  }
+
+  &__pip {
+    transition: transform 200ms ease;
+  }
+
+  &__pip--lit:hover {
+    transform: translateY(-2px) rotate(-6deg);
+  }
+
+  &__label {
+    @apply text-xs font-medium text-primary;
+  }
+
+  &--md &__row {
+    @apply gap-1;
+  }
+
+  &--md &__label {
+    @apply text-sm;
   }
 }
 
@@ -578,6 +635,226 @@
   }
 }
 
+// --- Members garden directory ---
+.members-garden {
+  &__lede {
+    @apply text-base leading-relaxed;
+  }
+
+  &__bed {
+    @apply rounded-3xl border border-border-secondary p-3 sm:p-4;
+    background: linear-gradient(
+      165deg,
+      var(--color-theme-light) 0%,
+      color-mix(in srgb, var(--color-border-secondary) 45%, transparent) 48%,
+      var(--color-theme-light) 100%
+    );
+  }
+
+  &__list {
+    @apply m-0 flex flex-col gap-2;
+  }
+
+  &__row {
+    @apply relative flex flex-wrap items-center gap-4 rounded-2xl border border-transparent px-4 py-4 no-underline transition-all duration-300 sm:flex-nowrap sm:gap-5 sm:px-5;
+    background-color: color-mix(in srgb, var(--color-surface-solid) 92%, transparent);
+    animation: members-row-in 0.45s ease both;
+    backdrop-filter: blur(6px);
+
+    &:hover {
+      @apply -translate-y-0.5 shadow-lg shadow-primary/10;
+      border-color: color-mix(in srgb, #fe6019 25%, transparent);
+    }
+
+    &--top {
+      box-shadow: inset 0 0 0 1px
+        color-mix(in srgb, #fe6019 18%, transparent);
+    }
+  }
+
+  &__rank {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold tabular-nums;
+
+    &--hot {
+      @apply bg-primary text-white;
+    }
+
+    &--quiet {
+      @apply bg-theme-light text-muted;
+    }
+  }
+
+  &__who {
+    @apply flex min-w-0 flex-1 items-center gap-3;
+  }
+
+  &__avatar {
+    @apply h-14 w-14 shrink-0 rounded-full object-cover;
+    box-shadow: 0 0 0 2px var(--color-body), 0 0 0 4px rgba(254, 96, 25, 0.28);
+
+    &--fallback {
+      @apply flex items-center justify-center bg-theme-light text-lg font-semibold text-primary;
+    }
+  }
+
+  &__name {
+    @apply mb-0 truncate text-base font-semibold text-dark transition-colors;
+  }
+
+  &__row:hover &__name {
+    @apply text-primary;
+  }
+
+  &__sub {
+    @apply mb-0 truncate text-sm text-muted;
+  }
+
+  &__bio {
+    @apply mb-0 mt-1 line-clamp-1 text-sm text-text;
+  }
+
+  &__badges {
+    @apply mb-0 mt-1 text-xs font-medium text-primary;
+  }
+
+  &__growth {
+    @apply flex w-full shrink-0 flex-col items-center gap-0.5 sm:w-auto sm:items-end;
+  }
+
+  &__level {
+    @apply text-xs font-medium text-primary;
+  }
+
+  &__points {
+    @apply text-xs text-muted;
+  }
+}
+
+@keyframes members-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// --- Member profile ---
+.member-plot {
+  &__hero {
+    @apply mb-10 flex flex-col gap-8 rounded-3xl border border-border-secondary p-6 md:flex-row md:items-center md:justify-between md:p-8;
+    background: linear-gradient(
+      135deg,
+      var(--color-theme-light) 0%,
+      color-mix(in srgb, var(--color-border-secondary) 50%, transparent) 100%
+    );
+  }
+
+  &__identity {
+    @apply flex items-start gap-5;
+  }
+
+  &__avatar {
+    @apply h-28 w-28 shrink-0 rounded-full object-cover;
+    box-shadow: 0 0 0 3px var(--color-body), 0 0 0 6px rgba(254, 96, 25, 0.3);
+
+    &--fallback {
+      @apply flex items-center justify-center bg-theme-light text-3xl font-semibold text-primary;
+    }
+  }
+
+  &__name {
+    @apply mb-1 text-h3 font-semibold text-dark;
+  }
+
+  &__sub {
+    @apply mb-3 text-sm text-muted;
+  }
+
+  &__bio {
+    @apply mb-4 max-w-lg text-base leading-relaxed text-text;
+  }
+
+  &__links {
+    @apply flex gap-4 text-muted;
+
+    a {
+      @apply transition-colors hover:text-primary;
+    }
+  }
+
+  &__meter {
+    @apply flex flex-col items-center md:items-end;
+  }
+
+  &__points {
+    @apply mb-0 mt-1 text-sm text-muted;
+  }
+
+  &__dates {
+    @apply mb-10 grid grid-cols-1 gap-4 sm:grid-cols-3;
+
+    > div {
+      @apply rounded-xl bg-theme-light px-4 py-3;
+    }
+
+    dt {
+      @apply mb-1 text-xs text-muted;
+    }
+
+    dd {
+      @apply mb-0 text-sm font-medium text-dark;
+    }
+  }
+
+  &__panels {
+    @apply grid grid-cols-1 gap-6 lg:grid-cols-2;
+  }
+
+  &__panel {
+    @apply rounded-2xl border border-border-secondary bg-surface-solid p-5 sm:p-6;
+  }
+
+  &__heading {
+    @apply mb-5 text-h5 font-semibold text-dark;
+  }
+
+  &__timeline {
+    @apply m-0 space-y-4;
+  }
+
+  &__event {
+    @apply relative flex gap-3 ps-2;
+
+    &-dot {
+      @apply mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-primary;
+      box-shadow: 0 0 0 4px rgba(254, 96, 25, 0.15);
+    }
+
+    &-title {
+      @apply mb-0 text-sm font-medium text-dark;
+    }
+
+    &-pts {
+      @apply text-primary;
+    }
+
+    &-date {
+      @apply mb-0 text-xs text-muted;
+    }
+  }
+
+  &__titles {
+    @apply m-0 space-y-3;
+
+    li {
+      @apply flex items-center justify-between gap-3 text-sm text-dark;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .carrot-mark--wiggle,
   .carrot-mark--grow,
@@ -588,8 +865,13 @@
   .carrot-btn__grow,
   .carrot-state--success .carrot-state__mark,
   .group:hover .zoom-carrot,
-  .group:hover .zoom-carrot__leaves {
+  .group:hover .zoom-carrot__leaves,
+  .members-garden__row {
     animation: none;
+  }
+
+  .members-garden__row:hover {
+    transform: none;
   }
 
   .carrot-progress__fill--indeterminate {

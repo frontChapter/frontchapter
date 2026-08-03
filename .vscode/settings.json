@@ -1,5 +1,7 @@
 {
   "cursor.openai.baseUrl": "http://127.0.0.1:8787/p/frontchapter/v1",
   "deno.enable": true,
-  "deno.enablePaths": ["supabase/functions"]
+  "deno.enablePaths": ["supabase/functions"],
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore"
 }

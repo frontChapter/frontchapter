@@ -4,11 +4,11 @@ import Banner from '@layouts/components/Banner';
 import {
   CarrotBadge,
   CarrotButton,
+  CarrotLevel,
   CarrotLoader,
   CarrotSuccessState,
 } from '@layouts/components/carrot';
 import {
-  LEVEL_LABELS,
   levelFromPoints,
   type Member,
   type MemberStats,
@@ -279,6 +279,14 @@ const Join = () => {
       const updated = data as Member;
       setMember(updated);
       if (session) await loadMember(session.user.id);
+      // Open Telegram group chat if they were muted pending profile
+      try {
+        await supabase.functions.invoke('telegram-bot', {
+          body: { action: 'unmute' },
+        });
+      } catch {
+        // non-fatal — user can still use the site
+      }
       setStep('done');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ذخیره ناموفق بود');
@@ -550,11 +558,10 @@ const Join = () => {
                     />
                   ) : null}
                   <div className="min-w-0 flex-1">
-                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <div className="mb-2 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
                       <h2 className="h4 mb-0 text-dark">
                         {member.display_name}
                       </h2>
-                      <CarrotBadge accent>{LEVEL_LABELS[levelKey]}</CarrotBadge>
                     </div>
                     {member.username ? (
                       <p className="mb-1 text-sm text-muted">
@@ -562,16 +569,17 @@ const Join = () => {
                       </p>
                     ) : null}
                     {member.expertise ? (
-                      <p className="mb-2 text-sm font-medium text-dark">
+                      <p className="mb-3 text-sm font-medium text-dark">
                         {member.expertise}
                       </p>
                     ) : null}
+                    <CarrotLevel level={levelKey} size="md" />
+                    <p className="mt-1 text-xs text-muted">{points} امتیاز</p>
                     {member.bio ? (
-                      <p className="mb-3 text-sm leading-relaxed text-muted">
+                      <p className="mt-3 mb-0 text-sm leading-relaxed text-muted">
                         {member.bio}
                       </p>
                     ) : null}
-                    <p className="text-sm text-muted">{points} امتیاز</p>
                   </div>
                 </div>
 

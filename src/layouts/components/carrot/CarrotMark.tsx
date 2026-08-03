@@ -3,10 +3,13 @@ import type { SVGProps } from 'react';
 
 export type CarrotMarkSize = 'sm' | 'md' | 'lg' | 'xl';
 export type CarrotMarkPose = 'idle' | 'wiggle' | 'grow';
+export type CarrotMarkTone = 'filled' | 'empty';
 
 type Props = {
   size?: CarrotMarkSize;
   pose?: CarrotMarkPose;
+  /** empty = dim/gray (for level meter) */
+  tone?: CarrotMarkTone;
   className?: string;
   title?: string;
 } & Omit<SVGProps<SVGSVGElement>, 'children' | 'width' | 'height'>;
@@ -23,6 +26,7 @@ const HEIGHT: Record<CarrotMarkSize, number> = {
 const CarrotMark = ({
   size = 'md',
   pose = 'idle',
+  tone = 'filled',
   className,
   title,
   style,
@@ -42,6 +46,7 @@ const CarrotMark = ({
       className={clsx(
         'carrot-mark',
         `carrot-mark--${size}`,
+        tone === 'empty' && 'carrot-mark--empty',
         pose !== 'idle' && `carrot-mark--${pose}`,
         className
       )}

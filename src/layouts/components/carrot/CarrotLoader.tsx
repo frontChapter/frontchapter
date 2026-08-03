@@ -9,8 +9,9 @@ type Props = {
   className?: string;
 };
 
+/** Wait state — mark only, no soil box (that read as a broken image). */
 const CarrotLoader = ({
-  variant = 'grow',
+  variant = 'bounce',
   label = 'در حال بارگذاری…',
   className,
 }: Props) => {
@@ -21,15 +22,9 @@ const CarrotLoader = ({
       aria-live="polite"
       aria-label={label}
     >
-      {variant === 'grow' ? (
-        <div className="carrot-loader__soil" aria-hidden="true">
-          <div className="carrot-loader__mark">
-            <CarrotMark size="md" pose="idle" />
-          </div>
-        </div>
-      ) : (
-        <CarrotMark size="md" pose="idle" />
-      )}
+      <div className="carrot-loader__mark" aria-hidden="true">
+        <CarrotMark size="lg" pose="idle" />
+      </div>
       <span className="carrot-loader__label">{label}</span>
     </div>
   );

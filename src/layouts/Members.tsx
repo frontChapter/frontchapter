@@ -2,9 +2,9 @@
 
 import Banner from '@layouts/components/Banner';
 import {
-  CarrotBadge,
   CarrotButton,
   CarrotEmptyState,
+  CarrotLevel,
   CarrotLoader,
 } from '@layouts/components/carrot';
 import Cta from '@layouts/components/Cta';
@@ -14,20 +14,19 @@ import {
   type LevelKey,
   type MemberStats,
 } from '@lib/membership/types';
+import { memberPath, memberSlug } from '@lib/membership/slug';
 import { getSupabase } from '@lib/supabase/client';
+import clsx from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import {
-  IoGlobeOutline,
-  IoLogoGithub,
-  IoLogoLinkedin,
-  IoPaperPlaneOutline,
-} from 'react-icons/io5';
 
 type LoadState = 'loading' | 'ready' | 'error';
 
+type Row = MemberStats & { telegram_id: number };
+
 const Members = () => {
-  const [members, setMembers] = useState<MemberStats[]>([]);
+  const [members, setMembers] = useState<Row[]>([]);
   const [state, setState] = useState<LoadState>('loading');
   const [error, setError] = useState('');
 
@@ -40,7 +39,7 @@ const Members = () => {
         const { data, error: qErr } = await supabase
           .from('member_stats')
           .select(
-            'id, username, display_name, photo_url, expertise, bio, linkedin_url, github_url, website_url, is_public, profile_completed_at, points_total, level_key, badges'
+            'id, telegram_id, username, display_name, photo_url, expertise, bio, linkedin_url, github_url, website_url, is_public, profile_completed_at, points_total, level_key, badges'
           )
           .eq('is_public', true)
           .not('profile_completed_at', 'is', null)
@@ -48,7 +47,7 @@ const Members = () => {
 
         if (qErr) throw qErr;
         if (!cancelled) {
-          setMembers((data as MemberStats[]) ?? []);
+          setMembers((data as Row[]) ?? []);
           setState('ready');
         }
       } catch (e) {
@@ -67,22 +66,21 @@ const Members = () => {
 
   return (
     <>
-      <section className="section pt-0">
+      <section className="section members-garden pt-0">
         <Banner title="هویجی‌ها" />
         <div className="container">
-          <p className="fade mx-auto max-w-2xl text-center text-muted">
-            اعضای عمومی جامعه فرانت‌چپتر. سطح‌ها از مشارکت در گروه و رویدادها
-            رشد می‌کنن.
+          <p className="members-garden__lede fade mx-auto mb-10 max-w-xl text-center text-muted">
+            باغ جامعه. هر هویج رنگی یک پله رشد است — از مشارکت در گروه و رویدادها.
           </p>
 
           {state === 'loading' ? (
             <div className="flex justify-center py-20">
-              <CarrotLoader variant="grow" label="در حال چیدن هویجی‌ها…" />
+              <CarrotLoader variant="bounce" label="در حال چیدن هویجی‌ها…" />
             </div>
           ) : null}
 
           {state === 'error' ? (
-            <div className="mx-auto mt-12 max-w-lg">
+            <div className="mx-auto mt-8 max-w-lg">
               <CarrotEmptyState
                 tone="error"
                 title="لیست اعضا لود نشد"
@@ -101,7 +99,7 @@ const Members = () => {
           ) : null}
 
           {state === 'ready' && members.length === 0 ? (
-            <div className="mx-auto mt-12 max-w-lg">
+            <div className="mx-auto mt-8 max-w-lg">
               <CarrotEmptyState
                 title="هنوز هویجی عمومی نیست"
                 description="اولین نفر باش که پروفایل عمومی می‌سازه."
@@ -112,123 +110,95 @@ const Members = () => {
           ) : null}
 
           {state === 'ready' && members.length > 0 ? (
-            <ul className="fade mt-12 grid list-none grid-cols-1 gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-3">
-              {members.map((m) => {
-                const level = (m.level_key || 'badge') as LevelKey;
-                const badges = Array.isArray(m.badges) ? m.badges : [];
-                return (
-                  <li
-                    key={m.id}
-                    className="flex flex-col gap-4 border-t border-border pt-6"
-                  >
-                    <div className="flex items-start gap-4">
-                      {m.photo_url ? (
-                        <Image
-                          src={m.photo_url}
-                          alt=""
-                          width={64}
-                          height={64}
-                          className="h-16 w-16 shrink-0 rounded-full object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        <div
-                          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-theme-light text-2xl"
-                          aria-hidden
+            <div className="members-garden__bed fade">
+              <ul className="members-garden__list list-none p-0">
+                {members.map((m, index) => {
+                  const level = (m.level_key || 'badge') as LevelKey;
+                  const badges = Array.isArray(m.badges) ? m.badges : [];
+                  const slug = memberSlug(m);
+                  const rank = index + 1;
+
+                  return (
+                    <li key={m.id}>
+                      <Link
+                        href={memberPath(slug)}
+                        className={clsx(
+                          'members-garden__row group',
+                          rank <= 3 && 'members-garden__row--top'
+                        )}
+                        style={{
+                          animationDelay: `${Math.min(index, 16) * 35}ms`,
+                        }}
+                      >
+                        <span
+                          className={clsx(
+                            'members-garden__rank',
+                            rank <= 3
+                              ? 'members-garden__rank--hot'
+                              : 'members-garden__rank--quiet'
+                          )}
                         >
-                          🥕
+                          {rank}
+                        </span>
+
+                        <div className="members-garden__who">
+                          {m.photo_url ? (
+                            <Image
+                              src={m.photo_url}
+                              alt=""
+                              width={56}
+                              height={56}
+                              className="members-garden__avatar"
+                              unoptimized
+                            />
+                          ) : (
+                            <span
+                              className="members-garden__avatar members-garden__avatar--fallback"
+                              aria-hidden
+                            >
+                              ؟
+                            </span>
+                          )}
+                          <div className="members-garden__meta min-w-0">
+                            <p className="members-garden__name">
+                              {m.display_name}
+                            </p>
+                            <p className="members-garden__sub">
+                              {m.username ? `@${m.username}` : null}
+                              {m.username && m.expertise ? ' · ' : null}
+                              {m.expertise || null}
+                            </p>
+                            {m.bio ? (
+                              <p className="members-garden__bio">{m.bio}</p>
+                            ) : null}
+                            {badges.length > 0 ? (
+                              <p className="members-garden__badges">
+                                {badges
+                                  .map((b) => BADGE_LABELS[b] ?? b)
+                                  .join(' · ')}
+                              </p>
+                            ) : null}
+                          </div>
                         </div>
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-dark">
-                          {m.display_name}
-                        </p>
-                        {m.username ? (
-                          <p className="text-sm text-muted">@{m.username}</p>
-                        ) : null}
-                        {m.expertise ? (
-                          <p className="mt-1 text-sm text-dark">
-                            {m.expertise}
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
 
-                    <div className="flex flex-wrap items-center gap-2">
-                      <CarrotBadge accent>{LEVEL_LABELS[level]}</CarrotBadge>
-                      <span className="text-xs text-muted">
-                        {m.points_total ?? 0} امتیاز
-                      </span>
-                      {badges.map((b) => (
-                        <CarrotBadge key={b}>
-                          {BADGE_LABELS[b] ?? b}
-                        </CarrotBadge>
-                      ))}
-                    </div>
-
-                    {m.bio ? (
-                      <p className="line-clamp-3 text-sm leading-relaxed text-muted">
-                        {m.bio}
-                      </p>
-                    ) : null}
-
-                    <div className="mt-auto flex flex-wrap gap-3 text-muted">
-                      {m.linkedin_url ? (
-                        <a
-                          href={m.linkedin_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="transition-colors hover:text-primary"
-                          aria-label={`لینکدین ${m.display_name}`}
-                        >
-                          <IoLogoLinkedin className="h-5 w-5" />
-                        </a>
-                      ) : null}
-                      {m.github_url ? (
-                        <a
-                          href={m.github_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="transition-colors hover:text-primary"
-                          aria-label={`گیت‌هاب ${m.display_name}`}
-                        >
-                          <IoLogoGithub className="h-5 w-5" />
-                        </a>
-                      ) : null}
-                      {m.website_url ? (
-                        <a
-                          href={m.website_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="transition-colors hover:text-primary"
-                          aria-label={`وب‌سایت ${m.display_name}`}
-                        >
-                          <IoGlobeOutline className="h-5 w-5" />
-                        </a>
-                      ) : null}
-                      {m.username ? (
-                        <a
-                          href={`https://t.me/${m.username}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="transition-colors hover:text-primary"
-                          aria-label={`تلگرام ${m.display_name}`}
-                        >
-                          <IoPaperPlaneOutline className="h-5 w-5" />
-                        </a>
-                      ) : null}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : null}
-
-          {state === 'ready' ? (
-            <div className="mt-14 text-center">
-              <CarrotButton href="/join/" variant="secondary">
-                تو هم هویجی شو!
-              </CarrotButton>
+                        <div className="members-garden__growth">
+                          <CarrotLevel
+                            level={level}
+                            size="md"
+                            showLabel={false}
+                          />
+                          <span className="members-garden__level">
+                            {LEVEL_LABELS[level]}
+                          </span>
+                          <span className="members-garden__points">
+                            {m.points_total ?? 0} امتیاز
+                          </span>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           ) : null}
         </div>

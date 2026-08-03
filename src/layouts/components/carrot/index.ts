@@ -1,5 +1,9 @@
 export { default as CarrotMark } from './CarrotMark';
-export type { CarrotMarkPose, CarrotMarkSize } from './CarrotMark';
+export type {
+  CarrotMarkPose,
+  CarrotMarkSize,
+  CarrotMarkTone,
+} from './CarrotMark';
 
 export { default as CarrotButton } from './CarrotButton';
 export type { CarrotButtonVariant } from './CarrotButton';
@@ -18,3 +22,6 @@ export { default as CarrotSuccessState } from './CarrotSuccessState';
 export { default as CarrotBadge } from './CarrotBadge';
 export { default as CarrotPattern } from './CarrotPattern';
 export { default as CarrotBackground } from './CarrotBackground';
+
+export { default as CarrotLevel, LEVEL_FILL } from './CarrotLevel';
+export { default as CarrotPip } from './CarrotPip';
