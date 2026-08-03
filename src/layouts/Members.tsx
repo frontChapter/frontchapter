@@ -8,24 +8,134 @@ import {
   CarrotLoader,
 } from '@layouts/components/carrot';
 import Cta from '@layouts/components/Cta';
+import MemberSingle from '@layouts/MemberSingle';
 import {
   BADGE_LABELS,
   LEVEL_LABELS,
   type LevelKey,
   type MemberStats,
 } from '@lib/membership/types';
-import { memberPath, memberSlug } from '@lib/membership/slug';
+import type { MemberActivity, MemberProfile } from '@lib/membership/fetch';
+import { memberPath, memberSlug, parseMemberSlug } from '@lib/membership/slug';
 import { getSupabase } from '@lib/supabase/client';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 type LoadState = 'loading' | 'ready' | 'error';
 
 type Row = MemberStats & { telegram_id: number };
 
-const Members = () => {
+const PROFILE_SELECT =
+  'id, telegram_id, username, display_name, photo_url, expertise, bio, linkedin_url, github_url, website_url, is_public, telegram_joined_at, profile_completed_at, created_at, points_total, level_key, badges';
+
+function MemberProfileByQuery({ slug }: { slug: string }) {
+  const [state, setState] = useState<LoadState>('loading');
+  const [error, setError] = useState('');
+  const [member, setMember] = useState<MemberProfile | null>(null);
+  const [activities, setActivities] = useState<MemberActivity[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      try {
+        const supabase = getSupabase();
+        const parsed = parseMemberSlug(slug);
+        let q = supabase
+          .from('member_stats')
+          .select(PROFILE_SELECT)
+          .eq('is_public', true)
+          .not('profile_completed_at', 'is', null);
+
+        q =
+          parsed.kind === 'telegram_id'
+            ? q.eq('telegram_id', parsed.value)
+            : q.ilike('username', parsed.value);
+
+        const { data, error: qErr } = await q.maybeSingle();
+        if (qErr) throw qErr;
+        if (!data) {
+          if (!cancelled) {
+            setMember(null);
+            setState('ready');
+          }
+          return;
+        }
+
+        const { data: acts, error: aErr } = await supabase
+          .from('activity_log')
+          .select('id, activity_type, points, created_at')
+          .eq('member_id', data.id)
+          .order('created_at', { ascending: false })
+          .limit(20);
+        if (aErr) throw aErr;
+
+        if (!cancelled) {
+          setMember(data as MemberProfile);
+          setActivities((acts as MemberActivity[]) ?? []);
+          setState('ready');
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(
+            e instanceof Error ? e.message : 'بارگذاری پروفایل ناموفق بود'
+          );
+          setState('error');
+        }
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
+
+  if (state === 'loading') {
+    return (
+      <div className="flex justify-center py-20">
+        <CarrotLoader variant="bounce" label="در حال باز کردن پروفایل…" />
+      </div>
+    );
+  }
+
+  if (state === 'error') {
+    return (
+      <div className="mx-auto mt-8 max-w-lg">
+        <CarrotEmptyState
+          tone="error"
+          title="پروفایل لود نشد"
+          description={error || 'یک بار دیگه امتحان کن.'}
+          action={
+            <CarrotButton variant="primary" href="/members/">
+              بازگشت به هویجی‌ها
+            </CarrotButton>
+          }
+        />
+      </div>
+    );
+  }
+
+  if (!member) {
+    return (
+      <div className="mx-auto mt-8 max-w-lg">
+        <CarrotEmptyState
+          title="هویجی یافت نشد"
+          description="این پروفایل عمومی نیست یا وجود نداره."
+          actionLabel="هویجی‌ها"
+          actionHref="/members/"
+        />
+      </div>
+    );
+  }
+
+  return <MemberSingle member={member} activities={activities} />;
+}
+
+function MemberDirectory() {
   const [members, setMembers] = useState<Row[]>([]);
   const [state, setState] = useState<LoadState>('loading');
   const [error, setError] = useState('');
@@ -70,7 +180,8 @@ const Members = () => {
         <Banner title="هویجی‌ها" />
         <div className="container">
           <p className="members-garden__lede fade mx-auto mb-10 max-w-xl text-center text-muted">
-            باغ جامعه. هر هویج رنگی یک پله رشد است — از مشارکت در گروه و رویدادها.
+            باغ جامعه. هر هویج رنگی یک پله رشد است — از مشارکت در گروه و
+            رویدادها.
           </p>
 
           {state === 'loading' ? (
@@ -206,6 +317,29 @@ const Members = () => {
       <Cta />
     </>
   );
-};
+}
+
+function MembersRouter() {
+  const search = useSearchParams();
+  const slug = search.get('m')?.trim();
+
+  if (slug) {
+    return <MemberProfileByQuery slug={slug} />;
+  }
+
+  return <MemberDirectory />;
+}
+
+const Members = () => (
+  <Suspense
+    fallback={
+      <div className="flex justify-center py-20">
+        <CarrotLoader variant="bounce" label="در حال بارگذاری…" />
+      </div>
+    }
+  >
+    <MembersRouter />
+  </Suspense>
+);
 
 export default Members;

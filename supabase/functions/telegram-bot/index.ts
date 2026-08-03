@@ -6,10 +6,13 @@
 // Actions:
 //   POST (Telegram update) + X-Telegram-Bot-Api-Secret-Token
 //   POST { action: "unmute" } + Authorization: Bearer <user jwt>
+//   /useful (admin reply) → +10 quality_message + thanks + profile link
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const JOIN_URL = 'https://frontchapter.ir/join/';
+const SITE = 'https://frontchapter.ir';
+const USEFUL_POINTS = 10;
 
 const MUTED = {
   can_send_messages: false,
@@ -236,24 +239,171 @@ function memberJoinedFromChatMember(update: Record<string, unknown>) {
   return { chatId: cm.chat.id, user: cm.new_chat_member.user };
 }
 
+type TgUser = {
+  id: number;
+  is_bot?: boolean;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+};
+
+type GroupMessage = {
+  message_id?: number;
+  chat?: { id?: number; type?: string };
+  new_chat_members?: TgUser[];
+  text?: string;
+  from?: TgUser;
+  reply_to_message?: {
+    message_id?: number;
+    from?: TgUser;
+    text?: string;
+  };
+};
+
 function membersFromServiceMessage(update: Record<string, unknown>) {
-  const msg = update.message as
-    | {
-        chat?: { id?: number; type?: string };
-        new_chat_members?: Array<{
-          id: number;
-          is_bot?: boolean;
-          first_name?: string;
-          last_name?: string;
-          username?: string;
-        }>;
-        text?: string;
-        from?: { id: number };
-      }
-    | undefined;
+  const msg = update.message as GroupMessage | undefined;
   if (!msg?.chat?.id) return null;
   if (msg.chat.type !== 'group' && msg.chat.type !== 'supergroup') return null;
   return msg;
+}
+
+function urlButton(text: string, url: string) {
+  return { inline_keyboard: [[{ text, url }]] };
+}
+
+function profileSlug(m: { username: string | null; telegram_id: number }) {
+  const u = m.username?.trim().toLowerCase();
+  if (u) return u;
+  return `tg-${m.telegram_id}`;
+}
+
+async function isGroupAdmin(chatId: number, userId: number) {
+  const m = await tg('getChatMember', { chat_id: chatId, user_id: userId });
+  return m.status === 'creator' || m.status === 'administrator';
+}
+
+async function handleUseful(
+  db: ReturnType<typeof adminDb>,
+  msg: GroupMessage
+) {
+  const chatId = msg.chat!.id!;
+  const admin = msg.from;
+  const target = msg.reply_to_message?.from;
+  const targetMsgId = msg.reply_to_message?.message_id;
+
+  if (!admin?.id) return;
+
+  if (!msg.reply_to_message || !target?.id || !targetMsgId) {
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: 'روی پیام مفید ریپلای کن، بعد /useful بزن.',
+    });
+    return;
+  }
+
+  if (!(await isGroupAdmin(chatId, admin.id))) return;
+
+  if (target.is_bot) {
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: 'به ربات امتیاز نمی‌دیم 🥕',
+    });
+    return;
+  }
+
+  const { data: member } = await db
+    .from('members')
+    .select('id, username, telegram_id, display_name, profile_completed_at')
+    .eq('telegram_id', target.id)
+    .maybeSingle();
+
+  if (!member) {
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: 'این کاربر هنوز عضو فرانت‌چپتر نیست.\nاول ثبت‌نام کنه، بعد امتیاز می‌دیم 🥕',
+      disable_web_page_preview: true,
+      reply_markup: urlButton('ثبت‌نام در فرانت‌چپتر', JOIN_URL),
+    });
+    return;
+  }
+
+  // already awarded for this telegram message?
+  const { data: existing } = await db
+    .from('activity_log')
+    .select('id')
+    .eq('member_id', member.id)
+    .eq('activity_type', 'quality_message')
+    .contains('meta', { telegram_message_id: targetMsgId, chat_id: chatId })
+    .maybeSingle();
+
+  if (existing) {
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: 'این پیام قبلاً امتیاز گرفته.',
+    });
+    return;
+  }
+
+  const { data: adminMember } = await db
+    .from('members')
+    .select('id')
+    .eq('telegram_id', admin.id)
+    .maybeSingle();
+
+  const { error: insErr } = await db.from('activity_log').insert({
+    member_id: member.id,
+    activity_type: 'quality_message',
+    points: USEFUL_POINTS,
+    created_by: adminMember?.id ?? null,
+    meta: {
+      source: 'telegram_/useful',
+      chat_id: chatId,
+      telegram_message_id: targetMsgId,
+      awarded_by_telegram_id: admin.id,
+    },
+  });
+
+  if (insErr) {
+    console.error('useful insert', insErr);
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: 'ثبت امتیاز نشد — دوباره تلاش کن.',
+    });
+    return;
+  }
+
+  const name = member.display_name || displayName(target);
+  const url = `${SITE}/members/?m=${encodeURIComponent(profileSlug(member))}`;
+
+  if (!member.profile_completed_at) {
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: targetMsgId,
+      text:
+        `مرسی ${name} 🥕\n` +
+        `پیامت خیلی مفید بود — ${USEFUL_POINTS} امتیاز گرفتی!\n` +
+        `فقط پروفایلت هنوز کامل نیست؛ زود تکمیلش کن تا امتیازت هدر نره.`,
+      disable_web_page_preview: true,
+      reply_markup: urlButton('تکمیل پروفایل', JOIN_URL),
+    });
+    return;
+  }
+
+  await tg('sendMessage', {
+    chat_id: chatId,
+    reply_to_message_id: targetMsgId,
+    text:
+      `مرسی ${name} 🥕\n` +
+      `پیامت خیلی مفید بود!\n` +
+      `${USEFUL_POINTS} امتیاز گرفتی.`,
+    disable_web_page_preview: true,
+    reply_markup: urlButton('مشاهده پروفایل', url),
+  });
 }
 
 async function handleUnmute(req: Request) {
@@ -328,21 +478,26 @@ async function handleWebhook(update: Record<string, unknown>) {
       return;
     }
 
-    // admin helper: /chatid
     const text = (msg.text || '').trim();
-    if (text === '/chatid' || text.startsWith('/chatid@')) {
+
+    // admin: reply to a message with /useful → +10 + thanks + profile link
+    if (isCommand(text, 'useful')) {
+      await handleUseful(db, msg);
+      return;
+    }
+
+    // admin helper: /chatid
+    if (isCommand(text, 'chatid')) {
       await tg('sendMessage', {
         chat_id: msg.chat!.id!,
         text: `chat_id: \`${msg.chat!.id}\``,
         parse_mode: 'Markdown',
       });
+      return;
     }
 
     // admin helper: /gate_test — re-run gate on the sender (debug)
-    if (
-      (text === '/gate_test' || text.startsWith('/gate_test@')) &&
-      msg.from?.id
-    ) {
+    if (isCommand(text, 'gate_test') && msg.from?.id) {
       await gateNewMember(db, msg.chat!.id!, {
         id: msg.from.id,
         first_name: 'تست',

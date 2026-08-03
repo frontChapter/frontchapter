@@ -9,12 +9,16 @@ export function memberSlug(m: {
 }
 
 export function memberPath(slug: string): string {
-  return `/members/${encodeURIComponent(slug)}/`;
+  // Query on /members/ — GH Pages static export has no per-slug HTML until rebuild.
+  // Directory index always exists; client fetches the profile by ?m=
+  return `/members/?m=${encodeURIComponent(slug)}`;
 }
 
 export function parseMemberSlug(
   slug: string
-): { kind: 'username'; value: string } | { kind: 'telegram_id'; value: number } {
+):
+  | { kind: 'username'; value: string }
+  | { kind: 'telegram_id'; value: number } {
   const s = slug.trim().toLowerCase();
   if (s.startsWith('tg-')) {
     const n = Number(s.slice(3));

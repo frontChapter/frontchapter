@@ -5,14 +5,8 @@ import {
 } from '@layouts/components/carrot';
 import Banner from '@layouts/components/Banner';
 import Cta from '@layouts/components/Cta';
-import {
-  ACTIVITY_LABELS,
-  formatTehranDate,
-} from '@lib/membership/activity';
-import type {
-  MemberActivity,
-  MemberProfile,
-} from '@lib/membership/fetch';
+import { ACTIVITY_LABELS, formatTehranDate } from '@lib/membership/activity';
+import type { MemberActivity, MemberProfile } from '@lib/membership/fetch';
 import { memberPath, memberSlug } from '@lib/membership/slug';
 import {
   BADGE_LABELS,
@@ -41,8 +35,7 @@ export function buildMemberMetadata(m: MemberProfile): Metadata {
     title: m.display_name,
     meta_title: `${m.display_name} | هویجی‌های فرانت‌چپتر`,
     description:
-      bits.join(' — ').slice(0, 160) ||
-      `پروفایل ${handle} در جامعه فرانت‌چپتر`,
+      bits.join(' — ').slice(0, 160) || `پروفایل ${handle} در جامعه فرانت‌چپتر`,
     image: m.photo_url || undefined,
     canonical: memberPath(memberSlug(m)),
     authors: [{ name: m.display_name }],
@@ -181,7 +174,9 @@ const MemberSingle = ({ member: m, activities }: Props) => {
             <section className="member-plot__panel">
               <h2 className="member-plot__heading">تاریخچه فعالیت</h2>
               {activities.length === 0 ? (
-                <p className="text-sm text-muted">هنوز فعالیت ثبت‌شده‌ای نیست.</p>
+                <p className="text-sm text-muted">
+                  هنوز فعالیت ثبت‌شده‌ای نیست.
+                </p>
               ) : (
                 <ol className="member-plot__timeline list-none p-0">
                   {activities.map((a) => (
