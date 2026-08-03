@@ -30,6 +30,11 @@ export const LEVEL_LABELS: Record<LevelKey, string> = {
   golden: 'هویج طلایی',
 };
 
+export const BADGE_LABELS: Record<string, string> = {
+  speaker: 'هویج سخنران',
+  writer: 'هویج قلم‌به‌دست',
+};
+
 export function levelFromPoints(points: number): LevelKey {
   if (points >= 800) return 'golden';
   if (points >= 400) return 'senior';

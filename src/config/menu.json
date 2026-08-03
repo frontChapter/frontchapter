@@ -13,6 +13,10 @@
       "url": "/posts"
     },
     {
+      "name": "هویجی‌ها",
+      "url": "/members"
+    },
+    {
       "name": "تماس با ما",
       "url": "/contact"
     },
@@ -29,6 +33,10 @@
     {
       "name": "وبلاگ",
       "url": "/blog"
+    },
+    {
+      "name": "هویجی‌ها",
+      "url": "/members"
     },
     {
       "name": "هویجی شو!",
