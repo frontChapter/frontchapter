@@ -1,41 +1,103 @@
 ---
-title: Terms & condition
-description: "this is meta description"
+title: "قوانین و مقررات جامعه"
+description: "راهنمای جامعه و منشور رفتاری فرانت‌چپتر — فضایی امن، محترمانه و حرفه‌ای برای یادگیری و هم‌رشدی."
 draft: false
 ---
 
-#### 1. Definitions
+فرانت‌چپتر جامعه‌ای برای یادگیری، گفت‌وگو و هم‌رشدی توسعه‌دهندگان فرانت‌اند است. این صفحه، **راهنمای جامعه** و **منشور رفتاری** ماست. با عضویت در کانال‌ها، شرکت در رویدادها یا هرگونه مشارکت در فضای فرانت‌چپتر، این قوانین را می‌پذیرید.
 
-We collect certain identifying personal data when you sign up to our Service such as your name, email address, PayPal address (if different from email address), and telephone number. The personal data we collect from you is disclosed only in accordance with our Terms of Service and/or this Privacy Policy.Conclude collects Slack account and access information from Users for the purposes of connecting to the Slack API and to authenticate access to information on the Conclude website. Whenever you visit our Site, we may collect non-identifying information from you, such as referring URL, browser, operating system, cookie information, and Internet Service Provider. Without a subpoena, voluntary compliance on the part of your Internet Service Provider, or additional records from a third party, this information alone cannot usually be used to identify you.The term “personal data” does not include any anonymized and aggregated data made on the basis of personal data, which are wholly owned by Conclude.
+---
 
-#### 2. General Terms
+### هدف ما
 
-##### Service Provided AS IS
+می‌خواهیم فضایی بسازیم که در آن همه — از تازه‌کار تا باتجربه — احساس امنیت، احترام و تعلق کنند. دانش وقتی جمعی می‌شود ارزشمندتر است؛ اما فقط وقتی که گفت‌وگو سالم و حرفه‌ای بماند.
 
-The Service is provided for free during this pilot project, and is provided “as is” with no warranty. Conclude will provide User support for the Service, however; Conclude is not committed to any level of service or availability of the Service. A further description of the Service and our user support is available at the Site.
+---
 
-##### Interoperation with Slack
+### این قوانین کجا اعمال می‌شود؟
 
-The Service interoperates with Slack.com, and depends on the continuing availability and access to Slack. If for any reason Conclude cannot access or use Slack (including without limitation, change in terms or increase in fees charged by Slack), Conclude may not be able to provide all of the functions of its Service. No refund or credit, if applicable, will be provided for temporary unavailability of Slack (for example, maintenance windows).
+این منشور برای همه فضاها و فعالیت‌های فرانت‌چپتر صدق می‌کند، از جمله:
 
-##### Company Liability
+- کانال‌ها و گروه‌های آنلاین (تلگرام، اینستاگرام، یوتیوب، گیت‌هاب و …)
+- دورهمی‌ها، وبینارها و همایش‌های حضوری و آنلاین
+- وبلاگ، هویج‌تایمز و سایر محتوای منتشرشده توسط جامعه
+- هر تعامل مرتبط با برند یا رویدادهای فرانت‌چپتر
 
-If you enter into this agreement on behalf of a company, you hereby agree that the company is responsible under this Agreement for all actions and omissions conducted by its designated users of the Service.
+---
 
-#### 3. Rules of Use
+### ارزش‌های جامعه
 
-1. must keep passwords secure and confidential;
-2. are solely responsible for User Data and all activity in their account while using the Service;
-3. must use commercially reasonable efforts to prevent unauthorized access to their account, and notify Conclude promptly of any such unauthorized access; and
-4. may use the Service only in accordance with Conclude’s online user guide and all applicable laws and regulations.
+- **احترام متقابل:** با همه با ادب و بدون تبعیض رفتار کنید.
+- **یادگیری جمعی:** سوال بپرسید، تجربه به اشتراک بگذارید و به دیگران کمک کنید.
+- **فراگیری:** جامعه برای همه باز است؛ جنسیت، سطح تجربه، شهر، یا پیش‌زمینه نباید مانع مشارکت شود.
+- **صداقت و شفافیت:** نظرات را با نیت سازنده بیان کنید، نه برای تخریب.
+- **مسئولیت‌پذیری:** برای کلمات و رفتار خود در فضای جامعه پاسخگو باشید.
 
-###### You must not
+---
 
-- Enhance or improve User experience, our Site, or our Service.
-- Process transactions.
-- Send emails about our Site or respond to inquiries.
-- As this Privacy Policy and our Terms of Service.
+### رفتار مورد انتظار
 
-##### 5. Intellectual Property Rights
+از اعضای جامعه انتظار داریم:
 
-Your information may be transferred to — and maintained on — computers located outside of your state, province, country or other governmental jurisdiction where the privacy laws may not be as protective as those in your jurisdiction. If you choose to provide information to us, Conclude transfers Personal Information to Google Cloud Platform and processes it there. Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.
+1. به دیگران با احترام و حسن‌نیت برخورد کنند.
+2. در بحث‌های فنی، نقد را روی ایده و کد متمرکز کنند، نه روی شخص.
+3. به تازه‌واردها خوش‌آمد بگویند و فضای امن برای سوال ایجاد کنند.
+4. محتوا و منابع را با ذکر منبع به اشتراک بگذارند.
+5. قوانین پلتفرم‌های میزبان (تلگرام، اینستاگرام و …) را رعایت کنند.
+6. در رویدادهای حضوری، به زمان‌بندی، محل برگزاری و دستورالعمل‌های تیم اجرایی احترام بگذارند.
+
+---
+
+### رفتارهای غیرقابل قبول
+
+موارد زیر در فرانت‌چپتر مجاز نیست و می‌تواند منجر به اخطار، محدودیت یا حذف از جامعه شود:
+
+- توهین، تحقیر، تهدید، یا هرگونه آزار کلامی و رفتاری
+- تبعیض بر اساس جنسیت، گرایش، قومیت، مذهب، معلولیت، سن، سطح دانش یا هر ویژگی دیگر
+- انتشار محتوای جنسی، خشونت‌آمیز، نفرت‌پراکنانه یا غیرقانونی
+- اسپم، تبلیغات ناخواسته، یا سوءاستفاده از کانال‌ها برای مقاصد تجاری بدون هماهنگی
+- فیشینگ، انتشار بدافزار، یا هر اقدام مخرب امنیتی
+- افشای اطلاعات خصوصی دیگران بدون رضایت (داکسینگ)
+- جعل هویت افراد یا تیم فرانت‌چپتر
+- خرابکاری در رویدادها، اختلال عمدی در گفت‌وگوها، یا نادیده گرفتن درخواست مدیران
+
+---
+
+### رویدادها و فضاهای حضوری / آنلاین
+
+- ثبت‌نام و حضور باید مطابق شرایط اعلام‌شده همان رویداد باشد.
+- در رویدادهای حضوری، به فضای فیزیکی، سایر شرکت‌کنندگان و تیم اجرایی احترام بگذارید.
+- عکاسی و فیلم‌برداری از افراد فقط با رعایت حریم خصوصی و در چارچوب اعلام‌شده رویداد مجاز است.
+- در جلسات آنلاین، میکروفون، چت و اشتراک صفحه را مسئولانه استفاده کنید.
+
+---
+
+### محتوا و مالکیت فکری
+
+- محتوای تولیدشده توسط فرانت‌چپتر (وب‌سایت، ویدئوها، هویج‌تایمز و …) متعلق به فرانت‌چپتر است، مگر خلاف آن اعلام شود.
+- بازنشر با ذکر منبع و لینک مجاز است؛ استفاده تجاری بدون هماهنگی قبلی مجاز نیست.
+- اگر محتوایی ارسال می‌کنید، تأیید می‌کنید که حق انتشار آن را دارید و با قوانین جامعه سازگار است.
+
+---
+
+### گزارش تخلف و رسیدگی
+
+اگر رفتار نادرستی دیدید یا تجربه کردید:
+
+1. در صورت امکان، پیام یا شواهد مرتبط را نگه دارید.
+2. موضوع را از طریق [صفحه تماس](/contact) یا ایمیل [frontchapter.ir@gmail.com](mailto:frontchapter.ir@gmail.com) به تیم گزارش دهید.
+3. تیم در اسرع وقت موضوع را بررسی می‌کند و در صورت نیاز اقدام لازم را انجام می‌دهد.
+
+اقدامات احتمالی بسته به شدت موضوع می‌تواند شامل تذکر خصوصی، حذف محتوا، محدودیت موقت، یا اخراج دائم از جامعه باشد.
+
+---
+
+### به‌روزرسانی قوانین
+
+ممکن است این راهنما گاه‌به‌گاه به‌روز شود. نسخهٔ معتبر همیشه در همین صفحه در دسترس است. ادامهٔ مشارکت در جامعه به معنای پذیرش نسخهٔ به‌روزشده است.
+
+---
+
+### سوال یا پیشنهاد؟
+
+اگر دربارهٔ این قوانین سوالی دارید یا پیشنهادی برای بهبود فضای جامعه، از [صفحه تماس با ما](/contact) پیام بفرستید. با هم فضای بهتری می‌سازیم. 🥕
