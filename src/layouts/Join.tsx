@@ -30,11 +30,9 @@ type TelegramWidgetUser = {
   hash: string;
 };
 
-declare global {
-  interface Window {
-    onFrontChapterTelegramAuth?: (user: TelegramWidgetUser) => void;
-  }
-}
+type TelegramAuthWindow = Window & {
+  onFrontChapterTelegramAuth?: (user: TelegramWidgetUser) => void;
+};
 
 const TELEGRAM_BOT_USERNAME =
   process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || 'FrontChapterMagic';
@@ -183,7 +181,8 @@ const Join = () => {
     const host = widgetRef.current;
     if (!host) return;
 
-    window.onFrontChapterTelegramAuth = (user) => {
+    const w = window as TelegramAuthWindow;
+    w.onFrontChapterTelegramAuth = (user) => {
       void finishTelegramLogin(user);
     };
 
@@ -199,7 +198,7 @@ const Join = () => {
     host.appendChild(script);
 
     return () => {
-      delete window.onFrontChapterTelegramAuth;
+      delete w.onFrontChapterTelegramAuth;
       host.innerHTML = '';
     };
   }, [step, finishTelegramLogin]);
