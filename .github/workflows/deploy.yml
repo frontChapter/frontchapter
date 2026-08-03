@@ -30,6 +30,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm run build:pages
+        env:
+          # Publishable (anon) key — safe in client bundle
+          NEXT_PUBLIC_SUPABASE_URL: https://yuwsoyhknbjipfouemen.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_OF9FwM-9TGsktwDYvCZxQg_PcM0Rvjm
 
       - name: Push to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4

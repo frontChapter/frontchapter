@@ -10,7 +10,7 @@
   "homepage": "https://frontchapter.ir",
   "author": "FrontChapter Community <info@frontchapter.ir>",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --experimental-https --experimental-https-key ./certificates/localhost-key.pem --experimental-https-cert ./certificates/localhost.pem",
     "build": "next build",
     "export": "next build",
     "postexport": "echo 'frontchapter.ir' > out/CNAME",
@@ -20,6 +20,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.111.0",
     "clsx": "^2.1.1",
     "disqus-react": "^1.1.7",
     "feather-icons-react": "^0.7.1",

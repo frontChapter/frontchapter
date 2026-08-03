@@ -6,7 +6,7 @@ banner:
   video: frontchapter-banner.mp4
   link:
     label: به جامعه بپیوندید!
-    href: '#'
+    href: /join/
 
 #storySection
 storySection:
