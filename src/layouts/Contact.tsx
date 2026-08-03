@@ -8,10 +8,14 @@ import {
   IoLocationOutline,
   IoMailOutline,
   IoPaperPlaneOutline,
-  IoCheckmarkCircle,
   IoAlertCircleOutline,
 } from 'react-icons/io5';
 import Banner from './components/Banner';
+import {
+  CarrotButton,
+  CarrotLoader,
+  CarrotSuccessState,
+} from './components/carrot';
 import SocialFixed from './components/SocialFixed';
 
 interface Frontmatter {
@@ -42,7 +46,6 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // honeypot — bots fill this; humans never see it
     if (formData.get('_honey')) return;
 
     setStatus('loading');
@@ -98,7 +101,6 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
         </div>
 
         <div className="row g-4 items-start justify-center">
-          {/* Contact details */}
           <aside className="animate col-12 mb-10 lg:col-4 lg:mb-0">
             <div className="space-y-6">
               <div>
@@ -167,28 +169,25 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
             </div>
           </aside>
 
-          {/* Form */}
           <div className="animate col-12 lg:col-7">
             {status === 'success' ? (
               <div
-                className="flex flex-col items-center rounded-2xl border border-border-secondary bg-theme-light px-6 py-16 text-center"
+                className="rounded-2xl border border-border-secondary bg-theme-light px-6 py-12"
                 role="status"
               >
-                <IoCheckmarkCircle
-                  className="mb-4 h-14 w-14 text-primary"
-                  aria-hidden
+                <CarrotSuccessState
+                  title="پیامت رسید!"
+                  description="ممنون که نوشتی. در اولین فرصت جواب می‌دیم."
+                  action={
+                    <CarrotButton
+                      type="button"
+                      variant="secondary"
+                      onClick={() => setStatus('idle')}
+                    >
+                      ارسال پیام جدید
+                    </CarrotButton>
+                  }
                 />
-                <h3 className="h4 mb-2 text-dark">پیامت رسید!</h3>
-                <p className="mb-8 max-w-md text-text">
-                  ممنون که نوشتی. در اولین فرصت جواب می‌دیم.
-                </p>
-                <button
-                  type="button"
-                  className="btn btn-outline-primary cursor-pointer"
-                  onClick={() => setStatus('idle')}
-                >
-                  ارسال پیام جدید
-                </button>
               </div>
             ) : (
               <form
@@ -201,7 +200,6 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
                   فیلدهای ستاره‌دار الزامی‌اند.
                 </p>
 
-                {/* honeypot */}
                 <input
                   type="text"
                   name="_honey"
@@ -300,13 +298,23 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
                   </div>
                 )}
 
-                <button
+                {status === 'loading' ? (
+                  <div className="mb-5 flex justify-center py-2">
+                    <CarrotLoader
+                      variant="grow"
+                      label="در حال ارسال پیام…"
+                    />
+                  </div>
+                ) : null}
+
+                <CarrotButton
                   type="submit"
-                  className="btn btn-primary flex w-full cursor-pointer items-center justify-center gap-2 disabled:cursor-wait disabled:opacity-70"
-                  disabled={status === 'loading'}
+                  variant="primary"
+                  className="w-full"
+                  loading={status === 'loading'}
                 >
                   {status === 'loading' ? 'در حال ارسال…' : 'ارسال پیام'}
-                </button>
+                </CarrotButton>
               </form>
             )}
           </div>

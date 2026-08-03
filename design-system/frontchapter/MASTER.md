@@ -16,6 +16,8 @@
 **Stack:** Next.js 14 · React 18 · Tailwind CSS 3 · SCSS · GSAP · RTL (fa/en)  
 **Brand:** فرانت‌چپتر — warm orange carrot identity 🥕
 
+**Carrot UI language:** See [`CARROT.md`](./CARROT.md) for mascot placement rules and `src/layouts/components/carrot/` primitives.
+
 ---
 
 ## Global Rules
@@ -209,5 +211,7 @@ CTA pattern in JSX: `inline-flex min-h-12 items-center px-8 py-4 bg-primary text
 | `tailwind.config.js` | Tailwind color/font/size mapping (DanaVF override) |
 | `src/styles/style.scss` | `@font-face` DanaVF |
 | `src/styles/buttons.scss` | `.btn-primary` / outline |
+| `src/styles/carrot.scss` | Carrot mark poses, loaders, button variants |
+| `design-system/frontchapter/CARROT.md` | Carrot design system (do/don’t + API) |
 | `src/styles/components.scss` | `.section`, `.container`, social icons |
 | `src/config/config.json` | Site title, logo, nav CTA label |

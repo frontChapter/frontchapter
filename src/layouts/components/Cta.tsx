@@ -1,7 +1,10 @@
 import config from '@config/config.json';
 import { markdownify } from '@lib/utils/textConverter';
-import Link from 'next/link';
-import Circle from './Circle';
+import {
+  CarrotBackground,
+  CarrotBadge,
+  CarrotButton,
+} from './carrot';
 import ImageFallback from './ImageFallback';
 
 function Cta() {
@@ -11,26 +14,8 @@ function Cta() {
   return (
     <section className="cta section pt-0">
       <div className="container-xl">
-        <div className="section relative px-4 text-center">
-          <div className="animate relative z-10">
-            {markdownify({
-              content: title,
-              tag: 'h2',
-              className: 'section-title',
-            })}
-            {markdownify({
-              content: content,
-              tag: 'p',
-              className: 'mt-10 max-w-lg mx-auto',
-            })}
-            <Link
-              href={button.link}
-              className="btn btn-primary mt-10 inline-flex min-h-12 items-center"
-            >
-              {button.label}
-            </Link>
-          </div>
-          <div className="bg-theme animated-bg absolute top-0 left-0 w-full h-full md:h-auto after:hidden">
+        <div className="section relative px-4">
+          <div className="bg-theme animated-bg absolute top-0 left-0 h-full w-full after:hidden md:h-auto">
             <ImageFallback
               src="/images/wave.svg"
               fill={true}
@@ -39,42 +24,29 @@ function Cta() {
               aria-hidden="true"
               fallback={''}
             />
-            <Circle
-              className="left-[10%] top-12 hidden md:block"
-              width={32}
-              height={32}
-              fill={false}
-            />
-            <Circle
-              className="left-[3%] bottom-[13%] hidden md:block"
-              width={85}
-              height={85}
-            />
-            <Circle
-              className="left-[15%] bottom-[35%] hidden md:block"
-              width={47}
-              height={47}
-              fill={false}
-            />
-
-            <Circle
-              className="right-[12%] top-[12%] hidden md:block"
-              width={20}
-              height={20}
-            />
-            <Circle
-              className="right-[2%] bottom-[30%] hidden md:block"
-              width={73}
-              height={73}
-              fill={false}
-            />
-            <Circle
-              className="right-[19%] bottom-[16%] hidden md:block"
-              width={37}
-              height={37}
-              fill={false}
-            />
           </div>
+          <CarrotBackground className="animate relative z-10 mx-auto max-w-3xl px-6 py-12 text-center md:px-10 md:py-14">
+            <CarrotBadge accent className="mb-5">
+              جامعه فرانت‌چپتر
+            </CarrotBadge>
+            {markdownify({
+              content: title,
+              tag: 'h2',
+              className: 'section-title',
+            })}
+            {markdownify({
+              content: content,
+              tag: 'p',
+              className: 'mx-auto mt-6 max-w-lg',
+            })}
+            <CarrotButton
+              href={button.link}
+              variant="community"
+              className="mt-8"
+            >
+              {button.label}
+            </CarrotButton>
+          </CarrotBackground>
         </div>
       </div>
     </section>

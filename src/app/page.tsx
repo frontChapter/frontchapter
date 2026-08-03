@@ -2,6 +2,7 @@ import { getListPage } from '@lib/contentParser';
 import { buildHomeJsonLd } from '@lib/seo/jsonLd';
 import { homeMetadata } from '@lib/seo/metadata';
 import Cta from '../layouts/components/Cta';
+import { CarrotDivider } from '../layouts/components/carrot';
 import GSAPWrapper from '../layouts/components/GSAPWrapper';
 import ContinuedStory from '../layouts/partials/ContinuedStory';
 import HomeBanner from '../layouts/partials/HomeBanner';
@@ -81,6 +82,9 @@ const Home = async () => {
         <main id="main-content">
           <HomeBanner banner={banner} sponsors={sponsors} />
           <StorySection {...storySection} />
+          <div className="container">
+            <CarrotDivider variant="growth" />
+          </div>
           <YearOneStats
             title={yearOne.title}
             year={yearOne.year}
@@ -126,6 +130,9 @@ const Home = async () => {
             title={continuedStory.title}
             description={continuedStory.description}
           />
+          <div className="container">
+            <CarrotDivider variant="growth" />
+          </div>
           <Cta />
         </main>
       </GSAPWrapper>

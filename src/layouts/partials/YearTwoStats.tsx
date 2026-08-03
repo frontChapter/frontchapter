@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import React, { useRef } from 'react';
 import { useYearStatsAnimations } from '../../hooks/useYearStatsAnimations';
 import type { GalleryImage, Stat } from '../../types/content';
+import { CarrotButton } from '../components/carrot';
 import GalleryImageCard from '../components/GalleryImageCard';
 import ImageLightbox from '../components/ImageLightbox';
 import SectionDecorations from '../components/SectionDecorations';
@@ -106,12 +106,9 @@ const YearTwoStats: React.FC<YearTwoStatsProps> = ({
             ))}
 
             <div className="mt-8">
-              <Link
-                href={memories.link.href}
-                className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-all hover:shadow-lg hover:shadow-primary/20"
-              >
+              <CarrotButton href={memories.link.href} variant="primary">
                 {memories.link.label}
-              </Link>
+              </CarrotButton>
             </div>
           </div>
         </div>

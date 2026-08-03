@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useRef } from 'react';
+import { CarrotButton } from '../components/carrot';
 import GalleryClickOverlay from '../components/GalleryClickOverlay';
 import ImageLightbox from '../components/ImageLightbox';
 import LazyVideo from '../components/LazyVideo';
@@ -313,13 +314,13 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
             <p className="text-text mb-8 leading-relaxed text-base md:text-lg">
               {magazine.description}
             </p>
-            <Link
+            <CarrotButton
               href={magazine.link.href}
+              variant="primary"
               {...externalLinkProps(magazine.link.href)}
-              className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
             >
               {magazine.link.label}
-            </Link>
+            </CarrotButton>
           </div>
         </div>
       </div>
@@ -344,13 +345,13 @@ const YearThreeStats: React.FC<YearThreeStatsProps> = ({
             <p className="text-text leading-relaxed mb-8 text-base md:text-lg">
               {festival.description}
             </p>
-            <Link
+            <CarrotButton
               href={festival.link.href}
+              variant="primary"
               {...externalLinkProps(festival.link.href)}
-              className="inline-flex min-h-12 items-center px-8 py-4 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
             >
               {festival.link.label}
-            </Link>
+            </CarrotButton>
           </div>
 
           {/* Images */}

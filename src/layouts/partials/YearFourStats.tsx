@@ -4,6 +4,7 @@ import { externalLinkProps } from '@lib/seo/links';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useRef } from 'react';
+import { CarrotButton } from '../components/carrot';
 import GalleryClickOverlay from '../components/GalleryClickOverlay';
 import ImageLightbox from '../components/ImageLightbox';
 import LazyVideo from '../components/LazyVideo';
@@ -483,13 +484,13 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         </p>
                       </div>
                       <div>
-                        <Link
+                        <CarrotButton
                           href={event.link.href}
+                          variant="primary"
                           {...externalLinkProps(event.link.href)}
-                          className="inline-flex min-h-12 items-center px-6 py-3 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
                         >
                           {event.link.label}
-                        </Link>
+                        </CarrotButton>
                       </div>
                     </div>
                   </>
@@ -506,13 +507,13 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                         </p>
                       </div>
                       <div>
-                        <Link
+                        <CarrotButton
                           href={event.link.href}
+                          variant="primary"
                           {...externalLinkProps(event.link.href)}
-                          className="inline-flex min-h-12 items-center px-6 py-3 bg-primary text-white font-semibold rounded hover:opacity-90 transition-all duration-300 transform hover:scale-105"
                         >
                           {event.link.label}
-                        </Link>
+                        </CarrotButton>
                       </div>
                     </div>
                     {/* Image (Right) */}

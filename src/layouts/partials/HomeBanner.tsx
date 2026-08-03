@@ -2,11 +2,11 @@
 
 import { gsap } from '@lib/gsap';
 import { markdownify } from '@lib/utils/textConverter';
-import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type FC } from 'react';
 
-import React from 'react';
+import { withSponsorReferral } from '@lib/sponsorReferral';
 import { useRTL } from '../../hooks/useRTL';
+import { CarrotButton } from '../components/carrot';
 import Circle from '../components/Circle';
 import LazyVideo from '../components/LazyVideo';
 import SponsorCarousel, { type Sponsor } from '../components/SponsorCarousel';
@@ -31,8 +31,6 @@ interface HomeBannerProps {
   banner: BannerData;
   sponsors: SponsorsData;
 }
-
-import { withSponsorReferral } from '@lib/sponsorReferral';
 
 const RTL_CIRCLES = [
   {
@@ -110,10 +108,7 @@ const LTR_CIRCLES = [
   { className: 'circle bottom-[20%] right-[3%]', width: 65, height: 65 },
 ] as const;
 
-const HomeBanner: React.FC<HomeBannerProps> = ({
-  banner: bannerData,
-  sponsors,
-}) => {
+const HomeBanner: FC<HomeBannerProps> = ({ banner: bannerData, sponsors }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const circlesRef = useRef<(HTMLDivElement | null)[]>([]);
   const headingRef = useRef<HTMLDivElement>(null);
@@ -295,12 +290,13 @@ const HomeBanner: React.FC<HomeBannerProps> = ({
                     })}
                   </div>
                   <div ref={btnRef} className="banner-btn opacity-0">
-                    <Link
-                      className="btn btn-primary inline-flex min-h-12 items-center px-6 py-3 text-sm transition-transform duration-300 hover:scale-105 md:px-8 md:text-base"
+                    <CarrotButton
                       href={bannerData.link.href}
+                      variant="community"
+                      className="px-6 text-sm md:px-8 md:text-base"
                     >
                       {bannerData.link.label}
-                    </Link>
+                    </CarrotButton>
                   </div>
                 </header>
                 <div className="col-12 col-md-11 col-lg-10 px-3 md:px-5 lg:px-6">

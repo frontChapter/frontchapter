@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { CgClose } from 'react-icons/cg';
 import { useRTL } from '../../hooks/useRTL';
+import { CarrotButton } from '../components/carrot';
 import Logo from '../components/Logo';
 
 type MenuChild = {
@@ -42,20 +43,21 @@ type Config = {
   [key: string]: unknown;
 };
 
+function isNavActive(pathname: string, url: string): boolean {
+  if (url === '/') return pathname === '/';
+  return pathname === url || pathname.startsWith(`${url}/`);
+}
+
 const Header: React.FC = () => {
-  // distructuring the main menu from menu object
   const { main } = menu as Menu;
 
-  // states declaration
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [sticky, setSticky] = useState<boolean>(false);
   const headerRef = useRef<HTMLHeadingElement | null>(null);
   const [direction, setDirection] = useState<number | null>(null);
 
   const pathname = usePathname();
-  const asPath = pathname;
 
-  //sticky header
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
@@ -74,6 +76,11 @@ const Header: React.FC = () => {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setShowMenu(false);
+  }, [pathname]);
 
   const { isRTL } = useRTL();
   return (
@@ -95,11 +102,9 @@ const Header: React.FC = () => {
               : 'navbar container-xl flex items-center'
           }
         >
-          {/* RTL: hamburger far left, logo centered; LTR: logo left */}
           {isRTL ? (
             <>
               <div className="flex items-center">
-                {/* Hamburger menu button */}
                 {showMenu ? (
                   <button
                     type="button"
@@ -134,12 +139,12 @@ const Header: React.FC = () => {
                 )}
               </div>
               <div className="flex-1 flex justify-center">
-                <Logo />
+                <Logo size="header" />
               </div>
             </>
           ) : (
             <div className="flex items-center">
-              <Logo />
+              <Logo size="header" />
             </div>
           )}
 
@@ -147,13 +152,14 @@ const Header: React.FC = () => {
             id="nav-menu"
             className={clsx(
               'navbar-nav',
-              isRTL ? 'order-2' : 'order-2',
-              'w-full justify-center lg:order-1 md:w-auto md:space-x-2 lg:flex',
+              'order-2 w-full justify-center lg:order-1 md:w-auto md:space-x-1 lg:flex',
               !showMenu && 'hidden'
             )}
             style={isRTL ? { direction: 'rtl' } : { direction: 'ltr' }}
           >
-            {main.map((menu, i) => (
+            {main.map((menu, i) => {
+              const active = !menu.hasChildren && isNavActive(pathname, menu.url);
+              return (
               <React.Fragment key={`menu-${i}`}>
                 {menu.hasChildren && menu.children ? (
                   <li className="nav-item nav-dropdown group relative">
@@ -184,45 +190,55 @@ const Header: React.FC = () => {
                         isRTL ? 'lg:left-1/2' : 'lg:right-1/2'
                       )}
                     >
-                      {menu.children.map((child, j) => (
-                        <li className="nav-dropdown-item" key={`children-${j}`}>
-                          <Link
-                            href={child.url}
-                            className={clsx(
-                              'nav-dropdown-link block transition-all',
-                              asPath === child.url && 'active',
-                              isRTL && 'lg:text-right'
-                            )}
+                      {menu.children.map((child, j) => {
+                        const childActive = isNavActive(pathname, child.url);
+                        return (
+                          <li
+                            className="nav-dropdown-item"
+                            key={`children-${j}`}
                           >
-                            {child.name}
-                          </Link>
-                        </li>
-                      ))}
+                            <Link
+                              href={child.url}
+                              className={clsx(
+                                'nav-dropdown-link block transition-all',
+                                childActive && 'active',
+                                isRTL && 'lg:text-right'
+                              )}
+                              aria-current={childActive ? 'page' : undefined}
+                            >
+                              {child.name}
+                            </Link>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </li>
                 ) : (
                   <li className="nav-item">
                     <Link
                       href={menu.url}
-                      className={clsx(
-                        'nav-link block',
-                        asPath === menu.url && 'active'
-                      )}
+                      className={clsx('nav-link', active && 'active')}
+                      aria-current={active ? 'page' : undefined}
                     >
+                      {active && (
+                        <span className="nav-active-dot" aria-hidden="true" />
+                      )}
                       {menu.name}
                     </Link>
                   </li>
                 )}
               </React.Fragment>
-            ))}
+              );
+            })}
             {(config as Config).nav_button.enable && (
               <li className="nav-item lg:hidden">
-                <Link
-                  className="btn btn-primary hidden lg:flex"
+                <CarrotButton
+                  className="header-cta hidden lg:flex"
                   href={(config as Config).nav_button.link}
+                  variant="community"
                 >
                   {(config as Config).nav_button.label}
-                </Link>
+                </CarrotButton>
               </li>
             )}
           </ul>
@@ -233,7 +249,6 @@ const Header: React.FC = () => {
                 : 'order-1 ms-auto flex items-center md:ms-0'
             }
           >
-            {/* Hamburger menu button for LTR and close button for RTL when menu is open */}
             {!isRTL && showMenu && (
               <button
                 type="button"
@@ -266,14 +281,14 @@ const Header: React.FC = () => {
                 </svg>
               </button>
             )}
-            {/* /navbar toggler */}
             {(config as Config).nav_button.enable && (
-              <Link
-                className="btn btn-primary hidden min-h-12 items-center lg:inline-flex"
+              <CarrotButton
+                className="header-cta hidden lg:inline-flex"
                 href={(config as Config).nav_button.link}
+                variant="community"
               >
                 {(config as Config).nav_button.label}
-              </Link>
+              </CarrotButton>
             )}
           </div>
         </nav>

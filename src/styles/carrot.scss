@@ -1,0 +1,463 @@
+/* Carrot Design System — interaction language, not icon spam */
+
+// --- Mark (only for loader / empty / success / optional divider) ---
+.carrot-mark {
+  @apply inline-block shrink-0;
+  transform-origin: center bottom;
+
+  &--sm {
+    height: 1.125rem;
+    width: auto;
+  }
+  &--md {
+    height: 1.75rem;
+    width: auto;
+  }
+  &--lg {
+    height: 3.5rem;
+    width: auto;
+  }
+  &--xl {
+    height: 5.5rem;
+    width: auto;
+  }
+
+  &--wiggle {
+    animation: carrot-wiggle 2.4s ease-in-out infinite;
+  }
+
+  &--grow {
+    animation: carrot-grow 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes carrot-wiggle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2px) rotate(-8deg);
+  }
+}
+
+@keyframes carrot-grow {
+  0%,
+  100% {
+    transform: scaleY(0.92) translateY(2px);
+  }
+  50% {
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+// --- Loader ---
+.carrot-loader {
+  @apply inline-flex flex-col items-center justify-center gap-3;
+
+  &__soil {
+    @apply relative flex h-10 w-12 items-end justify-center overflow-hidden rounded-b-md;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--color-border-secondary) 35%,
+      #3d2f24 100%
+    );
+  }
+
+  &__mark {
+    @apply relative z-[1];
+  }
+
+  &--grow .carrot-loader__mark {
+    animation: carrot-rise 1.8s ease-in-out infinite;
+  }
+
+  &--bounce .carrot-mark {
+    animation: carrot-bounce 1.2s ease-in-out infinite;
+  }
+
+  &--leaves .carrot-mark {
+    animation: carrot-leaves 1.6s ease-in-out infinite;
+  }
+
+  &__label {
+    @apply text-sm text-muted;
+  }
+}
+
+@keyframes carrot-rise {
+  0% {
+    transform: translateY(18px) scaleY(0.7);
+    opacity: 0.5;
+  }
+  55% {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(18px) scaleY(0.7);
+    opacity: 0.5;
+  }
+}
+
+@keyframes carrot-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px) rotate(-6deg);
+  }
+  60% {
+    transform: translateY(-6px) rotate(4deg);
+  }
+}
+
+@keyframes carrot-leaves {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+
+// --- Progress (growth fill) ---
+.carrot-progress {
+  @apply flex w-full max-w-xs flex-col gap-2;
+
+  &__track {
+    @apply relative h-1.5 w-full overflow-hidden rounded-full;
+    background-color: var(--color-border-secondary);
+  }
+
+  &__fill {
+    @apply h-full rounded-full bg-primary;
+    transition: width 300ms ease;
+
+    &--indeterminate {
+      width: 40%;
+      animation: carrot-progress-slide 1.4s ease-in-out infinite;
+    }
+  }
+
+  &__label {
+    @apply text-sm text-muted;
+  }
+}
+
+@keyframes carrot-progress-slide {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(280%);
+  }
+}
+
+// --- Divider ---
+.carrot-divider {
+  @apply my-10 flex w-full items-center gap-4;
+
+  &__line {
+    @apply h-px flex-1 bg-border-secondary;
+  }
+
+  &__dot {
+    @apply h-1.5 w-1.5 shrink-0 rounded-full bg-primary/50;
+  }
+
+  &--growth &__line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-border-secondary) 20%,
+      var(--color-border-secondary) 80%,
+      transparent
+    );
+  }
+}
+
+// --- Buttons (plain CSS — Tailwind @apply inside nested variants was dropping fills) ---
+.carrot-btn {
+  position: relative;
+  display: inline-flex;
+  height: 3rem;
+  min-height: 3rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease,
+    color 200ms ease, border-color 200ms ease;
+}
+
+.carrot-btn:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-body, #fff), 0 0 0 4px rgba(254, 96, 25, 0.4);
+}
+
+.carrot-btn__label {
+  position: relative;
+  z-index: 1;
+}
+
+.carrot-btn__grow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 0.125rem;
+  transform-origin: right;
+  background-color: rgba(255, 255, 255, 0.6);
+  animation: carrot-btn-grow 1.2s ease-in-out infinite;
+}
+
+.carrot-btn:disabled,
+.carrot-btn--loading {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.carrot-btn:active:not(:disabled):not(.carrot-btn--loading) {
+  transform: scale(0.98);
+}
+
+.carrot-btn::before {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  z-index: 0;
+  width: 100%;
+  height: 0;
+  content: '';
+  background: rgba(0, 0, 0, 0.1);
+  transition: height 300ms ease, top 300ms ease, bottom 300ms ease;
+}
+
+.carrot-btn:hover:not(:disabled):not(.carrot-btn--loading)::before {
+  top: auto;
+  bottom: 0;
+  height: 100%;
+}
+
+.carrot-btn--primary,
+.carrot-btn--community {
+  background-color: #fe6019;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(254, 96, 25, 0.25);
+}
+
+.carrot-btn--primary:hover:not(:disabled):not(.carrot-btn--loading),
+.carrot-btn--community:hover:not(:disabled):not(.carrot-btn--loading) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(254, 96, 25, 0.35);
+  color: #ffffff;
+}
+
+.carrot-btn--community {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  box-shadow: 0 4px 18px rgba(254, 96, 25, 0.32);
+}
+
+.carrot-btn--secondary {
+  background-color: var(--color-nav-hover, #ffece4);
+  border: 1px solid #fe6019;
+  color: #fe6019;
+}
+
+.carrot-btn--secondary::before {
+  background: rgba(254, 96, 25, 0.12);
+}
+
+.carrot-btn--secondary:hover:not(:disabled):not(.carrot-btn--loading) {
+  background-color: #fe6019;
+  color: #ffffff;
+}
+
+.carrot-btn--secondary .carrot-btn__grow {
+  background-color: rgba(254, 96, 25, 0.5);
+}
+
+.carrot-btn--ghost {
+  background-color: var(--color-surface-solid, #ffffff);
+  border: 1px solid var(--color-border, #dee2e6);
+  color: var(--color-heading, #222222);
+}
+
+.carrot-btn--ghost::before {
+  background: var(--color-nav-hover, #ffece4);
+}
+
+.carrot-btn--ghost:hover:not(:disabled):not(.carrot-btn--loading) {
+  border-color: #fe6019;
+  color: #fe6019;
+}
+
+.carrot-btn--ghost .carrot-btn__grow {
+  background-color: rgba(254, 96, 25, 0.4);
+}
+
+.carrot-btn--destructive {
+  background-color: #fef2f2;
+  border: 1px solid #f87171;
+  color: #b91c1c;
+}
+
+.carrot-btn--destructive::before {
+  background: rgba(185, 28, 28, 0.1);
+}
+
+.carrot-btn--destructive:hover:not(:disabled):not(.carrot-btn--loading) {
+  background-color: #dc2626;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.carrot-btn--destructive .carrot-btn__grow {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes carrot-btn-grow {
+  0% {
+    transform: scaleX(0);
+    transform-origin: right center;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: right center;
+  }
+  51% {
+    transform-origin: left center;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .carrot-btn--ghost {
+    background-color: var(--color-surface-solid, #1a2332);
+    border-color: var(--color-border, #2d3748);
+    color: var(--color-heading, #f1f5f9);
+  }
+
+  .carrot-btn--destructive {
+    background-color: rgba(127, 29, 29, 0.5);
+    border-color: #b91c1c;
+    color: #fca5a5;
+  }
+
+  .carrot-btn--destructive:hover:not(:disabled):not(.carrot-btn--loading) {
+    background-color: #b91c1c;
+    color: #ffffff;
+  }
+
+  .carrot-btn--secondary {
+    background-color: var(--color-nav-hover, #2d2419);
+  }
+}
+
+// --- Badge (text chip, no mark) ---
+.carrot-badge {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-border-secondary bg-theme-light px-3 py-1 text-sm font-medium text-dark;
+
+  &--accent {
+    background-color: var(--color-nav-hover);
+    @apply border-transparent text-primary;
+  }
+}
+
+// --- Pattern / Background (atmosphere, no watermark mascot) ---
+.carrot-pattern {
+  @apply pointer-events-none absolute inset-0 overflow-hidden;
+  opacity: 0.06;
+
+  svg {
+    @apply h-full w-full;
+  }
+}
+
+.carrot-bg {
+  @apply relative overflow-hidden rounded-2xl bg-theme-light;
+
+  &__content {
+    @apply relative z-10;
+  }
+}
+
+// --- State shell ---
+.carrot-state {
+  @apply mx-auto flex max-w-lg flex-col items-center text-center;
+
+  &__title {
+    @apply mb-3 text-h3 font-semibold text-dark;
+  }
+
+  &__desc {
+    @apply mb-8 text-base leading-relaxed text-text;
+  }
+
+  &__mark {
+    @apply mb-6;
+  }
+
+  &--success .carrot-state__mark {
+    animation: carrot-success-pulse 0.7s ease-out 1;
+  }
+}
+
+@keyframes carrot-success-pulse {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.6;
+  }
+  60% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carrot-mark--wiggle,
+  .carrot-mark--grow,
+  .carrot-loader--grow .carrot-loader__mark,
+  .carrot-loader--bounce .carrot-mark,
+  .carrot-loader--leaves .carrot-mark,
+  .carrot-progress__fill--indeterminate,
+  .carrot-btn__grow,
+  .carrot-state--success .carrot-state__mark {
+    animation: none;
+  }
+
+  .carrot-progress__fill--indeterminate {
+    width: 50%;
+    transform: none;
+  }
+
+  .carrot-btn--primary:hover:not(:disabled),
+  .carrot-btn--community:hover:not(:disabled),
+  .carrot-btn:active:not(:disabled) {
+    transform: none;
+  }
+
+  .carrot-btn:hover:not(:disabled)::before {
+    height: 0;
+  }
+}
