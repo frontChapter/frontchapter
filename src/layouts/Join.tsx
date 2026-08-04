@@ -52,6 +52,7 @@ const TELEGRAM_LOGIN_SCRIPT = 'https://oauth.telegram.org/js/telegram-login.js';
 type FormState = {
   expertise: string;
   bio: string;
+  email: string;
   linkedin_url: string;
   github_url: string;
   website_url: string;
@@ -61,17 +62,19 @@ type FormState = {
 const emptyForm: FormState = {
   expertise: '',
   bio: '',
+  email: '',
   linkedin_url: '',
   github_url: '',
   website_url: '',
   is_public: true,
 };
 
-function formFromMember(m: Member | null): FormState {
-  if (!m) return emptyForm;
+function formFromMember(m: Member | null, email = ''): FormState {
+  if (!m) return { ...emptyForm, email };
   return {
     expertise: m.expertise ?? '',
     bio: m.bio ?? '',
+    email,
     linkedin_url: m.linkedin_url ?? '',
     github_url: m.github_url ?? '',
     website_url: m.website_url ?? '',
@@ -203,8 +206,18 @@ const Join = () => {
     if (memErr) throw memErr;
 
     const m = row as Member | null;
+    let email = '';
+    const { data: emailRow, error: emailErr } = await supabase
+      .from('member_emails')
+      .select('email')
+      .eq('member_id', userId)
+      .maybeSingle();
+    if (!emailErr) {
+      email = (emailRow as { email?: string } | null)?.email ?? '';
+    }
+
     setMember(m);
-    setForm(formFromMember(m));
+    setForm(formFromMember(m, email));
 
     if (m?.profile_completed_at) {
       const { data: s } = await supabase
@@ -309,6 +322,7 @@ const Join = () => {
         p_github_url: form.github_url.trim() || null,
         p_website_url: form.website_url.trim() || null,
         p_is_public: form.is_public,
+        p_email: form.email.trim() || null,
       });
       if (rpcErr) throw rpcErr;
       const updated = data as Member;
@@ -469,6 +483,30 @@ const Join = () => {
                   className="form-textarea w-full"
                   placeholder="چند خط درباره خودت…"
                 />
+              </div>
+
+              <div className="mb-5">
+                <label
+                  className="mb-2 block text-sm font-medium text-dark"
+                  htmlFor="join-email"
+                >
+                  ایمیل (اختیاری)
+                </label>
+                <input
+                  id="join-email"
+                  type="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, email: e.target.value }))
+                  }
+                  className="form-input w-full"
+                  placeholder="you@example.com"
+                  dir="ltr"
+                />
+                <p className="mt-1.5 mb-0 text-xs text-muted">
+                  برای دعوت تقویم رویدادها و تطبیق حضور. عمومی نمی‌شود.
+                </p>
               </div>
 
               <div className="mb-5 grid gap-5 sm:grid-cols-1">

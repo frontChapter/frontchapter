@@ -6,6 +6,7 @@ import {
   parseAuthorNames,
   speakerPath,
 } from '@lib/speakers';
+import type { SessionFrontmatter } from '@lib/membership/session';
 import FormattedDate from './components/FormattedDate';
 import { AuthorNames } from './components/AuthorLink';
 import { markdownify } from '@lib/utils/textConverter';
@@ -14,6 +15,7 @@ import Link from 'next/link';
 import React from 'react';
 import MDXContent from '../app/helper/MDXContent';
 import Cta from './components/Cta';
+import EventRegister from './components/EventRegister';
 import ImageFallback from './components/ImageFallback';
 import DisqussEmbed from './partials/DisqussEmbed';
 import type { PostType } from './partials/Post';
@@ -24,7 +26,7 @@ interface Author {
   avatar: string;
 }
 
-interface Frontmatter {
+interface Frontmatter extends SessionFrontmatter {
   description?: string;
   title: string;
   date: string;
@@ -59,6 +61,12 @@ const PostSingle: React.FC<PostSingleProps> = ({
   const primarySpeaker = primarySpeakerSlug
     ? getSpeakerBySlug(primarySpeakerSlug)
     : undefined;
+
+  const session: SessionFrontmatter = {
+    session_datetime: frontmatter.session_datetime,
+    registration_deadline: frontmatter.registration_deadline,
+    meet_link: frontmatter.meet_link,
+  };
 
   const avatar = primarySpeakerSlug ? (
     <Link
@@ -150,6 +158,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
                     </div>
                   </div>
                 </header>
+                <EventRegister postSlug={slug} session={session} />
                 <div className="content mb-16 mt-10 text-start">
                   <MDXContent content={content} />
                 </div>

@@ -7,6 +7,7 @@ import { buildPostJsonLd, buildPostPageMetadata } from '@lib/seo/blogSeo';
 import { buildPageMetadata } from '@lib/seo/metadata';
 import { sortByDate } from '@lib/utils/sortFunctions';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 const { blog_folder } = config.settings;
 
@@ -28,10 +29,13 @@ export async function generateMetadata({
 const Article = async ({ params }: { params: { single: string } }) => {
   const { single } = params;
   const posts = await getSinglePage(`src/content/${blog_folder}`);
-  const post = posts.filter((p) => p.slug == single);
+  const post = posts.find((p) => p.slug === single);
+  if (!post) {
+    notFound();
+  }
   const recentPosts = sortByDate(posts).filter((post) => post.slug !== single);
-  const { frontmatter, content } = post[0];
-  const jsonLd = buildPostJsonLd(post[0]);
+  const { frontmatter, content } = post;
+  const jsonLd = buildPostJsonLd(post);
 
   return (
     <>
@@ -45,6 +49,9 @@ const Article = async ({ params }: { params: { single: string } }) => {
             author: frontmatter.author,
             description: frontmatter.description,
             image: frontmatter.image,
+            session_datetime: frontmatter.session_datetime,
+            registration_deadline: frontmatter.registration_deadline,
+            meet_link: frontmatter.meet_link,
           }}
           content={content}
           recentPosts={recentPosts}

@@ -415,3 +415,13 @@ enabled = true
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# Telegram posts with no JWT — must stay false or webhook gets 401
+[functions.telegram-bot]
+verify_jwt = false
+
+[functions.event-attendance]
+verify_jwt = false
+
+[functions.telegram-login]
+verify_jwt = false

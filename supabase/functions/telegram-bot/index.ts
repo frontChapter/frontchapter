@@ -6,13 +6,28 @@
 // Actions:
 //   POST (Telegram update) + X-Telegram-Bot-Api-Secret-Token
 //   POST { action: "unmute" } + Authorization: Bearer <user jwt>
-//   /useful (admin reply) → +10 quality_message + thanks + profile link
+//   /start welcome (private) → join-page link (bot chat consent)
+//   /useful (admin reply) → +10 quality_message + thanks + profile link + tag sync
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const JOIN_URL = 'https://frontchapter.ir/join/';
 const SITE = 'https://frontchapter.ir';
+// Real bot username from getMe — NOT display name "HavijMagic"
+const BOT_USERNAME =
+  Deno.env.get('TELEGRAM_BOT_USERNAME')?.replace(/^@/, '') ||
+  'frontChapterMagicBot';
+const WELCOME_START_URL = `https://t.me/${BOT_USERNAME}?start=welcome`;
 const USEFUL_POINTS = 10;
+
+/** Plain Persian Member Tags — ≤16 chars, no emoji */
+const LEVEL_TAGS = {
+  badge: 'هویج‌نشان',
+  young: 'هویج جوان',
+  whole: 'هویج تمام',
+  senior: 'هویج ارشد',
+  golden: 'هویج طلایی',
+};
 
 const MUTED = {
   can_send_messages: false,
@@ -107,6 +122,85 @@ async function getChatId(
   return data?.group_chat_id ?? null;
 }
 
+function isCommand(text: string, name: string) {
+  const t = text.trim();
+  const at = `@${BOT_USERNAME}`;
+  return (
+    t === `/${name}` ||
+    t === `/${name}${at}` ||
+    t.startsWith(`/${name} `) ||
+    t.startsWith(`/${name}${at} `)
+  );
+}
+
+function startPayload(text: string): string | null {
+  const t = text.trim();
+  const at = `@${BOT_USERNAME}`;
+  const prefixes = [`/start `, `/start${at} `];
+  for (const p of prefixes) {
+    if (t.startsWith(p)) return t.slice(p.length).trim() || null;
+  }
+  if (t === '/start' || t === `/start${at}`) return null;
+  return null;
+}
+
+function levelKeyFromPoints(points: number) {
+  if (points >= 800) return 'golden';
+  if (points >= 400) return 'senior';
+  if (points >= 150) return 'whole';
+  if (points >= 50) return 'young';
+  return 'badge';
+}
+
+async function memberPoints(
+  db: ReturnType<typeof adminDb>,
+  memberId: string
+): Promise<number> {
+  const { data } = await db
+    .from('activity_log')
+    .select('points')
+    .eq('member_id', memberId);
+  return (data ?? []).reduce(
+    (sum: number, row: { points: number }) => sum + (row.points || 0),
+    0
+  );
+}
+
+async function setMemberTag(chatId: number, userId: number, tag: string) {
+  try {
+    await tg('setChatMemberTag', {
+      chat_id: chatId,
+      user_id: userId,
+      tag: tag.slice(0, 16),
+    });
+  } catch (e) {
+    // expected if not in group / rights race — never block join flow
+    console.error('setChatMemberTag failed', e);
+  }
+}
+
+async function syncMemberTag(
+  db: ReturnType<typeof adminDb>,
+  chatId: number,
+  memberId: string,
+  telegramId: number
+) {
+  const points = await memberPoints(db, memberId);
+  const key = levelKeyFromPoints(points);
+  await setMemberTag(chatId, telegramId, LEVEL_TAGS[key]);
+}
+
+async function stampJoinDate(
+  db: ReturnType<typeof adminDb>,
+  telegramId: number
+) {
+  await db
+    .from('members')
+    .update({ telegram_joined_at: new Date().toISOString() })
+    .eq('telegram_id', telegramId)
+    .is('telegram_joined_at', null);
+}
+
 function displayName(user: {
   first_name?: string;
   last_name?: string;
@@ -158,6 +252,100 @@ async function isProfileComplete(
   return Boolean(data?.profile_completed_at);
 }
 
+function botUserId(): number {
+  // token = "<bot_id>:<secret>"
+  return Number(botToken().split(':')[0]);
+}
+
+type GateReason = 'join' | 'nudge';
+
+/** Avoid spamming welcome on repeated restricted→restricted updates */
+const nudgeCooldownMs = 24 * 60 * 60 * 1000;
+const lastNudgeAt = new Map<number, number>();
+
+function allowNudge(userId: number): boolean {
+  const last = lastNudgeAt.get(userId) ?? 0;
+  if (Date.now() - last < nudgeCooldownMs) {
+    console.log('nudge cooldown', userId);
+    return false;
+  }
+  lastNudgeAt.set(userId, Date.now());
+  return true;
+}
+
+function welcomeIncompleteMarkup() {
+  return {
+    inline_keyboard: [
+      [{ text: 'میخوام هویج نشان بشم!', url: WELCOME_START_URL }],
+    ],
+  };
+}
+
+async function sendIncompleteWelcome(chatId: number, name: string) {
+  await tg('sendMessage', {
+    chat_id: chatId,
+    text: welcomeText(name),
+    disable_web_page_preview: true,
+    reply_markup: welcomeIncompleteMarkup(),
+  });
+}
+
+async function sendCompleteWelcome(chatId: number, name: string) {
+  await tg('sendMessage', {
+    chat_id: chatId,
+    text:
+      `درود ${name} 🥕 خوش اومدی!\n` +
+      `پروفایلت کامله — چت و بقیه‌ی دسترسی‌ها برات آزاده.\n` +
+      `فهرست اعضا: frontchapter.ir/members/\n` +
+      `برای دیدن سطح و امتیازت هر وقت خواستی، /profile رو بزن.`,
+    disable_web_page_preview: true,
+  });
+}
+
+/**
+ * Admin preview — exact same copy/button as real join paths.
+ * /gate_test          → incomplete CTA (no mute; safe to test on yourself)
+ * /gate_test complete → complete-profile welcome (no mute spam either)
+ */
+async function handleGateTest(
+  db: ReturnType<typeof adminDb>,
+  msg: GroupMessage
+) {
+  const chatId = msg.chat!.id!;
+  const from = msg.from;
+  if (!from?.id) return;
+
+  if (!(await isGroupAdmin(chatId, from.id))) {
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: 'فقط ادمین می‌تونه /gate_test بزنه.',
+    });
+    return;
+  }
+
+  const text = (msg.text || '').trim().toLowerCase();
+  const wantComplete =
+    text.includes('complete') || text.includes('done') || text.includes('کامل');
+  const name = displayName(from);
+
+  try {
+    if (wantComplete) {
+      await sendCompleteWelcome(chatId, name);
+    } else {
+      // Exact new-member incomplete message — ignore your real profile_completed_at
+      await sendIncompleteWelcome(chatId, name);
+    }
+  } catch (e) {
+    console.error('gate_test send failed', e);
+    await tg('sendMessage', {
+      chat_id: chatId,
+      reply_to_message_id: msg.message_id,
+      text: `gate_test failed: ${e instanceof Error ? e.message : e}`,
+    });
+  }
+}
+
 async function gateNewMember(
   db: ReturnType<typeof adminDb>,
   chatId: number,
@@ -167,76 +355,117 @@ async function gateNewMember(
     first_name?: string;
     last_name?: string;
     username?: string;
-  }
+  },
+  reason: GateReason = 'join'
 ) {
   if (!user?.id || user.is_bot) return;
+  if (reason === 'nudge' && !allowNudge(user.id)) return;
   await rememberChatId(db, chatId);
+  await stampJoinDate(db, user.id);
 
   const name = displayName(user);
   const done = await isProfileComplete(db, user.id);
 
+  // Profile complete: always open chat, never mute, no signup CTA
   if (done) {
     try {
       await unmuteUser(chatId, user.id);
     } catch (e) {
       console.error('unmute failed', e);
     }
-    await tg('sendMessage', {
-      chat_id: chatId,
-      text:
-        `درود ${name} 🥕 برگشتی! پروفایلت کامله — چت برات آزاده.\n` +
-        `اگه هنوز ندیدی: frontchapter.ir/members/`,
-      disable_web_page_preview: true,
-    });
+    const { data: m } = await db
+      .from('members')
+      .select('id')
+      .eq('telegram_id', user.id)
+      .maybeSingle();
+    if (m?.id) await syncMemberTag(db, chatId, m.id, user.id);
+
+    try {
+      await sendCompleteWelcome(chatId, name);
+    } catch (e) {
+      console.error('welcome (complete) send failed', e);
+    }
     return;
   }
 
-  // Welcome first — mute can fail if rights race; still show the CTA
-  await tg('sendMessage', {
-    chat_id: chatId,
-    text: welcomeText(name),
-    disable_web_page_preview: true,
-    reply_markup: {
-      inline_keyboard: [[{ text: 'میخوام هویج نشان بشم!', url: JOIN_URL }]],
-    },
-  });
-
+  // Incomplete: welcome + deep-link button
   try {
-    await muteUser(chatId, user.id);
+    await sendIncompleteWelcome(chatId, name);
   } catch (e) {
-    console.error('mute failed', e);
+    console.error('welcome send failed', e);
+  }
+
+  // Mute only on fresh join. Nudge = already restricted — mute again loops chat_member.
+  if (reason === 'join') {
+    try {
+      await muteUser(chatId, user.id);
+    } catch (e) {
+      console.error('mute failed', e);
+    }
   }
 }
 
-/** chat_member: left/kicked → member|restricted (first enter only) */
-function memberJoinedFromChatMember(update: Record<string, unknown>) {
+/**
+ * join: left/kicked → in-group
+ * nudge: already muted (restricted→restricted) — legacy members who never got CTA
+ * Skip updates caused by this bot (mute/unmute) to avoid loops.
+ */
+function memberJoinedFromChatMember(update: Record<string, unknown>): {
+  chatId: number;
+  user: TgUser;
+  reason: GateReason;
+} | null {
   const cm = update.chat_member as
     | {
+        from?: { id?: number; is_bot?: boolean };
         chat?: { id?: number; type?: string };
         old_chat_member?: { status?: string };
         new_chat_member?: {
           status?: string;
-          user?: {
-            id: number;
-            is_bot?: boolean;
-            first_name?: string;
-            last_name?: string;
-            username?: string;
-          };
+          user?: TgUser;
         };
       }
     | undefined;
   if (!cm?.chat?.id || !cm.new_chat_member?.user) return null;
   if (cm.chat.type !== 'group' && cm.chat.type !== 'supergroup') return null;
 
+  // Our own restrict/unrestrict must not re-trigger gate
+  if (cm.from?.id && cm.from.id === botUserId()) {
+    console.log('chat_member skip (bot actor)', {
+      user: cm.new_chat_member.user.id,
+    });
+    return null;
+  }
+
   const old = cm.old_chat_member?.status ?? 'left';
   const neu = cm.new_chat_member.status;
-  const entered =
-    ['left', 'kicked'].includes(old) &&
-    (neu === 'member' || neu === 'restricted');
-  if (!entered) return null;
+  const wasOut = ['left', 'kicked'].includes(old);
+  const isIn =
+    neu === 'member' || neu === 'restricted' || neu === 'administrator';
+  const stuckRestricted = old === 'restricted' && neu === 'restricted';
 
-  return { chatId: cm.chat.id, user: cm.new_chat_member.user };
+  if (wasOut && isIn) {
+    return {
+      chatId: cm.chat.id,
+      user: cm.new_chat_member.user,
+      reason: 'join',
+    };
+  }
+
+  if (stuckRestricted) {
+    return {
+      chatId: cm.chat.id,
+      user: cm.new_chat_member.user,
+      reason: 'nudge',
+    };
+  }
+
+  console.log('chat_member skip', {
+    old,
+    neu,
+    user: cm.new_chat_member.user.id,
+  });
+  return null;
 }
 
 type TgUser = {
@@ -282,10 +511,7 @@ async function isGroupAdmin(chatId: number, userId: number) {
   return m.status === 'creator' || m.status === 'administrator';
 }
 
-async function handleUseful(
-  db: ReturnType<typeof adminDb>,
-  msg: GroupMessage
-) {
+async function handleUseful(db: ReturnType<typeof adminDb>, msg: GroupMessage) {
   const chatId = msg.chat!.id!;
   const admin = msg.from;
   const target = msg.reply_to_message?.from;
@@ -325,7 +551,7 @@ async function handleUseful(
       reply_to_message_id: msg.message_id,
       text: 'این کاربر هنوز عضو فرانت‌چپتر نیست.\nاول ثبت‌نام کنه، بعد امتیاز می‌دیم 🥕',
       disable_web_page_preview: true,
-      reply_markup: urlButton('ثبت‌نام در فرانت‌چپتر', JOIN_URL),
+      reply_markup: urlButton('ثبت‌نام در فرانت‌چپتر', WELCOME_START_URL),
     });
     return;
   }
@@ -380,6 +606,10 @@ async function handleUseful(
   const name = member.display_name || displayName(target);
   const url = `${SITE}/members/?m=${encodeURIComponent(profileSlug(member))}`;
 
+  if (member.profile_completed_at) {
+    await syncMemberTag(db, chatId, member.id, Number(member.telegram_id));
+  }
+
   if (!member.profile_completed_at) {
     await tg('sendMessage', {
       chat_id: chatId,
@@ -389,7 +619,7 @@ async function handleUseful(
         `پیامت خیلی مفید بود — ${USEFUL_POINTS} امتیاز گرفتی!\n` +
         `فقط پروفایلت هنوز کامل نیست؛ زود تکمیلش کن تا امتیازت هدر نره.`,
       disable_web_page_preview: true,
-      reply_markup: urlButton('تکمیل پروفایل', JOIN_URL),
+      reply_markup: urlButton('تکمیل پروفایل', WELCOME_START_URL),
     });
     return;
   }
@@ -426,7 +656,7 @@ async function handleUnmute(req: Request) {
   const db = adminDb();
   const { data: member, error: mErr } = await db
     .from('members')
-    .select('telegram_id, profile_completed_at')
+    .select('id, telegram_id, profile_completed_at')
     .eq('id', userData.user.id)
     .maybeSingle();
 
@@ -449,22 +679,84 @@ async function handleUnmute(req: Request) {
     return json({ ok: true, unmuted: false, reason: message });
   }
 
+  await syncMemberTag(db, chatId, member.id, Number(member.telegram_id));
+
   return json({ ok: true, unmuted: true });
+}
+
+async function handlePrivateStart(msg: {
+  chat?: { id?: number; type?: string };
+  text?: string;
+  from?: TgUser;
+}) {
+  if (msg.chat?.type !== 'private' || !msg.chat.id) return false;
+  const text = (msg.text || '').trim();
+  if (!text.startsWith('/start')) return false;
+
+  const payload = startPayload(text);
+  const name = msg.from ? displayName(msg.from) : 'هویجی';
+
+  const capabilities =
+    `از این‌جا به بعد می‌تونم:\n` +
+    `🥕 عضویتت رو ثبت کنم و سطح هویجیت رو نگه دارم\n` +
+    `📈 امتیاز فعالیتت رو حساب کنم\n` +
+    `📅 قبل از جلسات آنلاین یادآوری بفرستم\n\n`;
+
+  await tg('sendMessage', {
+    chat_id: msg.chat.id,
+    text:
+      payload === 'welcome'
+        ? `درود ${name} 🥕\n` +
+          `خوش اومدی به فرانت‌چپتر!\n\n` +
+          capabilities +
+          `فقط یه قدم مونده — روی دکمه بزن و عضویتت رو تموم کن:`
+        : `سلام! من هویج‌مجیک‌ام 🥕\n` +
+          `ربات رسمی جامعه‌ی فرانت‌چپترم.\n\n` +
+          capabilities +
+          `برای عضویت، روی دکمه بزن:`,
+    disable_web_page_preview: true,
+    reply_markup: urlButton('تکمیل عضویت در سایت', JOIN_URL),
+  });
+  return true;
 }
 
 async function handleWebhook(update: Record<string, unknown>) {
   const db = adminDb();
-  console.log(
-    'update keys',
-    Object.keys(update).filter((k) => k !== 'update_id')
-  );
+  const keys = Object.keys(update).filter((k) => k !== 'update_id');
+  console.log('update', update.update_id, keys);
+
+  // Log raw join-ish payloads for Dashboard debugging
+  if (update.chat_member) {
+    const cm = update.chat_member as {
+      old_chat_member?: { status?: string };
+      new_chat_member?: { status?: string; user?: { id?: number } };
+    };
+    console.log('chat_member raw', {
+      old: cm.old_chat_member?.status,
+      neu: cm.new_chat_member?.status,
+      user: cm.new_chat_member?.user?.id,
+      from: (update.chat_member as { from?: { id?: number } })?.from?.id,
+    });
+  }
 
   const joined = memberJoinedFromChatMember(update);
   if (joined) {
-    console.log('gate via chat_member', joined.user.id);
-    await gateNewMember(db, joined.chatId, joined.user);
+    console.log('gate via chat_member', joined.user.id, joined.reason);
+    await gateNewMember(db, joined.chatId, joined.user, joined.reason);
     return;
   }
+
+  // Private /start (bot chat consent for later DMs)
+  const anyMsg = update.message as
+    | {
+        chat?: { id?: number; type?: string };
+        text?: string;
+        from?: TgUser;
+        message_id?: number;
+        new_chat_members?: TgUser[];
+      }
+    | undefined;
+  if (anyMsg && (await handlePrivateStart(anyMsg))) return;
 
   const msg = membersFromServiceMessage(update);
   if (msg) {
@@ -496,12 +788,9 @@ async function handleWebhook(update: Record<string, unknown>) {
       return;
     }
 
-    // admin helper: /gate_test — re-run gate on the sender (debug)
+    // admin: preview exact welcome copy (incomplete by default)
     if (isCommand(text, 'gate_test') && msg.from?.id) {
-      await gateNewMember(db, msg.chat!.id!, {
-        id: msg.from.id,
-        first_name: 'تست',
-      });
+      await handleGateTest(db, msg);
     }
   }
 }
