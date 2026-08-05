@@ -18,7 +18,10 @@ function icsEscape(s: string) {
 }
 
 function icsUtc(d: Date) {
-  return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return d
+    .toISOString()
+    .replace(/[-:]/g, '')
+    .replace(/\.\d{3}/, '');
 }
 
 export function buildEventIcs(input: IcsEventInput): string {

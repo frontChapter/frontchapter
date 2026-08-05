@@ -297,6 +297,13 @@ const Join = () => {
     }
   };
 
+  /** Rebuild static /members/ on GitHub Pages — non-fatal if dispatch fails */
+  const requestSiteRebuild = async () => {
+    const { error: fnErr } =
+      await getSupabase().functions.invoke('site-rebuild');
+    if (fnErr) console.warn('[join] site-rebuild:', fnErr.message);
+  };
+
   // Retry unmute when landing on success (covers failed/missed invoke)
   useEffect(() => {
     if (step !== 'done' || !member?.profile_completed_at) return;
@@ -344,6 +351,9 @@ const Join = () => {
         await requestUnmute();
       } catch {
         // non-fatal — done-step effect + button retry
+      }
+      if (form.is_public) {
+        await requestSiteRebuild();
       }
       setStep('done');
     } catch (err) {

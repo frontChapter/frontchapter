@@ -135,45 +135,7 @@ function MemberProfileByQuery({ slug }: { slug: string }) {
   return <MemberSingle member={member} activities={activities} />;
 }
 
-function MemberDirectory() {
-  const [members, setMembers] = useState<Row[]>([]);
-  const [state, setState] = useState<LoadState>('loading');
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const load = async () => {
-      try {
-        const supabase = getSupabase();
-        const { data, error: qErr } = await supabase
-          .from('member_stats')
-          .select(
-            'id, telegram_id, username, display_name, photo_url, expertise, bio, linkedin_url, github_url, website_url, is_public, profile_completed_at, points_total, level_key, badges'
-          )
-          .eq('is_public', true)
-          .not('profile_completed_at', 'is', null)
-          .order('points_total', { ascending: false });
-
-        if (qErr) throw qErr;
-        if (!cancelled) {
-          setMembers((data as Row[]) ?? []);
-          setState('ready');
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setError(e instanceof Error ? e.message : 'بارگذاری اعضا ناموفق بود');
-          setState('error');
-        }
-      }
-    };
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+function MemberDirectory({ members }: { members: Row[] }) {
   return (
     <>
       <section className="section members-garden pt-0">
@@ -184,32 +146,7 @@ function MemberDirectory() {
             رویدادها.
           </p>
 
-          {state === 'loading' ? (
-            <div className="flex justify-center py-20">
-              <CarrotLoader variant="bounce" label="در حال چیدن هویجی‌ها…" />
-            </div>
-          ) : null}
-
-          {state === 'error' ? (
-            <div className="mx-auto mt-8 max-w-lg">
-              <CarrotEmptyState
-                tone="error"
-                title="لیست اعضا لود نشد"
-                description={error || 'یک بار دیگه امتحان کن.'}
-                action={
-                  <CarrotButton
-                    type="button"
-                    variant="primary"
-                    onClick={() => window.location.reload()}
-                  >
-                    تلاش دوباره
-                  </CarrotButton>
-                }
-              />
-            </div>
-          ) : null}
-
-          {state === 'ready' && members.length === 0 ? (
+          {members.length === 0 ? (
             <div className="mx-auto mt-8 max-w-lg">
               <CarrotEmptyState
                 title="هنوز هویجی عمومی نیست"
@@ -220,7 +157,7 @@ function MemberDirectory() {
             </div>
           ) : null}
 
-          {state === 'ready' && members.length > 0 ? (
+          {members.length > 0 ? (
             <div className="members-garden__bed fade">
               <ul className="members-garden__list list-none p-0">
                 {members.map((m, index) => {
@@ -319,7 +256,7 @@ function MemberDirectory() {
   );
 }
 
-function MembersRouter() {
+function MembersRouter({ members }: { members: Row[] }) {
   const search = useSearchParams();
   const slug = search.get('m')?.trim();
 
@@ -327,10 +264,10 @@ function MembersRouter() {
     return <MemberProfileByQuery slug={slug} />;
   }
 
-  return <MemberDirectory />;
+  return <MemberDirectory members={members} />;
 }
 
-const Members = () => (
+const Members = ({ members }: { members: Row[] }) => (
   <Suspense
     fallback={
       <div className="flex justify-center py-20">
@@ -338,7 +275,7 @@ const Members = () => (
       </div>
     }
   >
-    <MembersRouter />
+    <MembersRouter members={members} />
   </Suspense>
 );
 

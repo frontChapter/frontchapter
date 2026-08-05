@@ -28,11 +28,7 @@ export type SessionFrontmatter = {
   speaker?: SessionSpeakerSocial;
 };
 
-export type SessionPhase =
-  | 'hidden'
-  | 'open'
-  | 'closed'
-  | 'live_or_done';
+export type SessionPhase = 'hidden' | 'open' | 'closed' | 'live_or_done';
 
 export function sessionPhase(
   fm: SessionFrontmatter,
@@ -41,9 +37,7 @@ export function sessionPhase(
   const deadline = fm.registration_deadline
     ? Date.parse(fm.registration_deadline)
     : NaN;
-  const sessionAt = fm.session_datetime
-    ? Date.parse(fm.session_datetime)
-    : NaN;
+  const sessionAt = fm.session_datetime ? Date.parse(fm.session_datetime) : NaN;
 
   if (!Number.isFinite(deadline) && !Number.isFinite(sessionAt)) {
     return 'hidden';
@@ -66,14 +60,8 @@ export function assertSessionPhaseOk() {
   const t = new Date('2026-08-01T12:00:00Z');
   const cases: Array<[SessionFrontmatter, SessionPhase]> = [
     [{}, 'hidden'],
-    [
-      { registration_deadline: '2026-09-01T00:00:00Z' },
-      'open',
-    ],
-    [
-      { registration_deadline: '2026-07-01T00:00:00Z' },
-      'closed',
-    ],
+    [{ registration_deadline: '2026-09-01T00:00:00Z' }, 'open'],
+    [{ registration_deadline: '2026-07-01T00:00:00Z' }, 'closed'],
     [
       {
         registration_deadline: '2026-09-01T00:00:00Z',
@@ -85,7 +73,9 @@ export function assertSessionPhaseOk() {
   for (const [fm, want] of cases) {
     const got = sessionPhase(fm, t);
     if (got !== want) {
-      throw new Error(`sessionPhase(${JSON.stringify(fm)}) → ${got}, want ${want}`);
+      throw new Error(
+        `sessionPhase(${JSON.stringify(fm)}) → ${got}, want ${want}`
+      );
     }
   }
   return true;

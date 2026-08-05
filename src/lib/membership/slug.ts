@@ -9,8 +9,11 @@ export function memberSlug(m: {
 }
 
 export function memberPath(slug: string): string {
-  // Query on /members/ — GH Pages static export has no per-slug HTML until rebuild.
-  // Directory index always exists; client fetches the profile by ?m=
+  return `/members/${encodeURIComponent(slug)}/`;
+}
+
+/** Legacy GH Pages query URLs — still handled client-side on /members/ */
+export function memberQueryPath(slug: string): string {
   return `/members/?m=${encodeURIComponent(slug)}`;
 }
 

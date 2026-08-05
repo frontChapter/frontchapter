@@ -170,9 +170,7 @@ export default function AdminAttendance() {
                   <p className="mb-1">
                     امتیاز جدید: {result.newly_awarded ?? 0}
                   </p>
-                  <p className="mb-0">
-                    بدون مچ: {result.unmatched_count ?? 0}
-                  </p>
+                  <p className="mb-0">بدون مچ: {result.unmatched_count ?? 0}</p>
                 </div>
               ) : null}
             </form>
