@@ -1,9 +1,31 @@
 /** Session fields on /posts/ frontmatter (optional — CTA only when present). */
 
+export type SessionSocialCopy = {
+  telegram?: string;
+  linkedin?: string;
+  linkedin_first_comment?: string;
+  twitter?: string;
+  instagram?: string;
+  instagram_first_comment?: string;
+};
+
+/** Speaker handles for Buffer mentions (LinkedIn URL + Instagram tag). */
+export type SessionSpeakerSocial = {
+  linkedin?: string;
+  instagram?: string;
+  instagram_tag_x?: number;
+  instagram_tag_y?: number;
+};
+
 export type SessionFrontmatter = {
   session_datetime?: string;
   registration_deadline?: string;
   meet_link?: string;
+  /** Poster / hero used for Buffer + Telegram photo */
+  image?: string;
+  image_alt?: string;
+  social?: SessionSocialCopy;
+  speaker?: SessionSpeakerSocial;
 };
 
 export type SessionPhase =

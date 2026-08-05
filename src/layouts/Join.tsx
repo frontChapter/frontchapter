@@ -27,9 +27,15 @@ type TelegramLoginResult = {
 };
 
 type TelegramAuthOptions = {
-  client_id: number | string;
+  client_id?: number | string;
+  // Legacy widget option name (some script builds still expect this)
+  bot_id?: number | string;
   scope?: Array<'profile' | 'phone' | 'write'>;
+  // Legacy widget option name (maps to write permission)
+  request_access?: boolean | 'write';
   lang?: string;
+  redirect_uri?: string;
+  redirect_url?: string;
 };
 
 type TelegramLoginApi = {
@@ -47,7 +53,7 @@ type TelegramWindow = Window & {
 
 const TELEGRAM_CLIENT_ID =
   process.env.NEXT_PUBLIC_TELEGRAM_CLIENT_ID || '8954964070';
-const TELEGRAM_LOGIN_SCRIPT = 'https://oauth.telegram.org/js/telegram-login.js';
+const TELEGRAM_LOGIN_SCRIPT = 'https://telegram.org/js/telegram-login.js';
 
 type FormState = {
   expertise: string;
@@ -165,11 +171,17 @@ const Join = () => {
     setError('');
     try {
       const login = await loadTelegramLoginScript();
+      const redirectUri = `${window.location.origin}/join/`;
       login.auth(
         {
           client_id: Number(TELEGRAM_CLIENT_ID),
+          bot_id: Number(TELEGRAM_CLIENT_ID),
           scope: ['profile', 'write'],
+          request_access: 'write',
           lang: 'fa',
+          // Some Telegram SDK/runtime variants require explicit redirect URI.
+          redirect_uri: redirectUri,
+          redirect_url: redirectUri,
         },
         (data) => {
           if (data.error) {

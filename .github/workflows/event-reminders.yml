@@ -1,0 +1,32 @@
+# Fire due Telegram event reminders via event-ops.
+# Requires repo secrets: EVENT_OPS_SECRET, SUPABASE_ANON_KEY (publishable/anon)
+
+name: Event reminders
+
+on:
+  schedule:
+    # every 20 minutes
+    - cron: '*/20 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-due:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call run_due_reminders
+        env:
+          EVENT_OPS_SECRET: ${{ secrets.EVENT_OPS_SECRET }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${EVENT_OPS_SECRET:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "Missing EVENT_OPS_SECRET or SUPABASE_ANON_KEY secrets — skip"
+            exit 0
+          fi
+          curl -sfS -X POST \
+            "https://yuwsoyhknbjipfouemen.supabase.co/functions/v1/event-ops" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Content-Type: application/json" \
+            -H "x-event-ops-secret: ${EVENT_OPS_SECRET}" \
+            -d '{"action":"run_due_reminders"}'

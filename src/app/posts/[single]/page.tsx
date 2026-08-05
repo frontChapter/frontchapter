@@ -49,9 +49,12 @@ const Article = async ({ params }: { params: { single: string } }) => {
             author: frontmatter.author,
             description: frontmatter.description,
             image: frontmatter.image,
+            image_alt: frontmatter.image_alt,
             session_datetime: frontmatter.session_datetime,
             registration_deadline: frontmatter.registration_deadline,
             meet_link: frontmatter.meet_link,
+            social: frontmatter.social,
+            speaker: frontmatter.speaker,
           }}
           content={content}
           recentPosts={recentPosts}

@@ -1,9 +1,7 @@
 'use client';
 
-import {
-  CarrotButton,
-  CarrotLoader,
-} from '@layouts/components/carrot';
+import { CarrotButton, CarrotLoader } from '@layouts/components/carrot';
+import { downloadEventIcs } from '@lib/membership/ics';
 import { sessionPhase, type SessionFrontmatter } from '@lib/membership/session';
 import { getSupabase } from '@lib/supabase/client';
 import Link from 'next/link';
@@ -11,6 +9,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 
 type Props = {
   postSlug: string;
+  eventTitle: string;
   session: SessionFrontmatter;
 };
 
@@ -22,14 +21,101 @@ type Status =
   | 'registered'
   | 'hidden';
 
-export default function EventRegister({ postSlug, session }: Props) {
+function googleCalendarAddUrl(
+  title: string,
+  sessionDatetime: string,
+  eventUrl: string,
+  meetLink?: string
+) {
+  const start = new Date(sessionDatetime);
+  if (!Number.isFinite(start.getTime())) return '';
+  const end = new Date(start.getTime() + 90 * 60 * 1000);
+  const fmt = (d: Date) =>
+    d
+      .toISOString()
+      .replace(/[-:]/g, '')
+      .replace(/\.\d{3}/, '');
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title,
+    dates: `${fmt(start)}/${fmt(end)}`,
+    details: `${title}\n${eventUrl}`,
+    location: meetLink || '',
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+export default function EventRegister({
+  postSlug,
+  eventTitle,
+  session,
+}: Props) {
   const phase = sessionPhase(session);
   const [status, setStatus] = useState<Status>('loading');
   const [email, setEmail] = useState('');
   const [needEmail, setNeedEmail] = useState(false);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
   const [hint, setHint] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const [calendarUrl, setCalendarUrl] = useState('');
+  const [meetLink, setMeetLink] = useState(session.meet_link || '');
+
+  const runFollowups = useCallback(async () => {
+    const supabase = getSupabase();
+    const eventPageUrl = `https://frontchapter.ir/posts/${postSlug}/`;
+    const fallbackCal = session.session_datetime
+      ? googleCalendarAddUrl(
+          eventTitle,
+          session.session_datetime,
+          eventPageUrl,
+          meetLink || session.meet_link
+        )
+      : '';
+    const { data, error: fnErr } = await supabase.functions.invoke(
+      'event-ops',
+      {
+        body: {
+          action: 'register_event_followups',
+          post_slug: postSlug,
+          event_title: eventTitle,
+          event_url: eventPageUrl,
+          meet_link: meetLink || session.meet_link || '',
+          session_datetime: session.session_datetime || '',
+        },
+      }
+    );
+    if (fnErr) throw fnErr;
+    const res = data as {
+      error?: string;
+      invite_sent?: boolean;
+      invite_error?: string | null;
+      calendar_add_url?: string | null;
+      meet_link?: string | null;
+    };
+    if (res?.error && !res.calendar_add_url) throw new Error(res.error);
+    const url = res.calendar_add_url || fallbackCal;
+    if (url) setCalendarUrl(url);
+    if (res.meet_link) setMeetLink(res.meet_link);
+    if (res.invite_sent) {
+      setHint((h) => `${h} دعوت‌نامه Calendar به ایمیلت ارسال شد.`.trim());
+    } else {
+      setHint((h) =>
+        `${h} ایونت را به Calendar اضافه کن یا .ics دانلود کن.`
+          .replace(/\s+/g, ' ')
+          .trim()
+      );
+    }
+    if (res.invite_error) console.warn('calendar invite:', res.invite_error);
+  }, [
+    eventTitle,
+    meetLink,
+    postSlug,
+    session.meet_link,
+    session.session_datetime,
+  ]);
 
   const refresh = useCallback(async () => {
     if (phase === 'hidden') {
@@ -47,9 +133,10 @@ export default function EventRegister({ postSlug, session }: Props) {
       const uid = sess.session.user.id;
       const { data: member } = await supabase
         .from('members')
-        .select('profile_completed_at')
+        .select('profile_completed_at, is_admin')
         .eq('id', uid)
         .maybeSingle();
+      setIsAdmin(Boolean(member?.is_admin));
       if (!member?.profile_completed_at) {
         setStatus('need_profile');
         return;
@@ -66,9 +153,10 @@ export default function EventRegister({ postSlug, session }: Props) {
 
       const { data: ev } = await supabase
         .from('events')
-        .select('id')
+        .select('id, meet_link')
         .eq('post_slug', postSlug)
         .maybeSingle();
+      if (ev?.meet_link) setMeetLink(String(ev.meet_link));
       if (ev?.id) {
         const { data: reg } = await supabase
           .from('event_registrations')
@@ -91,6 +179,28 @@ export default function EventRegister({ postSlug, session }: Props) {
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  useEffect(() => {
+    if (status !== 'registered' || !session.session_datetime || calendarUrl) {
+      return;
+    }
+    setCalendarUrl(
+      googleCalendarAddUrl(
+        eventTitle,
+        session.session_datetime,
+        `https://frontchapter.ir/posts/${postSlug}/`,
+        meetLink || session.meet_link
+      )
+    );
+  }, [
+    status,
+    calendarUrl,
+    eventTitle,
+    postSlug,
+    meetLink,
+    session.meet_link,
+    session.session_datetime,
+  ]);
 
   if (phase === 'hidden' || status === 'hidden') return null;
 
@@ -121,10 +231,110 @@ export default function EventRegister({ postSlug, session }: Props) {
       }
       setStatus('registered');
       setNeedEmail(false);
+
+      try {
+        await runFollowups();
+      } catch (e) {
+        console.error('event followups failed', e);
+        if (session.session_datetime) {
+          setCalendarUrl(
+            googleCalendarAddUrl(
+              eventTitle,
+              session.session_datetime,
+              `https://frontchapter.ir/posts/${postSlug}/`,
+              meetLink || session.meet_link
+            )
+          );
+        }
+        setHint((h) =>
+          `${h} افزودن خودکار به Calendar ناموفق بود — از دکمه‌های زیر استفاده کن.`
+            .replace(/\s+/g, ' ')
+            .trim()
+        );
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'ثبت‌نام ناموفق بود');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const onPublishTest = async () => {
+    setPublishing(true);
+    setError('');
+    setHint('');
+    try {
+      const supabase = getSupabase();
+      const scheduledFor = new Date(
+        Date.now() + 3 * 60 * 60 * 1000
+      ).toISOString();
+      const origin = window.location.origin;
+      const imagePath = session.image || '';
+      const imageUrl = imagePath
+        ? imagePath.startsWith('http')
+          ? imagePath
+          : `${origin}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`
+        : '';
+      const social = session.social || {};
+      const speaker = session.speaker || {};
+      const { data, error: fnErr } = await supabase.functions.invoke(
+        'event-ops',
+        {
+          body: {
+            action: 'publish_event_test',
+            post_slug: postSlug,
+            event_title: eventTitle,
+            event_url: `https://frontchapter.ir/posts/${postSlug}/`,
+            session_datetime: session.session_datetime || '',
+            meet_link: session.meet_link || '',
+            scheduled_for: scheduledFor,
+            image_url: imageUrl,
+            image_alt: session.image_alt || eventTitle,
+            social: {
+              telegram: social.telegram || '',
+              linkedin: social.linkedin || '',
+              linkedin_first_comment: social.linkedin_first_comment || '',
+              twitter: social.twitter || '',
+              instagram: social.instagram || '',
+              instagram_first_comment: social.instagram_first_comment || '',
+            },
+            speaker: {
+              linkedin: speaker.linkedin || '',
+              instagram: speaker.instagram || '',
+              instagram_tag_x: speaker.instagram_tag_x ?? 0.7,
+              instagram_tag_y: speaker.instagram_tag_y ?? 0.35,
+            },
+          },
+        }
+      );
+      if (fnErr) {
+        throw new Error(
+          fnErr.message.includes('Failed to send')
+            ? 'ارتباط با سرور قطع شد (timeout). یک‌بار دیگر امتحان کن.'
+            : fnErr.message
+        );
+      }
+      const payload = data as {
+        error?: string;
+        buffer_error?: string | null;
+        meet_link?: string | null;
+        calendar_error?: string | null;
+      };
+      if (payload?.error) throw new Error(payload.error);
+      if (payload.meet_link) setMeetLink(payload.meet_link);
+      const parts = [
+        'ارسال تلگرام انجام شد و Buffer برای ۳ ساعت بعد schedule شد.',
+      ];
+      if (payload.meet_link) parts.push(`Meet: ${payload.meet_link}`);
+      if (payload.calendar_error) {
+        parts.push(`Calendar: ${payload.calendar_error}`);
+      }
+      if (payload.buffer_error) parts.push(`(${payload.buffer_error})`);
+      setHint(parts.join(' '));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'انتشار تستی ناموفق بود');
+    } finally {
+      setPublishing(false);
     }
   };
 
@@ -150,6 +360,19 @@ export default function EventRegister({ postSlug, session }: Props) {
         </p>
       ) : null}
       {hint ? <p className="mb-3 text-sm text-muted">{hint}</p> : null}
+
+      {isAdmin ? (
+        <div className="mb-4">
+          <CarrotButton
+            type="button"
+            variant="secondary"
+            loading={publishing}
+            onClick={onPublishTest}
+          >
+            انتشار تستی (تلگرام + Buffer تا ۳ ساعت بعد)
+          </CarrotButton>
+        </div>
+      ) : null}
 
       {status === 'loading' ? (
         <div className="flex justify-center py-4">
@@ -219,23 +442,67 @@ export default function EventRegister({ postSlug, session }: Props) {
       ) : null}
 
       {status === 'registered' ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <p className="mb-0 text-sm font-medium text-dark">
             ثبت‌نامت ثبت شد ✅
           </p>
-          {session.meet_link && phase !== 'live_or_done' ? (
+          <div className="flex flex-wrap gap-2">
+            {calendarUrl ? (
+              <CarrotButton
+                href={calendarUrl}
+                variant="primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                افزودن به Google Calendar
+              </CarrotButton>
+            ) : null}
+            {session.session_datetime ? (
+              <CarrotButton
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  try {
+                    downloadEventIcs({
+                      uid: postSlug,
+                      title: eventTitle,
+                      sessionDatetime: session.session_datetime!,
+                      eventUrl: `https://frontchapter.ir/posts/${postSlug}/`,
+                      meetLink: meetLink || session.meet_link,
+                    });
+                  } catch (e) {
+                    setError(
+                      e instanceof Error ? e.message : 'دانلود ICS ناموفق'
+                    );
+                  }
+                }}
+              >
+                دانلود .ics
+              </CarrotButton>
+            ) : null}
+          </div>
+          {(meetLink || session.meet_link) &&
+          phase !== 'live_or_done' &&
+          !(meetLink || session.meet_link || '').includes('test-session') ? (
             <p className="mb-0 text-sm">
               <a
-                href={session.meet_link}
+                href={meetLink || session.meet_link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary underline"
                 dir="ltr"
               >
-                لینک ورود به جلسه
+                لینک ورود به جلسه (Meet)
               </a>
             </p>
-          ) : null}
+          ) : (
+            <p className="mb-0 text-xs text-muted">
+              لینک Meet بعد از انتشار ادمین / ساخت Calendar آماده می‌شود.
+            </p>
+          )}
+          <p className="mb-0 text-xs text-muted">
+            برای یادآوری تلگرام، یک‌بار بات را با /start باز کن.
+          </p>
         </div>
       ) : null}
     </aside>

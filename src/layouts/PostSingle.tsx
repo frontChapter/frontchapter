@@ -31,7 +31,10 @@ interface Frontmatter extends SessionFrontmatter {
   title: string;
   date: string;
   image?: string;
+  image_alt?: string;
   author: Author;
+  social?: SessionFrontmatter['social'];
+  speaker?: SessionFrontmatter['speaker'];
 }
 
 interface RecentPost {
@@ -66,6 +69,10 @@ const PostSingle: React.FC<PostSingleProps> = ({
     session_datetime: frontmatter.session_datetime,
     registration_deadline: frontmatter.registration_deadline,
     meet_link: frontmatter.meet_link,
+    image: frontmatter.image,
+    image_alt: frontmatter.image_alt,
+    social: frontmatter.social,
+    speaker: frontmatter.speaker,
   };
 
   const avatar = primarySpeakerSlug ? (
@@ -109,7 +116,7 @@ const PostSingle: React.FC<PostSingleProps> = ({
                           src={image}
                           height={600}
                           width={600}
-                          alt={title}
+                          alt={frontmatter.image_alt || title}
                           priority={true}
                           className="h-full w-full object-contain"
                         />
@@ -158,7 +165,11 @@ const PostSingle: React.FC<PostSingleProps> = ({
                     </div>
                   </div>
                 </header>
-                <EventRegister postSlug={slug} session={session} />
+                <EventRegister
+                  postSlug={slug}
+                  eventTitle={title}
+                  session={session}
+                />
                 <div className="content mb-16 mt-10 text-start">
                   <MDXContent content={content} />
                 </div>

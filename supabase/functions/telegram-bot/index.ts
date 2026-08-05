@@ -19,6 +19,7 @@ const BOT_USERNAME =
   'frontChapterMagicBot';
 const WELCOME_START_URL = `https://t.me/${BOT_USERNAME}?start=welcome`;
 const USEFUL_POINTS = 10;
+const NOTIFY_CHANNEL = '@mytestchannel10002';
 
 /** Plain Persian Member Tags — ≤16 chars, no emoji */
 const LEVEL_TAGS = {
@@ -105,6 +106,24 @@ async function rememberChatId(db: ReturnType<typeof adminDb>, chatId: number) {
   await db.from('telegram_bot_config').upsert({
     id: 1,
     group_chat_id: chatId,
+    updated_at: new Date().toISOString(),
+  });
+}
+
+async function rememberPrivateChatId(
+  db: ReturnType<typeof adminDb>,
+  telegramId: number,
+  chatId: number
+) {
+  const { data: member } = await db
+    .from('members')
+    .select('id')
+    .eq('telegram_id', telegramId)
+    .maybeSingle();
+  if (!member?.id) return;
+  await db.from('telegram_private_chats').upsert({
+    member_id: member.id,
+    chat_id: chatId,
     updated_at: new Date().toISOString(),
   });
 }
@@ -696,6 +715,16 @@ async function handlePrivateStart(msg: {
   const payload = startPayload(text);
   const name = msg.from ? displayName(msg.from) : 'هویجی';
 
+  // Store private chat_id for DM best-effort (registration notifications)
+  if (msg.from?.id) {
+    try {
+      const db = adminDb();
+      await rememberPrivateChatId(db, msg.from.id, msg.chat.id);
+    } catch (e) {
+      console.error('rememberPrivateChatId failed', e);
+    }
+  }
+
   const capabilities =
     `از این‌جا به بعد می‌تونم:\n` +
     `🥕 عضویتت رو ثبت کنم و سطح هویجیت رو نگه دارم\n` +
@@ -718,6 +747,74 @@ async function handlePrivateStart(msg: {
     reply_markup: urlButton('تکمیل عضویت در سایت', JOIN_URL),
   });
   return true;
+}
+
+async function handleNotifyEventRegistration(
+  req: Request,
+  body: Record<string, unknown>
+) {
+  const auth = req.headers.get('Authorization');
+  if (!auth?.startsWith('Bearer ')) {
+    return json({ error: 'unauthorized' }, 401);
+  }
+
+  const url = Deno.env.get('SUPABASE_URL');
+  const anon = Deno.env.get('SUPABASE_ANON_KEY');
+  if (!url || !anon) return json({ error: 'server misconfigured' }, 500);
+
+  const userClient = createClient(url, anon, {
+    global: { headers: { Authorization: auth } },
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  const { data: userData, error: userErr } = await userClient.auth.getUser();
+  if (userErr || !userData.user) return json({ error: 'unauthorized' }, 401);
+
+  const db = adminDb();
+  const memberId = userData.user.id;
+  const { data: member } = await db
+    .from('members')
+    .select('telegram_id')
+    .eq('id', memberId)
+    .maybeSingle();
+  if (!member) return json({ error: 'member not found' }, 404);
+
+  const postSlug = String(body?.post_slug || '').trim();
+  const meetLink = String(body?.meet_link || '').trim();
+  const sessionDatetime = String(body?.session_datetime || '').trim();
+
+  const text =
+    `ثبت‌نام جدید در جلسه: ${postSlug}\n` +
+    (sessionDatetime
+      ? `زمان: ${sessionDatetime}\n`
+      : '') +
+    (meetLink ? `لینک: ${meetLink}` : '');
+
+  // Channel announcement (no group send)
+  await tg('sendMessage', {
+    chat_id: NOTIFY_CHANNEL,
+    text,
+    disable_web_page_preview: true,
+  });
+
+  // Optional DM best-effort if user started private chat with bot
+  try {
+    const { data: pc } = await db
+      .from('telegram_private_chats')
+      .select('chat_id')
+      .eq('member_id', memberId)
+      .maybeSingle();
+    if (pc?.chat_id) {
+      await tg('sendMessage', {
+        chat_id: pc.chat_id,
+        text: `ثبت‌نامت ثبت شد ✅\n${text}`,
+        disable_web_page_preview: true,
+      });
+    }
+  } catch (e) {
+    console.error('registration DM failed', e);
+  }
+
+  return json({ ok: true });
 }
 
 async function handleWebhook(update: Record<string, unknown>) {
@@ -819,6 +916,11 @@ Deno.serve(async (req) => {
     // Site unmute (user JWT) — body.action === 'unmute'
     if (body?.action === 'unmute') {
       return await handleUnmute(req);
+    }
+
+    // Frontend → bot notifications (no Telegram secret header)
+    if (body?.action === 'notify_event_registration') {
+      return await handleNotifyEventRegistration(req, body);
     }
 
     // Telegram webhook
