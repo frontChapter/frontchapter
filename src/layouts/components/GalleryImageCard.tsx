@@ -13,8 +13,6 @@ export interface GalleryImageCardProps {
   className?: string;
   containerClassName?: string;
   sizes?: string;
-  width?: number;
-  height?: number;
   showZoomIcon?: boolean;
   showMobileZoom?: boolean;
 }
@@ -26,19 +24,19 @@ const GalleryImageCard: React.FC<GalleryImageCardProps> = ({
   image,
   onClick,
   className,
-  containerClassName = 'relative w-full h-32 sm:h-36 md:h-56',
+  containerClassName = 'relative w-full h-full min-h-32 sm:min-h-36 md:min-h-56',
   sizes = DEFAULT_SIZES,
-  width = 600,
-  height = 400,
   showZoomIcon = true,
   showMobileZoom = false,
 }) => {
   const label = image.label || image.alt;
+  const imageClassName =
+    'object-cover transition-transform duration-500 group-hover:scale-110';
 
   return (
     <figure
       className={clsx(
-        'image-container group relative rounded-xl overflow-hidden',
+        'image-container group relative h-full rounded-xl overflow-hidden',
         'shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20',
         'transition-all duration-300',
         onClick && 'cursor-pointer',
@@ -57,24 +55,20 @@ const GalleryImageCard: React.FC<GalleryImageCardProps> = ({
             <Image
               src={image.jpgSrc}
               alt={image.alt}
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
-              width={width}
-              height={height}
+              className={imageClassName}
+              fill
               loading="lazy"
               sizes={sizes}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           </picture>
         ) : (
           <Image
             src={image.src}
             alt={image.alt}
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            width={width}
-            height={height}
+            className={imageClassName}
+            fill
             loading="lazy"
             sizes={sizes}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         )}
         {label && (
