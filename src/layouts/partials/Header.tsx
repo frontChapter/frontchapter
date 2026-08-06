@@ -131,10 +131,7 @@ const Header: React.FC = () => {
                 <Logo size="header" />
               </div>
               {/* Mirror menu width so wordmark sits on true center (mobile only) */}
-              <div
-                className="w-12 shrink-0 lg:hidden"
-                aria-hidden="true"
-              />
+              <div className="w-12 shrink-0 lg:hidden" aria-hidden="true" />
             </>
           ) : (
             <div className="flex items-center">
