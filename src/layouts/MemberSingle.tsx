@@ -5,6 +5,7 @@ import {
 } from '@layouts/components/carrot';
 import Banner from '@layouts/components/Banner';
 import Cta from '@layouts/components/Cta';
+import MemberCompleteProfileBanner from '@layouts/components/MemberCompleteProfileBanner';
 import { ACTIVITY_LABELS, formatTehranDate } from '@lib/membership/activity';
 import type { MemberActivity, MemberProfile } from '@lib/membership/fetch';
 import { memberPath, memberSlug } from '@lib/membership/slug';
@@ -63,6 +64,14 @@ const MemberSingle = ({ member: m, activities }: Props) => {
             <span aria-hidden> / </span>
             <span className="text-dark">{m.display_name}</span>
           </p>
+
+          <MemberCompleteProfileBanner
+            memberId={m.id}
+            bio={m.bio}
+            github_url={m.github_url}
+            linkedin_url={m.linkedin_url}
+            website_url={m.website_url}
+          />
 
           <div className="member-plot__hero">
             <div className="member-plot__identity">

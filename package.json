@@ -10,8 +10,7 @@
   "homepage": "https://frontchapter.ir",
   "author": "FrontChapter Community <info@frontchapter.ir>",
   "scripts": {
-    "dev": "next dev --experimental-https --experimental-https-key ./certificates/localhost-key.pem --experimental-https-cert ./certificates/localhost.pem",
-    "dev:http": "next dev",
+    "dev": "next dev",
     "build": "next build",
     "export": "next build",
     "postexport": "echo 'frontchapter.ir' > out/CNAME",

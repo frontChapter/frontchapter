@@ -1,5 +1,10 @@
 // @ts-nocheck
-// Telegram Login (new OIDC JS) → Supabase session
+// Telegram Login (legacy widget → magiclink) — superseded by custom OIDC
+// (signInWithOAuth custom:telegram). Keep deployed until OIDC is verified in
+// production for all existing members; then retire this function.
+//
+// Why public/oidc/ exists: Telegram JWKS includes ES256K/secp256k1 which
+// go-jose cannot parse, so Discovery URL points at our filtered document.
 // Verifies id_token with filtered JWKS (drops secp256k1 — breaks jose/go-jose).
 
 import { createClient } from 'npm:@supabase/supabase-js@2';

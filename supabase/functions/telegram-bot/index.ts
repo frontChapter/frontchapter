@@ -11,7 +11,7 @@
 
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
-const JOIN_URL = 'https://frontchapter.ir/join/';
+const JOIN_URL = 'https://frontchapter.ir/join/?auth=telegram';
 const SITE = 'https://frontchapter.ir';
 // Real bot username from getMe — NOT display name "HavijMagic"
 const BOT_USERNAME =
@@ -70,13 +70,25 @@ const cors = {
     'authorization, x-client-info, apikey, content-type, x-telegram-bot-api-secret-token',
 };
 
+// Reuse one service client per isolate — HTTP to PostgREST (not direct Postgres).
+let _admin: ReturnType<typeof createClient> | null = null;
 function adminDb() {
+  if (_admin) return _admin;
   const url = Deno.env.get('SUPABASE_URL');
   const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
   if (!url || !key) throw new Error('supabase env missing');
-  return createClient(url, key, {
+  _admin = createClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
+  return _admin;
+}
+
+function waitUntil(p: Promise<unknown>) {
+  // Supabase Edge: keep isolate alive for background tag sync
+  const wait = (globalThis as { EdgeRuntime?: { waitUntil?: unknown } })
+    .EdgeRuntime?.waitUntil;
+  if (typeof wait === 'function') (wait as Function)(p);
+  else void p;
 }
 
 function botToken() {
@@ -177,12 +189,11 @@ async function memberPoints(
 ): Promise<number> {
   const { data } = await db
     .from('activity_log')
-    .select('points')
-    .eq('member_id', memberId);
-  return (data ?? []).reduce(
-    (sum: number, row: { points: number }) => sum + (row.points || 0),
-    0
-  );
+    .select('points.sum()')
+    .eq('member_id', memberId)
+    .maybeSingle();
+  const sum = (data as { sum?: number } | null)?.sum;
+  return typeof sum === 'number' ? sum : 0;
 }
 
 async function setMemberTag(chatId: number, userId: number, tag: string) {
@@ -278,17 +289,17 @@ function botUserId(): number {
 
 type GateReason = 'join' | 'nudge';
 
-/** Avoid spamming welcome on repeated restricted→restricted updates */
-const nudgeCooldownMs = 24 * 60 * 60 * 1000;
-const lastNudgeAt = new Map<number, number>();
+/** chat_member can arrive twice on same join across isolates — soft dedupe */
+const joinDedupeMs = 60 * 1000;
+const lastJoinGateAt = new Map<number, number>();
 
-function allowNudge(userId: number): boolean {
-  const last = lastNudgeAt.get(userId) ?? 0;
-  if (Date.now() - last < nudgeCooldownMs) {
-    console.log('nudge cooldown', userId);
+function allowJoinGate(userId: number): boolean {
+  const last = lastJoinGateAt.get(userId) ?? 0;
+  if (Date.now() - last < joinDedupeMs) {
+    console.log('join dedupe', userId);
     return false;
   }
-  lastNudgeAt.set(userId, Date.now());
+  lastJoinGateAt.set(userId, Date.now());
   return true;
 }
 
@@ -378,7 +389,12 @@ async function gateNewMember(
   reason: GateReason = 'join'
 ) {
   if (!user?.id || user.is_bot) return;
-  if (reason === 'nudge' && !allowNudge(user.id)) return;
+  // Welcome + mute ONLY on real join. Nudge used to re-welcome muted leavers.
+  if (reason !== 'join') {
+    console.log('gate skip (not join)', user.id, reason);
+    return;
+  }
+  if (!allowJoinGate(user.id)) return;
   await rememberChatId(db, chatId);
   await stampJoinDate(db, user.id);
 
@@ -407,28 +423,38 @@ async function gateNewMember(
     return;
   }
 
-  // Incomplete: welcome + deep-link button
+  // Incomplete: welcome + deep-link button, then mute
   try {
     await sendIncompleteWelcome(chatId, name);
   } catch (e) {
     console.error('welcome send failed', e);
   }
 
-  // Mute only on fresh join. Nudge = already restricted — mute again loops chat_member.
-  if (reason === 'join') {
-    try {
-      await muteUser(chatId, user.id);
-    } catch (e) {
-      console.error('mute failed', e);
-    }
+  try {
+    await muteUser(chatId, user.id);
+  } catch (e) {
+    console.error('mute failed', e);
   }
 }
 
 /**
- * join: left/kicked → in-group
- * nudge: already muted (restricted→restricted) — legacy members who never got CTA
- * Skip updates caused by this bot (mute/unmute) to avoid loops.
+ * join: left/kicked/restricted-out → in-group only.
+ * Skip bot-caused mute/unmute. No nudge path (caused welcome-on-leave).
  */
+function memberInChat(m?: { status?: string; is_member?: boolean }): boolean {
+  if (!m?.status) return false;
+  if (
+    m.status === 'member' ||
+    m.status === 'administrator' ||
+    m.status === 'creator'
+  ) {
+    return true;
+  }
+  // Restricted can mean muted-in-group OR banned-out-with-restrictions
+  if (m.status === 'restricted') return m.is_member === true;
+  return false;
+}
+
 function memberJoinedFromChatMember(update: Record<string, unknown>): {
   chatId: number;
   user: TgUser;
@@ -438,9 +464,10 @@ function memberJoinedFromChatMember(update: Record<string, unknown>): {
     | {
         from?: { id?: number; is_bot?: boolean };
         chat?: { id?: number; type?: string };
-        old_chat_member?: { status?: string };
+        old_chat_member?: { status?: string; is_member?: boolean };
         new_chat_member?: {
           status?: string;
+          is_member?: boolean;
           user?: TgUser;
         };
       }
@@ -456,33 +483,38 @@ function memberJoinedFromChatMember(update: Record<string, unknown>): {
     return null;
   }
 
-  const old = cm.old_chat_member?.status ?? 'left';
-  const neu = cm.new_chat_member.status;
-  const wasOut = ['left', 'kicked'].includes(old);
-  const isIn =
-    neu === 'member' || neu === 'restricted' || neu === 'administrator';
-  const stuckRestricted = old === 'restricted' && neu === 'restricted';
+  const old = cm.old_chat_member;
+  const neu = cm.new_chat_member;
+  const wasIn = memberInChat(old);
+  const isIn = memberInChat(neu);
 
-  if (wasOut && isIn) {
+  // Leave / kick / restricted-out: never welcome
+  if (wasIn && !isIn) {
+    console.log('chat_member skip (left)', {
+      old: old?.status,
+      old_member: old?.is_member,
+      neu: neu.status,
+      neu_member: neu.is_member,
+      user: neu.user.id,
+    });
+    return null;
+  }
+
+  if (!wasIn && isIn) {
     return {
       chatId: cm.chat.id,
-      user: cm.new_chat_member.user,
+      user: neu.user,
       reason: 'join',
     };
   }
 
-  if (stuckRestricted) {
-    return {
-      chatId: cm.chat.id,
-      user: cm.new_chat_member.user,
-      reason: 'nudge',
-    };
-  }
-
+  // restricted→restricted / permission tweaks: never welcome
   console.log('chat_member skip', {
-    old,
-    neu,
-    user: cm.new_chat_member.user.id,
+    old: old?.status,
+    old_member: old?.is_member,
+    neu: neu.status,
+    neu_member: neu.is_member,
+    user: neu.user.id,
   });
   return null;
 }
@@ -673,18 +705,21 @@ async function handleUnmute(req: Request) {
   if (userErr || !userData.user) return json({ error: 'unauthorized' }, 401);
 
   const db = adminDb();
-  const { data: member, error: mErr } = await db
-    .from('members')
-    .select('id, telegram_id, profile_completed_at')
-    .eq('id', userData.user.id)
-    .maybeSingle();
+  const [memberRes, chatId] = await Promise.all([
+    db
+      .from('members')
+      .select('id, telegram_id, profile_completed_at')
+      .eq('id', userData.user.id)
+      .maybeSingle(),
+    getChatId(db),
+  ]);
+  const { data: member, error: mErr } = memberRes;
 
   if (mErr || !member) return json({ error: 'member not found' }, 404);
   if (!member.profile_completed_at) {
     return json({ error: 'profile incomplete' }, 403);
   }
 
-  const chatId = await getChatId(db);
   if (!chatId) {
     // ponytail: no group event yet — join gate never stored chat_id
     return json({ ok: true, unmuted: false, reason: 'no_chat_id' });
@@ -694,11 +729,23 @@ async function handleUnmute(req: Request) {
     await unmuteUser(chatId, Number(member.telegram_id));
   } catch (e) {
     const message = e instanceof Error ? e.message : 'unmute failed';
+    // Owner / admin already have full chat rights — treat as success
+    if (
+      /can't remove chat owner|CHAT_OWNER|user is an administrator|ADMIN/i.test(
+        message
+      )
+    ) {
+      waitUntil(
+        syncMemberTag(db, chatId, member.id, Number(member.telegram_id))
+      );
+      return json({ ok: true, unmuted: true, already: true });
+    }
     // user may not be in group yet — not fatal for site join
     return json({ ok: true, unmuted: false, reason: message });
   }
 
-  await syncMemberTag(db, chatId, member.id, Number(member.telegram_id));
+  // Tag sync after unmute — don't block chat unlock response
+  waitUntil(syncMemberTag(db, chatId, member.id, Number(member.telegram_id)));
 
   return json({ ok: true, unmuted: true });
 }
@@ -784,9 +831,7 @@ async function handleNotifyEventRegistration(
 
   const text =
     `ثبت‌نام جدید در جلسه: ${postSlug}\n` +
-    (sessionDatetime
-      ? `زمان: ${sessionDatetime}\n`
-      : '') +
+    (sessionDatetime ? `زمان: ${sessionDatetime}\n` : '') +
     (meetLink ? `لینک: ${meetLink}` : '');
 
   // Channel announcement (no group send)
@@ -830,7 +875,11 @@ async function handleWebhook(update: Record<string, unknown>) {
     };
     console.log('chat_member raw', {
       old: cm.old_chat_member?.status,
+      old_member: (cm.old_chat_member as { is_member?: boolean } | undefined)
+        ?.is_member,
       neu: cm.new_chat_member?.status,
+      neu_member: (cm.new_chat_member as { is_member?: boolean } | undefined)
+        ?.is_member,
       user: cm.new_chat_member?.user?.id,
       from: (update.chat_member as { from?: { id?: number } })?.from?.id,
     });
@@ -859,13 +908,8 @@ async function handleWebhook(update: Record<string, unknown>) {
   if (msg) {
     await rememberChatId(db, msg.chat!.id!);
 
-    if (msg.new_chat_members?.length) {
-      for (const u of msg.new_chat_members) {
-        console.log('gate via new_chat_members', u.id);
-        await gateNewMember(db, msg.chat!.id!, u);
-      }
-      return;
-    }
+    // Join gate = chat_member only. new_chat_members used to double-fire
+    // (separate HTTP → separate isolate → in-memory dedupe useless).
 
     const text = (msg.text || '').trim();
 

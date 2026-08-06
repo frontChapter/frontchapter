@@ -3,6 +3,12 @@
   @apply py-16;
 }
 
+// Inner pages: Banner hero then content (section.pt-0 removes top section padding)
+.section.pt-0 > .banner + .container,
+.section.pt-0 > .banner + .container-xl {
+  @apply pt-10 sm:pt-12 md:pt-16;
+}
+
 // container
 .container {
   @apply mx-auto max-w-[1380px] px-3;
@@ -84,12 +90,19 @@
 // form style
 .form-input,
 .form-textarea {
-  @apply rounded border border-primary border-transparent bg-theme-light py-4 focus:border focus:border-primary focus:ring-transparent border-l-primary;
+  @apply rounded-2xl border border-border bg-surface-solid px-4 py-3 text-dark placeholder:text-muted transition-all;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.92);
+
+  &:focus {
+    @apply border-border-secondary ring-0;
+    box-shadow: 0 0 0 3px rgb(100 116 139 / 0.14);
+  }
 }
 
 :dir(rtl) .form-input,
 :dir(rtl) .form-textarea {
-  @apply border-r-primary;
+  border-inline-start-color: var(--color-border);
+  border-inline-end-color: var(--color-border);
 }
 
 // content style

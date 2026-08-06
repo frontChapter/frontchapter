@@ -92,7 +92,7 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
     <section className="section !pt-0">
       <Banner title={title} />
 
-      <div className="container pt-12 md:pt-16">
+      <div className="container">
         <div className="mx-auto mb-12 max-w-2xl text-center lg:mb-16">
           <p className="text-lg leading-relaxed text-dark/70">
             سوالی داری، پیشنهادی هست، یا می‌خوای با کامیونیتی در ارتباط باشی؟

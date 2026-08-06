@@ -11,6 +11,7 @@ export type Member = {
   website_url: string | null;
   is_public: boolean;
   profile_completed_at: string | null;
+  charter_accepted_at?: string | null;
   created_at: string;
 };
 

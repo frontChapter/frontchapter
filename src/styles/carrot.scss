@@ -895,3 +895,326 @@
     transform: scaleX(1);
   }
 }
+
+// --- Join onboarding chips ---
+.join-chip {
+  @apply rounded-full border border-border bg-surface-solid px-3 py-1.5 text-sm text-dark transition-colors;
+
+  &:hover {
+    @apply border-primary/40 bg-theme-light;
+  }
+
+  &--selected {
+    @apply border-primary bg-theme-light font-medium text-primary;
+    box-shadow: 0 0 0 1px rgb(254 96 25 / 0.15);
+  }
+
+  &--pop {
+    animation: join-chip-pop 0.32s ease-out;
+  }
+}
+
+@keyframes join-chip-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.join-panel {
+  @apply rounded-2xl border border-border bg-surface-solid p-6 shadow-[0_4px_25px_var(--color-shadow)] sm:p-8;
+
+  &--gate {
+    @apply border-border-secondary;
+    background:
+      radial-gradient(
+        120% 80% at 100% 0%,
+        rgb(254 96 25 / 0.1),
+        transparent 55%
+      ),
+      radial-gradient(
+        90% 60% at 0% 100%,
+        rgb(255 236 228 / 0.55),
+        transparent 50%
+      ),
+      var(--color-surface-solid);
+
+    @media (prefers-color-scheme: dark) {
+      background:
+        radial-gradient(
+          120% 80% at 100% 0%,
+          rgb(254 96 25 / 0.16),
+          transparent 55%
+        ),
+        radial-gradient(
+          90% 60% at 0% 100%,
+          rgb(61 47 36 / 0.55),
+          transparent 50%
+        ),
+        var(--color-surface-solid);
+    }
+  }
+}
+
+.join-form {
+  .form-input,
+  .form-textarea {
+    @apply rounded-2xl border border-border bg-surface-solid px-4 py-3 text-dark placeholder:text-muted transition-all;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.92);
+    border-inline-start-color: var(--color-border) !important;
+    border-inline-end-color: var(--color-border) !important;
+
+    &:focus {
+      @apply border-border-secondary ring-0;
+      box-shadow: 0 0 0 3px rgb(254 96 25 / 0.16);
+    }
+  }
+
+  .form-textarea {
+    @apply min-h-[120px];
+  }
+}
+
+.join-field {
+  @apply mb-5;
+
+  &__label {
+    @apply mb-2 block text-sm font-medium text-dark;
+  }
+
+  &__shell {
+    @apply relative;
+
+    .join-field__icon {
+      @apply pointer-events-none absolute top-1/2 z-[1] -translate-y-1/2 text-muted;
+      inset-inline-start: 0.95rem;
+    }
+
+    .join-field__control,
+    > .form-input {
+      padding-inline-start: 2.75rem !important;
+    }
+
+    /* URL / handle fields: shell dir=ltr → icon + text on physical left */
+    &[dir='ltr'] {
+      .join-field__control,
+      > .form-input {
+        text-align: left;
+      }
+    }
+
+    &--textarea {
+      .join-field__icon {
+        top: 1rem;
+        transform: none;
+      }
+
+      .form-textarea {
+        padding-inline-start: 2.75rem !important;
+      }
+    }
+
+    &--error {
+      .form-input,
+      .form-textarea,
+      .join-field__control {
+        @apply border-red-400;
+        box-shadow: 0 0 0 3px rgb(248 113 113 / 0.2);
+      }
+
+      .join-field__icon {
+        @apply text-red-500;
+      }
+    }
+  }
+
+  &__error {
+    @apply mt-1.5 mb-0 text-xs text-red-600;
+  }
+
+  &__hint {
+    @apply mt-1.5 mb-0 text-xs text-muted;
+  }
+}
+
+/* Unified LTR social stack — brand chip glued to input */
+.join-social {
+  @apply mb-6;
+
+  &__head {
+    @apply mb-3;
+  }
+
+  &__title {
+    @apply mb-0.5 text-sm font-medium text-dark;
+  }
+
+  &__lede {
+    @apply mb-0 text-xs text-muted;
+  }
+
+  &__stack {
+    @apply overflow-hidden rounded-2xl border border-border-secondary bg-surface-solid;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  }
+
+  &__row {
+    @apply flex cursor-text items-stretch border-b border-border-secondary last:border-b-0;
+    direction: ltr;
+
+    &:focus-within {
+      background: rgb(254 96 25 / 0.06);
+      box-shadow: inset 0 0 0 1px rgb(254 96 25 / 0.35);
+    }
+
+    &--error {
+      background: rgb(248 113 113 / 0.08);
+      box-shadow: inset 0 0 0 1px rgb(248 113 113 / 0.45);
+    }
+  }
+
+  &__brand {
+    @apply flex shrink-0 items-center gap-2 border-e border-border-secondary bg-theme-light px-3 py-3;
+    min-width: 7.5rem;
+  }
+
+  &__icon {
+    @apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-solid text-primary;
+    box-shadow: 0 0 0 1px rgb(254 96 25 / 0.15);
+  }
+
+  &__brand-text {
+    @apply flex min-w-0 flex-col leading-tight;
+  }
+
+  &__brand-en {
+    @apply text-xs font-semibold text-dark;
+  }
+
+  &__brand-fa {
+    @apply text-[10px] text-muted;
+    direction: rtl;
+  }
+
+  &__input {
+    @apply min-w-0 flex-1 border-0 bg-transparent px-3 py-3 text-sm text-dark outline-none ring-0 placeholder:text-muted;
+    text-align: left;
+  }
+
+  &__error {
+    @apply mb-0 border-b border-border-secondary bg-red-50 px-3 py-1.5 text-xs text-red-600 last:border-b-0;
+
+    @media (prefers-color-scheme: dark) {
+      @apply bg-red-950/50 text-red-200;
+    }
+  }
+}
+
+.join-wizard-pane {
+  &--in {
+    animation: join-pane-in 0.28s ease-out;
+  }
+
+  &--in-back {
+    animation: join-pane-in-back 0.28s ease-out;
+  }
+}
+
+@keyframes join-pane-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes join-pane-in-back {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.join-toast {
+  @apply sticky bottom-4 z-20 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 shadow-[0_8px_24px_rgba(0,0,0,0.12)];
+
+  @media (prefers-color-scheme: dark) {
+    @apply border-red-900/60 bg-red-950/80 text-red-200;
+  }
+
+  &--inline {
+    @apply relative bottom-auto mt-4 shadow-none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .join-chip--pop,
+  .join-wizard-pane--in,
+  .join-wizard-pane--in-back {
+    animation: none !important;
+  }
+}
+
+.join-journey-item {
+  @apply flex gap-3 rounded-xl border border-border-secondary bg-theme-light p-4 text-sm leading-relaxed;
+}
+
+.join-layout {
+  @apply grid gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:items-start lg:gap-10 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)];
+
+  &__aside {
+    @apply lg:sticky lg:top-28;
+  }
+
+  &__main {
+    @apply min-w-0;
+  }
+}
+
+.join-gallery {
+  @apply rounded-2xl border border-border-secondary bg-theme-light p-4 sm:p-5;
+
+  &__title {
+    @apply mb-1 text-sm font-semibold text-dark;
+  }
+
+  &__lede {
+    @apply mb-4 text-xs leading-relaxed text-muted;
+  }
+
+  &__grid {
+    @apply grid grid-cols-2 gap-2 sm:gap-2.5;
+  }
+
+  &__item {
+    @apply relative aspect-[4/3] cursor-pointer overflow-hidden rounded-xl border border-border-secondary bg-surface-solid;
+
+    &--lead {
+      @apply col-span-2 aspect-[16/9];
+    }
+  }
+}
+
+.join-optional {
+  @apply mb-6 rounded-xl border border-border-secondary bg-surface-solid;
+
+  &__toggle {
+    @apply flex w-full items-center justify-between gap-3 px-4 py-3.5 text-sm font-medium text-dark transition-colors;
+  }
+
+  &__body {
+    @apply space-y-5 border-t border-border-secondary px-4 pb-4 pt-4;
+  }
+}

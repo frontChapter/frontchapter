@@ -9,5 +9,15 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["supabase/functions/**/*.ts"],
+      "env": { "browser": false },
+      "globals": {
+        "Deno": "readonly",
+        "EdgeRuntime": "readonly"
+      }
+    }
+  ]
 }
