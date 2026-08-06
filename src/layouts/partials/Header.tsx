@@ -95,39 +95,28 @@ const Header: React.FC = () => {
         ref={headerRef}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        <nav
-          className={
-            isRTL
-              ? 'navbar container-xl flex items-center justify-between'
-              : 'navbar container-xl flex items-center'
-          }
-        >
+        <nav className="navbar container-xl flex flex-wrap items-center">
           {isRTL ? (
             <>
-              <div className="flex items-center">
-                {showMenu ? (
-                  <button
-                    type="button"
-                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-3xl text-dark lg:hidden me-2"
-                    onClick={() => setShowMenu(false)}
-                    aria-label="بستن منو"
-                  >
-                    <CgClose aria-hidden="true" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="inline-flex min-h-12 min-w-12 items-center justify-center text-dark lg:hidden me-2"
-                    onClick={() => setShowMenu(true)}
-                    aria-label="باز کردن منو"
-                    aria-expanded={showMenu}
-                    aria-controls="nav-menu"
-                  >
+              {/* z-10: logo can overflow center; keep menu clickable */}
+              <div className="relative z-10 flex w-12 shrink-0 items-center justify-center lg:hidden">
+                <button
+                  type="button"
+                  className="inline-flex min-h-12 min-w-12 items-center justify-center text-dark"
+                  onClick={() => setShowMenu((open) => !open)}
+                  aria-label={showMenu ? 'بستن منو' : 'باز کردن منو'}
+                  aria-expanded={showMenu}
+                  aria-controls="nav-menu"
+                >
+                  {showMenu ? (
+                    <CgClose className="text-3xl" aria-hidden="true" />
+                  ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 32 32"
                       width="32px"
                       height="32px"
+                      aria-hidden="true"
                       style={{ transform: 'scaleX(-1)' }}
                     >
                       <path
@@ -135,12 +124,17 @@ const Header: React.FC = () => {
                         d="M 5 5 L 5 11 L 11 11 L 11 5 L 5 5 z M 13 5 L 13 11 L 19 11 L 19 5 L 13 5 z M 21 5 L 21 11 L 27 11 L 27 5 L 21 5 z M 7 7 L 9 7 L 9 9 L 7 9 L 7 7 z M 15 7 L 17 7 L 17 9 L 15 9 L 15 7 z M 23 7 L 25 7 L 25 9 L 23 9 L 23 7 z M 5 13 L 5 19 L 11 19 L 11 13 L 5 13 z M 13 13 L 13 19 L 19 19 L 19 13 L 13 13 z M 21 13 L 21 19 L 27 19 L 27 13 L 21 13 z M 7 15 L 9 15 L 9 17 L 7 17 L 7 15 z M 15 15 L 17 15 L 17 17 L 15 17 L 15 15 z M 23 15 L 25 15 L 25 17 L 23 17 L 23 15 z M 5 21 L 5 27 L 11 27 L 11 21 L 5 21 z M 13 21 L 13 27 L 19 27 L 19 21 L 13 21 z M 21 21 L 21 27 L 27 27 L 27 21 L 21 21 z M 7 23 L 9 23 L 9 25 L 7 25 L 7 23 z M 15 23 L 17 23 L 17 25 L 15 25 L 15 23 z"
                       />
                     </svg>
-                  </button>
-                )}
+                  )}
+                </button>
               </div>
-              <div className="flex-1 flex justify-center">
+              <div className="flex min-w-0 flex-1 justify-center lg:flex-none lg:justify-start">
                 <Logo size="header" />
               </div>
+              {/* Mirror menu width so wordmark sits on true center (mobile only) */}
+              <div
+                className="w-12 shrink-0 lg:hidden"
+                aria-hidden="true"
+              />
             </>
           ) : (
             <div className="flex items-center">
@@ -152,7 +146,7 @@ const Header: React.FC = () => {
             id="nav-menu"
             className={clsx(
               'navbar-nav',
-              'order-2 w-full justify-center lg:order-1 md:w-auto md:space-x-1 lg:flex',
+              'order-3 w-full basis-full justify-center lg:order-1 lg:w-auto lg:basis-auto md:space-x-1 lg:flex',
               !showMenu && 'hidden'
             )}
             style={isRTL ? { direction: 'rtl' } : { direction: 'ltr' }}
@@ -244,42 +238,39 @@ const Header: React.FC = () => {
             )}
           </ul>
           <div
-            className={
+            className={clsx(
+              'order-2 items-center',
+              // RTL mobile already has a w-12 spacer; keep this CTA slot for lg+ only
               isRTL
-                ? 'order-2 ms-auto flex items-center md:ms-0 flex-row-reverse'
-                : 'order-1 ms-auto flex items-center md:ms-0'
-            }
-          >
-            {!isRTL && showMenu && (
-              <button
-                type="button"
-                className="inline-flex min-h-12 min-w-12 items-center justify-center text-3xl text-dark lg:hidden ms-2"
-                onClick={() => setShowMenu(!showMenu)}
-                aria-label="بستن منو"
-              >
-                <CgClose aria-hidden="true" />
-              </button>
+                ? 'ms-auto hidden lg:flex flex-row-reverse'
+                : 'ms-auto flex md:ms-0'
             )}
-            {!isRTL && !showMenu && (
+          >
+            {!isRTL && (
               <button
                 type="button"
-                className="inline-flex min-h-12 min-w-12 items-center justify-center text-dark lg:hidden ms-2"
-                onClick={() => setShowMenu(!showMenu)}
-                aria-label="باز کردن منو"
+                className="ms-2 inline-flex min-h-12 min-w-12 items-center justify-center text-dark lg:hidden"
+                onClick={() => setShowMenu((open) => !open)}
+                aria-label={showMenu ? 'بستن منو' : 'باز کردن منو'}
                 aria-expanded={showMenu}
                 aria-controls="nav-menu"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  width="32px"
-                  height="32px"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M 5 5 L 5 11 L 11 11 L 11 5 L 5 5 z M 13 5 L 13 11 L 19 11 L 19 5 L 13 5 z M 21 5 L 21 11 L 27 11 L 27 5 L 21 5 z M 7 7 L 9 7 L 9 9 L 7 9 L 7 7 z M 15 7 L 17 7 L 17 9 L 15 9 L 15 7 z M 23 7 L 25 7 L 25 9 L 23 9 L 23 7 z M 5 13 L 5 19 L 11 19 L 11 13 L 5 13 z M 13 13 L 13 19 L 19 19 L 19 13 L 13 13 z M 21 13 L 21 19 L 27 19 L 27 13 L 21 13 z M 7 15 L 9 15 L 9 17 L 7 17 L 7 15 z M 15 15 L 17 15 L 17 17 L 15 17 L 15 15 z M 23 15 L 25 15 L 25 17 L 23 17 L 23 15 z M 5 21 L 5 27 L 11 27 L 11 21 L 5 21 z M 13 21 L 13 27 L 19 27 L 19 21 L 13 21 z M 21 21 L 21 27 L 27 27 L 27 21 L 21 21 z M 7 23 L 9 23 L 9 25 L 7 25 L 7 23 z M 15 23 L 17 23 L 17 25 L 15 25 L 15 23 z"
-                  />
-                </svg>
+                {showMenu ? (
+                  <CgClose className="text-3xl" aria-hidden="true" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 32 32"
+                    width="32px"
+                    height="32px"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M 5 5 L 5 11 L 11 11 L 11 5 L 5 5 z M 13 5 L 13 11 L 19 11 L 19 5 L 13 5 z M 21 5 L 21 11 L 27 11 L 27 5 L 21 5 z M 7 7 L 9 7 L 9 9 L 7 9 L 7 7 z M 15 7 L 17 7 L 17 9 L 15 9 L 15 7 z M 23 7 L 25 7 L 25 9 L 23 9 L 23 7 z M 5 13 L 5 19 L 11 19 L 11 13 L 5 13 z M 13 13 L 13 19 L 19 19 L 19 13 L 13 13 z M 21 13 L 21 19 L 27 19 L 27 13 L 21 13 z M 7 15 L 9 15 L 9 17 L 7 17 L 7 15 z M 15 15 L 17 15 L 17 17 L 15 17 L 15 15 z M 23 15 L 25 15 L 25 17 L 23 17 L 23 15 z M 5 21 L 5 27 L 11 27 L 11 21 L 5 21 z M 13 21 L 13 27 L 19 27 L 19 21 L 13 21 z M 21 21 L 21 27 L 27 27 L 27 21 L 21 21 z M 7 23 L 9 23 L 9 25 L 7 25 L 7 23 z M 15 23 L 17 23 L 17 25 L 15 25 L 15 23 z"
+                    />
+                  </svg>
+                )}
               </button>
             )}
             {(config as Config).nav_button.enable && (
