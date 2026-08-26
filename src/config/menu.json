@@ -13,16 +13,16 @@
       "url": "/posts"
     },
     {
-      "name": "هویجی‌ها",
-      "url": "/members"
+      "name": "همایش‌ها",
+      "url": "/conferences"
+    },
+    {
+      "name": "سخنرانان",
+      "url": "/speakers"
     },
     {
       "name": "تماس با ما",
       "url": "/contact"
-    },
-    {
-      "name": "هویجی شو!",
-      "url": "/join"
     }
   ],
   "footer": [
@@ -32,15 +32,15 @@
     },
     {
       "name": "وبلاگ",
-      "url": "/blog"
+      "url": "/posts"
     },
     {
-      "name": "هویجی‌ها",
-      "url": "/members"
+      "name": "همایش‌ها",
+      "url": "/conferences"
     },
     {
-      "name": "هویجی شو!",
-      "url": "/join"
+      "name": "سخنرانان",
+      "url": "/speakers"
     },
     {
       "name": "قوانین و مقررات",

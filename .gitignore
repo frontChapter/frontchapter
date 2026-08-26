@@ -43,5 +43,5 @@ yarn-error.log*
 # Local Netlify folder
 .netlify
 
-# Supabase CLI local link cache
-supabase/.temp/
+
+backups/

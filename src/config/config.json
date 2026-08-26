@@ -34,8 +34,8 @@
   },
   "nav_button": {
     "enable": true,
-    "label": "هویجی شو!",
-    "link": "/join/"
+    "label": "کانال تلگرام",
+    "link": "https://t.me/frontchapter"
   },
   "metadata": {
     "meta_author": "frontchapter",
@@ -44,11 +44,11 @@
   },
   "call_to_action": {
     "enable": true,
-    "title": "هویجی شو!",
+    "title": "همراه فرانت‌چپتر باش!",
     "content": "اینجا جاییه که توسعه‌دهنده‌ها کنار هم یاد می‌گیرن، ایده می‌سازن و دوستی‌های ماندگار شکل می‌گیره. فرانت‌چپتر فقط یک کامیونیتی نیست؛ فرصتیه برای رشد، شبکه‌سازی، و تجربه‌های واقعی که آینده‌ی حرفه‌ای‌ت رو تغییر می‌ده.",
     "button": {
-      "label": "همین حالا بپیوندید",
-      "link": "/join/"
+      "label": "عضویت در کانال تلگرام",
+      "link": "https://t.me/frontchapter"
     }
   },
   "disqus": {

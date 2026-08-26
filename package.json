@@ -20,7 +20,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.111.0",
     "clsx": "^2.1.1",
     "disqus-react": "^1.1.7",
     "feather-icons-react": "^0.7.1",

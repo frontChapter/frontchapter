@@ -6,7 +6,6 @@ import {
   parseAuthorNames,
   speakerPath,
 } from '@lib/speakers';
-import type { SessionFrontmatter } from '@lib/membership/session';
 import FormattedDate from './components/FormattedDate';
 import { AuthorNames } from './components/AuthorLink';
 import { markdownify } from '@lib/utils/textConverter';
@@ -15,7 +14,6 @@ import Link from 'next/link';
 import React from 'react';
 import MDXContent from '../app/helper/MDXContent';
 import Cta from './components/Cta';
-import EventRegister from './components/EventRegister';
 import ImageFallback from './components/ImageFallback';
 import DisqussEmbed from './partials/DisqussEmbed';
 import type { PostType } from './partials/Post';
@@ -26,15 +24,30 @@ interface Author {
   avatar: string;
 }
 
-interface Frontmatter extends SessionFrontmatter {
+interface Frontmatter {
   description?: string;
   title: string;
   date: string;
   image?: string;
   image_alt?: string;
   author: Author;
-  social?: SessionFrontmatter['social'];
-  speaker?: SessionFrontmatter['speaker'];
+  session_datetime?: string;
+  registration_deadline?: string;
+  meet_link?: string;
+  social?: {
+    telegram?: string;
+    linkedin?: string;
+    linkedin_first_comment?: string;
+    twitter?: string;
+    instagram?: string;
+    instagram_first_comment?: string;
+  };
+  speaker?: {
+    linkedin?: string;
+    instagram?: string;
+    instagram_tag_x?: number;
+    instagram_tag_y?: number;
+  };
 }
 
 interface RecentPost {
@@ -64,16 +77,6 @@ const PostSingle: React.FC<PostSingleProps> = ({
   const primarySpeaker = primarySpeakerSlug
     ? getSpeakerBySlug(primarySpeakerSlug)
     : undefined;
-
-  const session: SessionFrontmatter = {
-    session_datetime: frontmatter.session_datetime,
-    registration_deadline: frontmatter.registration_deadline,
-    meet_link: frontmatter.meet_link,
-    image: frontmatter.image,
-    image_alt: frontmatter.image_alt,
-    social: frontmatter.social,
-    speaker: frontmatter.speaker,
-  };
 
   const avatar = primarySpeakerSlug ? (
     <Link
@@ -165,11 +168,6 @@ const PostSingle: React.FC<PostSingleProps> = ({
                     </div>
                   </div>
                 </header>
-                <EventRegister
-                  postSlug={slug}
-                  eventTitle={title}
-                  session={session}
-                />
                 <div className="content mb-16 mt-10 text-start">
                   <MDXContent content={content} />
                 </div>

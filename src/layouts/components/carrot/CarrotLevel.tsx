@@ -1,6 +1,15 @@
 import clsx from 'clsx';
-import { LEVEL_LABELS, type LevelKey } from '@lib/membership/types';
 import CarrotPip from './CarrotPip';
+
+export type LevelKey = 'badge' | 'young' | 'whole' | 'senior' | 'golden';
+
+export const LEVEL_LABELS: Record<LevelKey, string> = {
+  badge: 'نشان هویجی',
+  young: 'هویج جوان',
+  whole: 'هویج کامل',
+  senior: 'هویج پیشکسوت',
+  golden: 'هویج طلایی',
+};
 
 /** Maps membership level → filled carrots out of 5 */
 export const LEVEL_FILL: Record<LevelKey, number> = {
