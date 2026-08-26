@@ -1,0 +1,25 @@
+# Haviji Sho Apache .htaccess configuration for roostkit.site
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Handle Authorization & API headers
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule .* - [E=HTTP_X_API_KEY:%{HTTP:X-API-KEY}]
+
+    # Direct Telegram Webhook
+    RewriteRule ^webhook/?$ telegram-webhook.php [L,QSA]
+
+    # API v1 Routing
+    RewriteRule ^api/v1/auth/telegram-verify/?$ api/v1/auth/telegram-verify.php [L,QSA]
+    RewriteRule ^api/v1/onboarding/complete/?$ api/v1/onboarding/complete.php [L,QSA]
+    RewriteRule ^api/v1/community/members/?$ api/v1/community/members.php [L,QSA]
+    RewriteRule ^api/v1/events/sync-attendance/?$ api/v1/events/sync-attendance.php [L,QSA]
+</IfModule>
+
+# Protect sensitive files
+<FilesMatch "^(config\.php|schema\.sql|\.env)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

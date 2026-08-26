@@ -25,3 +25,6 @@ export { default as CarrotBackground } from './CarrotBackground';
 
 export { default as CarrotLevel, LEVEL_FILL } from './CarrotLevel';
 export { default as CarrotPip } from './CarrotPip';
+
+export { default as TierBadge } from './TierBadge';
+export { default as TierProgressBar } from './TierProgressBar';

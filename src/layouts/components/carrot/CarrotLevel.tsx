@@ -1,7 +1,9 @@
 import clsx from 'clsx';
+import { TierLevel } from '../../../types/gamification';
 import CarrotPip from './CarrotPip';
 
-export type LevelKey = 'badge' | 'young' | 'whole' | 'senior' | 'golden';
+export type LegacyLevelKey = 'badge' | 'young' | 'whole' | 'senior' | 'golden';
+export type LevelKey = LegacyLevelKey | TierLevel;
 
 export const LEVEL_LABELS: Record<LevelKey, string> = {
   badge: 'نشان هویجی',
@@ -9,6 +11,12 @@ export const LEVEL_LABELS: Record<LevelKey, string> = {
   whole: 'هویج کامل',
   senior: 'هویج پیشکسوت',
   golden: 'هویج طلایی',
+  havij_neshan: 'هویج‌نشان',
+  havij_doost: 'هویج‌دوست',
+  havij_joo: 'هویج‌جو',
+  havij_baz: 'هویج‌باز',
+  havij_khah: 'هویج‌خواه',
+  havij_tala: 'هویج‌طلا',
 };
 
 /** Maps membership level → filled carrots out of 5 */
@@ -18,6 +26,12 @@ export const LEVEL_FILL: Record<LevelKey, number> = {
   whole: 3,
   senior: 4,
   golden: 5,
+  havij_neshan: 1,
+  havij_doost: 2,
+  havij_joo: 3,
+  havij_baz: 4,
+  havij_khah: 5,
+  havij_tala: 5,
 };
 
 type Props = {
@@ -35,12 +49,13 @@ const CarrotLevel = ({
   className,
 }: Props) => {
   const filled = LEVEL_FILL[level] ?? 1;
+  const label = LEVEL_LABELS[level] || 'هویج‌نشان';
 
   return (
     <div
       className={clsx('carrot-level', `carrot-level--${size}`, className)}
       role="img"
-      aria-label={`${filled} از ۵ هویج — ${LEVEL_LABELS[level]}`}
+      aria-label={`${filled} از ۵ هویج — ${label}`}
     >
       <div className="carrot-level__row" aria-hidden="true">
         {Array.from({ length: 5 }, (_, i) => (
@@ -55,9 +70,7 @@ const CarrotLevel = ({
           />
         ))}
       </div>
-      {showLabel ? (
-        <span className="carrot-level__label">{LEVEL_LABELS[level]}</span>
-      ) : null}
+      {showLabel ? <span className="carrot-level__label">{label}</span> : null}
     </div>
   );
 };

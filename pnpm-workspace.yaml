@@ -2,6 +2,8 @@ packages:
   - '.'
 allowBuilds:
   '@parcel/watcher': true
+  cpu-features: true
   sharp: true
+  ssh2: true
   swiper: true
   unrs-resolver: true
