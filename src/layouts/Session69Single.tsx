@@ -14,14 +14,18 @@ import {
   IoMicOutline,
   IoHeartOutline,
   IoLogoLinkedin,
+  IoExpandOutline,
 } from 'react-icons/io5';
 import Banner from './components/Banner';
 import ConferenceTimeline from './components/ConferenceTimeline';
 import Cta from './components/Cta';
+import ImageLightbox from './components/ImageLightbox';
 import SectionHeading from './components/SectionHeading';
 import TeamShowcase, { type TeamMember } from './components/TeamShowcase';
 import { StatItem } from './components/YearStatsShowcase';
+import ZoomCarrotChip from './components/ZoomCarrotChip';
 import Accordion from './shortcodes/Accordion';
+import { useImageLightbox, type ImageItem } from '../hooks/useImageLightbox';
 import { withSponsorReferral } from '../lib/sponsorReferral';
 import type { ScheduleEvent } from '../lib/conferences';
 
@@ -31,6 +35,34 @@ const EVAND_TICKET_URL = 'https://evand.com/';
 // TODO: تعداد ثبت‌نامی‌های واقعی رویداد برای نمایش درصد پر شدن ظرفیت
 const REGISTERED_SEATS = 38;
 const TOTAL_CAPACITY = 50;
+
+const galleryImages: ImageItem[] = [
+  {
+    src: '/images/session-69/venue-zavie.jpg',
+    alt: 'محیط داخلی فضای کار اشتراکی زاویه — محل برگزاری جلسه ۶۹ فرانت‌چپتر',
+    label: 'فضای کار اشتراکی زاویه (کارخانه نوآوری آزادی)',
+  },
+  {
+    src: '/images/session-69/event-birthday.jpg',
+    alt: 'جشن تولد ۳ سالگی و گردهمایی بزرگ جامعه فرانت‌چپتر',
+    label: 'جشن ۳ سالگی و گردهمایی جامعه فرانت‌چپتر',
+  },
+  {
+    src: '/images/session-69/event-workshop.jpg',
+    alt: 'کارگاه‌های تخصصی و جلسات هم‌اندیشی فرانت‌چپتر',
+    label: 'کارگاه‌های تخصصی و جلسات هم‌اندیشی',
+  },
+  {
+    src: '/images/session-69/event-reception.jpg',
+    alt: 'پذیرش، کارت شرکت‌کنندگان و پک رویداد فرانت‌چپتر',
+    label: 'میز پذیرش، نشان اختصاصی و پک‌های یادبود',
+  },
+  {
+    src: '/images/session-69/event-meetup.jpg',
+    alt: 'دورهمی حضوری، گفتگو و شبکه‌سازی اعضای فرانت‌چپتر',
+    label: 'دورهمی حضوری، گفتگو و شبکه‌سازی',
+  },
+];
 
 const stats = [
   { value: '۵۰ نفر', label: 'ظرفیت محدود' },
@@ -163,6 +195,8 @@ const faqs = [
 ];
 
 const Session69Single = () => {
+  const lightbox = useImageLightbox(galleryImages);
+
   return (
     <>
       <article
@@ -420,6 +454,36 @@ const Session69Single = () => {
                 محل برگزاری
               </SectionHeading>
               <div className="mt-4">
+                {/* Large Clickable Venue Photo with Lightbox */}
+                <figure
+                  onClick={() => lightbox.openLightbox(0)}
+                  className="group relative mb-6 h-64 w-full cursor-pointer overflow-hidden rounded-2xl border border-border bg-dark shadow-lg shadow-primary/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 sm:h-80 md:h-[420px]"
+                >
+                  <Image
+                    src="/images/session-69/venue-zavie.jpg"
+                    alt="فضای کار اشتراکی زاویه — محل برگزاری جلسه ۶۹ فرانت‌چپتر"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 950px"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+
+                  {/* Zoom Chip Hover Indicator */}
+                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <ZoomCarrotChip size="lg" />
+                  </div>
+
+                  <div className="pointer-events-none absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-2">
+                    <span className="rounded-xl bg-black/60 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-md sm:text-sm">
+                      محیط داخلی فضای کار اشتراکی زاویه (کارخانه نوآوری آزادی)
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/90 px-3 py-1 text-xs font-bold text-white shadow-sm">
+                      <IoExpandOutline className="h-4 w-4" />
+                      مشاهده تصویر در اندازه بزرگ
+                    </span>
+                  </div>
+                </figure>
+
                 <h3 className="text-lg font-bold text-dark sm:text-xl">
                   فضای کار اشتراکی زاویه (Zavie CoWork)
                 </h3>
@@ -471,36 +535,234 @@ const Session69Single = () => {
               </div>
             </section>
 
-            {/* Sponsor Section */}
+            {/* Past Events & Community Atmosphere Gallery with Large Photos and Lightbox */}
             <section
-              className="fade mt-14 rounded-2xl border border-border-secondary bg-theme-light p-6 text-center md:p-8"
-              aria-labelledby="sponsor-heading"
+              className="fade mt-14 rounded-2xl border border-border-secondary bg-theme-light p-6 md:p-8"
+              aria-labelledby="gallery-heading"
             >
-              <SectionHeading id="sponsor-heading" as="h2" centered>
-                با حمایت
+              <SectionHeading
+                id="gallery-heading"
+                as="h2"
+                centered
+                className="w-full mb-2"
+              >
+                اتمسفر و رویدادهای پیشین فرانت‌چپتر
               </SectionHeading>
-              <p className="mt-2 text-sm text-muted">
-                سپاس از حامی همیشگی جامعه توسعه‌دهندگان ایران
+              <p className="mx-auto mb-8 max-w-xl text-center text-xs text-muted sm:text-sm">
+                گوشه‌هایی از گردهمایی‌ها، تولد کامیونیتی، کارگاه‌های تخصصی و
+                فضای صمیمانه‌ای که در انتظار شماست (برای مشاهده بزرگ‌تر، روی هر
+                تصویر کلیک کنید)
               </p>
-              <div className="mt-6 flex items-center justify-center">
-                <Link
-                  href={withSponsorReferral('https://liara.ir')}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block rounded-xl border border-border bg-surface-solid p-6 shadow-sm transition-all hover:scale-105 hover:shadow-md"
-                  aria-label="وب‌سایت لیارا — سکوی ابری توسعه‌دهندگان"
+
+              {/* 2-Column Spacious Large Grid */}
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                {/* Photo 1: Birthday Gathering */}
+                <figure
+                  onClick={() => lightbox.openLightbox(1)}
+                  className="group relative min-h-[260px] cursor-pointer overflow-hidden rounded-2xl border border-border bg-dark shadow-md shadow-primary/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 sm:min-h-[300px] md:h-80"
                 >
                   <Image
-                    src="/images/sponsors/liara.png"
-                    alt="لوگوی لیارا — حامی فرانت‌چپتر"
-                    width={160}
-                    height={56}
-                    className="h-12 w-auto object-contain opacity-90 transition-opacity group-hover:opacity-100"
+                    src="/images/session-69/event-birthday.jpg"
+                    alt="جشن تولد ۳ سالگی و گردهمایی جامعه فرانت‌چپتر"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 500px"
                   />
-                  <span className="mt-2 block text-xs font-semibold text-text">
-                    لیارا — پلتفرم ابری
-                  </span>
-                </Link>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-90 transition-opacity group-hover:opacity-100" />
+
+                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <ZoomCarrotChip size="md" />
+                  </div>
+
+                  <figcaption className="pointer-events-none absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between">
+                    <span className="rounded-lg bg-black/60 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm">
+                      جشن ۳ سالگی و گردهمایی جامعه فرانت‌چپتر
+                    </span>
+                    <span className="rounded-full bg-primary/90 p-1.5 text-white">
+                      <IoExpandOutline className="h-4 w-4" />
+                    </span>
+                  </figcaption>
+                </figure>
+
+                {/* Photo 2: Workshop & Discussions */}
+                <figure
+                  onClick={() => lightbox.openLightbox(2)}
+                  className="group relative min-h-[260px] cursor-pointer overflow-hidden rounded-2xl border border-border bg-dark shadow-md shadow-primary/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 sm:min-h-[300px] md:h-80"
+                >
+                  <Image
+                    src="/images/session-69/event-workshop.jpg"
+                    alt="کارگاه‌های تخصصی و جلسات هم‌اندیشی فرانت‌چپتر"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 500px"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-90 transition-opacity group-hover:opacity-100" />
+
+                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <ZoomCarrotChip size="md" />
+                  </div>
+
+                  <figcaption className="pointer-events-none absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between">
+                    <span className="rounded-lg bg-black/60 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm">
+                      کارگاه‌های تخصصی و جلسات هم‌اندیشی
+                    </span>
+                    <span className="rounded-full bg-primary/90 p-1.5 text-white">
+                      <IoExpandOutline className="h-4 w-4" />
+                    </span>
+                  </figcaption>
+                </figure>
+
+                {/* Photo 3: Reception Desk & Badge Packs */}
+                <figure
+                  onClick={() => lightbox.openLightbox(3)}
+                  className="group relative min-h-[260px] cursor-pointer overflow-hidden rounded-2xl border border-border bg-dark shadow-md shadow-primary/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 sm:min-h-[300px] md:h-80"
+                >
+                  <Image
+                    src="/images/session-69/event-reception.jpg"
+                    alt="میز پذیرش، کارت شرکت‌کنندگان و پک رویداد"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 500px"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-90 transition-opacity group-hover:opacity-100" />
+
+                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <ZoomCarrotChip size="md" />
+                  </div>
+
+                  <figcaption className="pointer-events-none absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between">
+                    <span className="rounded-lg bg-black/60 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm">
+                      میز پذیرش، نشان اختصاصی و پک‌های یادبود
+                    </span>
+                    <span className="rounded-full bg-primary/90 p-1.5 text-white">
+                      <IoExpandOutline className="h-4 w-4" />
+                    </span>
+                  </figcaption>
+                </figure>
+
+                {/* Photo 4: Community Meetup */}
+                <figure
+                  onClick={() => lightbox.openLightbox(4)}
+                  className="group relative min-h-[260px] cursor-pointer overflow-hidden rounded-2xl border border-border bg-dark shadow-md shadow-primary/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 sm:min-h-[300px] md:h-80"
+                >
+                  <Image
+                    src="/images/session-69/event-meetup.jpg"
+                    alt="دورهمی حضوری، گفتگو و شبکه‌سازی اعضای فرانت‌چپتر"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, 500px"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-90 transition-opacity group-hover:opacity-100" />
+
+                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <ZoomCarrotChip size="md" />
+                  </div>
+
+                  <figcaption className="pointer-events-none absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between">
+                    <span className="rounded-lg bg-black/60 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm">
+                      دورهمی حضوری، گفتگو و شبکه‌سازی
+                    </span>
+                    <span className="rounded-full bg-primary/90 p-1.5 text-white">
+                      <IoExpandOutline className="h-4 w-4" />
+                    </span>
+                  </figcaption>
+                </figure>
+              </div>
+            </section>
+
+            {/* Premium Prominent Sponsor Showcase Section */}
+            <section
+              className="fade relative mt-16 overflow-hidden rounded-3xl border border-[#28c1f5]/30 bg-gradient-to-br from-[#121c2a] via-[#1a2332] to-[#0b1017] p-6 shadow-2xl shadow-[#28c1f5]/15 sm:p-8 md:p-10"
+              aria-labelledby="sponsor-heading"
+            >
+              {/* Glowing Background Ambience Orbs */}
+              <div
+                className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#28c1f5]/15 blur-3xl"
+                aria-hidden="true"
+              />
+              <div
+                className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#87fcc4]/10 blur-3xl"
+                aria-hidden="true"
+              />
+
+              {/* Header Badge */}
+              <div className="relative z-10 text-center md:text-right">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[#28c1f5]/40 bg-[#28c1f5]/10 px-4 py-1.5 text-xs font-bold text-[#28c1f5] backdrop-blur-md shadow-sm">
+                  <IoSparklesOutline className="h-4 w-4 text-[#87fcc4]" />
+                  حامی رسمی و اختصاصی جلسه‌ی ۶۹ فرانت‌چپتر
+                </span>
+              </div>
+
+              {/* Main Content Grid */}
+              <div className="relative z-10 mt-6 grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
+                {/* Brand Showcase & Info (7 Cols) */}
+                <div className="text-center lg:col-span-7 lg:text-right">
+                  <Link
+                    href={withSponsorReferral('https://liara.ir')}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block transition-transform duration-300 hover:scale-105"
+                    aria-label="وب‌سایت لیارا — سکوی ابری توسعه‌دهندگان"
+                  >
+                    <Image
+                      src="/images/1402/sponsors/liara.svg"
+                      alt="لوگوی رسمی لیارا — حامی فرانت‌چپتر"
+                      width={180}
+                      height={60}
+                      className="h-12 w-auto object-contain drop-shadow-[0_0_24px_rgba(40,193,245,0.45)] sm:h-14"
+                    />
+                  </Link>
+
+                  <h3
+                    id="sponsor-heading"
+                    className="mt-4 text-xl font-extrabold text-white sm:text-2xl"
+                  >
+                    لیارا؛ سکوی ابری توسعه‌دهندگان و کسب‌وکارهای مدرن
+                  </h3>
+
+                  <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm md:text-base">
+                    استقرار آنی برنامه‌های مدرن وب (Next.js, React, Node.js,
+                    Python, Laravel)، دیتابیس‌های ابری مدیریت‌شده و ذخیره‌سازی
+                    داده بدون دغدغه سرور و زیرساخت. لیارا با تضمین پایداری بالا،
+                    همراه همیشگی فرانت‌چپتر و جامعه توسعه‌دهندگان ایران است.
+                  </p>
+
+                  {/* Feature Tags */}
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
+                      ⚡ استقرار آنی و خودکار با Git
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
+                      🛡 دیتابیس‌های ابری مقیاس‌پذیر
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
+                      🚀 زیرساخت پرسرعت و پایدار ابری
+                    </span>
+                  </div>
+                </div>
+
+                {/* Call to Action Box (5 Cols) */}
+                <div className="lg:col-span-5">
+                  <div className="flex flex-col items-center rounded-2xl border border-white/15 bg-white/[0.04] p-6 text-center shadow-inner backdrop-blur-md">
+                    <span className="text-xs font-medium text-slate-300 sm:text-sm">
+                      همراه مطمئن هزاران تیم و برنامه‌نویس در ایران
+                    </span>
+
+                    <Link
+                      href={withSponsorReferral('https://liara.ir')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#28c1f5] to-[#87fcc4] px-6 py-3.5 text-center text-sm font-extrabold text-slate-950 shadow-lg shadow-[#28c1f5]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[#28c1f5]/40 sm:text-base"
+                    >
+                      ورود به وب‌سایت لیارا (liara.ir)
+                      <span aria-hidden="true">↗</span>
+                    </Link>
+
+                    <span className="mt-3 text-[11px] text-slate-400">
+                      مشاهده خدمات ابری، داکیومنت‌ها و شروع رایگان
+                    </span>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -659,6 +921,17 @@ const Session69Single = () => {
           </div>
         </div>
       </article>
+
+      {/* Fullscreen Lightbox Modal for All 5 Images */}
+      <ImageLightbox
+        images={galleryImages}
+        currentIndex={lightbox.currentIndex}
+        isOpen={lightbox.isOpen}
+        onClose={lightbox.closeLightbox}
+        onPrevious={lightbox.goToPrevious}
+        onNext={lightbox.goToNext}
+        onGoToImage={lightbox.goToImage}
+      />
 
       {/* Standard Community CTA */}
       <Cta />

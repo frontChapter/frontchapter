@@ -13,8 +13,7 @@ const eventTitle = 'بقا: هوش‌مصنوعی و آینده | جلسه ۶۹ 
 const eventDescription =
   'جلسه‌ی حضوری شماره‌ی ۶۹ فرانت‌چپتر با موضوع بقا: هوش‌مصنوعی و آینده. ۲۶ شهریور ۱۴۰۵، فضای کار اشتراکی زاویه، تهران. دو سخنرانی، گروه تراپی و پذیرایی.';
 
-// TODO: تصویر اختصاصی بنر رویداد (og:image) پس از طراحی در اینجا جایگزین شود
-const eventOgImage = '/images/1403/conf01.jpg';
+const eventOgImage = '/images/session-69/event-birthday.jpg';
 
 export const metadata: Metadata = buildPageMetadata({
   title: 'بقا: هوش‌مصنوعی و آینده',
