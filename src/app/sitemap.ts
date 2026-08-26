@@ -88,5 +88,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
+  entries.push({
+    url: `${SITE_URL}/events/session-69-ai-and-future/`,
+    changeFrequency: 'weekly',
+    priority: 0.8,
+  });
+
   return entries;
 }
