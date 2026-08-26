@@ -15,14 +15,16 @@ import {
   IoHeartOutline,
   IoLogoLinkedin,
   IoExpandOutline,
+  IoPulseOutline,
+  IoCodeSlashOutline,
+  IoPeopleOutline,
 } from 'react-icons/io5';
-import Banner from './components/Banner';
+import Circle from './components/Circle';
 import ConferenceTimeline from './components/ConferenceTimeline';
 import Cta from './components/Cta';
 import ImageLightbox from './components/ImageLightbox';
 import SectionHeading from './components/SectionHeading';
 import TeamShowcase, { type TeamMember } from './components/TeamShowcase';
-import { StatItem } from './components/YearStatsShowcase';
 import ZoomCarrotChip from './components/ZoomCarrotChip';
 import Accordion from './shortcodes/Accordion';
 import { useImageLightbox, type ImageItem } from '../hooks/useImageLightbox';
@@ -65,11 +67,37 @@ const galleryImages: ImageItem[] = [
 ];
 
 const stats = [
-  { value: '۵۰ نفر', label: 'ظرفیت محدود' },
-  { value: '۳٫۵ ساعت', label: 'مدت جلسه' },
-  { value: '۲', label: 'سخنران تخصصی' },
-  { value: '۱', label: 'کارگاه گروه تراپی' },
+  { value: '۵۰', unit: 'نفر', label: 'ظرفیت رویداد' },
+  { value: '۳٫۵', unit: 'ساعت', label: 'مدت‌زمان جلسه' },
+  { value: '۲', unit: 'نفر', label: 'سخنران تخصصی' },
+  { value: '۱', unit: 'کارگاه', label: 'گروه تراپی تعاملی' },
 ];
+
+interface HeroFeatureCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}
+
+const HeroFeatureCard = ({
+  icon,
+  title,
+  description,
+}: HeroFeatureCardProps) => (
+  <div className="flex h-full flex-col justify-between rounded-2xl border border-border bg-surface-solid/95 p-5 text-right shadow-sm backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:shadow-md">
+    <div>
+      <div className="mb-2 flex items-center gap-2.5">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          {icon}
+        </span>
+        <h2 className="text-sm font-bold text-dark sm:text-base">{title}</h2>
+      </div>
+      <p className="text-xs leading-relaxed text-muted sm:text-sm">
+        {description}
+      </p>
+    </div>
+  </div>
+);
 
 const scheduleEvents: ScheduleEvent[] = [
   {
@@ -203,18 +231,81 @@ const Session69Single = () => {
         className="section pt-0"
         aria-label="بقا: هوش‌مصنوعی و آینده | جلسه ۶۹ فرانت‌چپتر"
       >
-        {/* Banner with Waves and Breadcrumbs */}
-        <Banner
-          title="بقا: هوش‌مصنوعی و آینده"
-          parent={{ label: 'رویدادها', href: '/conferences/' }}
-        />
+        {/* Engaging Integrated Hero Section with Animated Wave Vectors */}
+        <section className="banner banner-single relative overflow-hidden pb-12 pt-6 sm:pb-16 sm:pt-10">
+          {/* Background Vectors and Circles */}
+          <div
+            className="banner-bg col-12 pointer-events-none absolute left-0 top-0 h-full w-full bg-theme-light before:hidden after:hidden"
+            aria-hidden="true"
+          >
+            <Image
+              src="/images/vectors/single-banner-wave-1.svg"
+              fill
+              className="object-cover opacity-60 dark:opacity-20"
+              alt=""
+              priority
+            />
+            <Image
+              src="/images/vectors/single-banner-wave-2.svg"
+              fill
+              className="object-cover opacity-60 dark:opacity-20"
+              alt=""
+              priority
+            />
+            <Circle
+              className="circle left-[12%] top-[15%]"
+              width={32}
+              height={32}
+              fill={false}
+            />
+            <Circle
+              className="circle bottom-[20%] left-[5%]"
+              width={72}
+              height={72}
+            />
+            <Circle
+              className="circle bottom-[25%] right-[5%]"
+              width={72}
+              height={72}
+              fill={false}
+            />
+            <Circle
+              className="circle right-[15%] top-[18%]"
+              width={32}
+              height={32}
+            />
+          </div>
 
-        <div className="container">
-          <div className="mx-auto max-w-5xl">
-            {/* Live Hero Header with Urgency & Scarcity */}
-            <div className="fade text-center">
-              {/* Urgency Pill */}
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary shadow-sm sm:text-sm">
+          <div className="container relative z-10">
+            <div className="mx-auto max-w-4xl text-center">
+              {/* Breadcrumb Navigation */}
+              <nav aria-label="مسیر راهنما" className="mb-5">
+                <ul className="flex items-center justify-center text-xs text-muted sm:text-sm">
+                  <li>
+                    <Link className="text-primary hover:underline" href="/">
+                      خانه
+                    </Link>
+                  </li>
+                  <li className="mx-2 text-muted" aria-hidden="true">
+                    /
+                  </li>
+                  <li>
+                    <Link
+                      className="text-primary hover:underline"
+                      href="/conferences/"
+                    >
+                      رویدادها
+                    </Link>
+                  </li>
+                  <li className="mx-2 text-muted" aria-hidden="true">
+                    /
+                  </li>
+                  <li className="font-medium text-dark">جلسه ۶۹ فرانت‌چپتر</li>
+                </ul>
+              </nav>
+
+              {/* Urgency Live Badge */}
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary shadow-sm backdrop-blur-md sm:text-sm">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
@@ -222,34 +313,56 @@ const Session69Single = () => {
                 <span>جلسه حضوری ۶۹ فرانت‌چپتر • ظرفیت محدود ۵۰ نفر</span>
               </div>
 
-              <h2 className="mb-3 text-2xl font-bold text-dark sm:text-3xl md:text-4xl">
+              {/* Single Main H1 Title */}
+              <h1 className="text-3xl font-black text-dark sm:text-4xl md:text-5xl md:leading-tight">
                 بقا: هوش‌مصنوعی و آینده
-              </h2>
+              </h1>
 
-              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted sm:text-base md:text-lg">
-                رویدادی حضوری برای عبور از سردرگمی، بررسی روانشناختی اضطراب
-                تکنولوژی، تجربه‌های واقعی برنامه‌نویسی و یک گروه تراپی جمعی در
-                کنار هم.
+              {/* Engaging Subtitle */}
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-muted sm:text-base md:text-lg">
+                چگونه در عصر انفجار AI دوام بیاوریم، اضطراب را مهار کنیم و به
+                عنوان توسعه‌دهنده به رشد و پویایی شغلی ادامه دهیم؟
               </p>
 
-              {/* Meta Badges */}
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5 text-xs text-muted sm:gap-3 sm:text-sm">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-solid px-3.5 py-1.5 shadow-sm">
-                  <IoCalendarOutline className="h-4 w-4 text-primary" />
-                  ۲۶ شهریور ۱۴۰۵ — ساعت ۱۶:۰۰ الی ۱۹:۳۰
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-solid px-3.5 py-1.5 shadow-sm">
-                  <IoLocationOutline className="h-4 w-4 text-primary" />
-                  تهران، فضای کار اشتراکی زاویه (کارخانه نوآوری آزادی)
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-solid px-3.5 py-1.5 font-medium text-dark shadow-sm">
-                  <IoTicketOutline className="h-4 w-4 text-primary" />
-                  ۴۴۵ هزار تومان (با تخفیف ویژه)
-                </span>
+              {/* 3 Pillars / Key Highlights Feature Cards - Unified Component */}
+              <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <HeroFeatureCard
+                  icon={<IoPulseOutline className="h-4 w-4" />}
+                  title="روانشناسی بحران"
+                  description="تحلیل علمی اضطراب تکنولوژی و راهکارهای تاب‌آوری ذهنی با مهیار پویامهر"
+                />
+
+                <HeroFeatureCard
+                  icon={<IoCodeSlashOutline className="h-4 w-4" />}
+                  title="تجربه و انطباق فنی"
+                  description="درس‌های یک دهه گذر از تغییرات شتابان فناوری نرم‌افزار با صالح شجاعی"
+                />
+
+                <HeroFeatureCard
+                  icon={<IoPeopleOutline className="h-4 w-4" />}
+                  title="گروه تراپی ۵۰ نفره"
+                  description="فضایی امن و ساختاریافته برای پردازش جمعی دغدغه‌های شغلی و همفکری"
+                />
               </div>
 
-              {/* Primary High-Impact CTA */}
-              <div className="mt-8 flex flex-col items-center justify-center gap-3">
+              {/* Balanced Info Pills Row (Equal Widths & Clear RTL Alignment) */}
+              <div className="mx-auto mt-6 grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-solid/90 px-4 py-2.5 text-xs text-muted shadow-sm backdrop-blur-sm sm:text-sm">
+                  <IoCalendarOutline className="h-4 w-4 shrink-0 text-primary" />
+                  <span>۲۶ شهریور ۱۴۰۵ • ۱۶:۰۰ الی ۱۹:۳۰</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-solid/90 px-4 py-2.5 text-xs text-muted shadow-sm backdrop-blur-sm sm:text-sm">
+                  <IoLocationOutline className="h-4 w-4 shrink-0 text-primary" />
+                  <span>فضای کار اشتراکی زاویه (تهران)</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 rounded-xl border border-border bg-surface-solid/90 px-4 py-2.5 text-xs font-semibold text-dark shadow-sm backdrop-blur-sm sm:text-sm">
+                  <IoTicketOutline className="h-4 w-4 shrink-0 text-primary" />
+                  <span>۴۴۵ هزار تومان (با تخفیف ویژه)</span>
+                </div>
+              </div>
+
+              {/* Hero High-Impact CTA */}
+              <div className="mt-8 flex flex-col items-center justify-center gap-2.5">
                 <Link
                   href={EVAND_TICKET_URL}
                   target="_blank"
@@ -257,33 +370,45 @@ const Session69Single = () => {
                   className="btn btn-primary inline-flex items-center justify-center gap-2.5 px-8 py-3.5 text-base font-bold shadow-xl shadow-primary/25 transition-all hover:scale-105"
                 >
                   <IoTicketOutline className="h-5 w-5" />
-                  ثبت‌نام در ایوند (ظرفیت محدود)
+                  ثبت‌نام و رزرو بلیت در ایوند
                 </Link>
-                <p className="flex items-center gap-1.5 text-xs text-muted">
-                  <IoFlame className="h-4 w-4 text-primary" />
-                  ظرفیت محدود به ۵۰ نفر — جامون داره تنگ میشه!
+                <p className="flex items-center gap-1.5 text-xs font-semibold text-primary">
+                  <IoFlame className="h-4 w-4" />
+                  ظرفیت محدود به ۵۰ نفر — فقط ۱۲ صندلی باقی‌مانده!
                 </p>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Quick Stats Strip */}
-            <section className="fade mt-12" aria-label="آمار سریع جلسه">
-              <h2 className="section-title text-center text-h5">
+        <div className="container">
+          <div className="mx-auto max-w-5xl">
+            {/* Standardized & Aligned Quick Stats Strip */}
+            <section
+              className="fade mt-14 rounded-2xl border border-border bg-surface-solid p-6 md:p-8"
+              aria-label="آمار کلی رویداد"
+            >
+              <h2 className="section-title mb-6 text-center text-h5">
                 آمار کلی رویداد
               </h2>
-              <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-5 sm:gap-y-8 md:flex md:flex-row md:items-center md:justify-center">
-                {stats.map((stat, idx) => (
-                  <React.Fragment key={stat.label}>
-                    {idx > 0 && (
-                      <div
-                        className="hidden h-12 w-px shrink-0 self-center bg-primary/20 md:block"
-                        aria-hidden="true"
-                      />
-                    )}
-                    <div className="flex min-w-0 flex-1 justify-center">
-                      <StatItem value={stat.value} label={stat.label} />
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:divide-x md:divide-x-reverse md:divide-border/70">
+                {stats.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="flex flex-col items-center justify-center px-4 py-3 text-center"
+                  >
+                    <div className="flex items-baseline justify-center gap-1">
+                      <span className="text-3xl font-black tracking-tight text-primary sm:text-4xl">
+                        {stat.value}
+                      </span>
+                      <span className="text-sm font-bold text-primary sm:text-base">
+                        {stat.unit}
+                      </span>
                     </div>
-                  </React.Fragment>
+                    <span className="mt-2 text-xs font-medium text-muted sm:text-sm">
+                      {stat.label}
+                    </span>
+                  </div>
                 ))}
               </div>
             </section>
