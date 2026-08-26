@@ -670,7 +670,7 @@ const Session69Single = () => {
               </div>
             </section>
 
-            {/* Premium Prominent Sponsor Showcase Section */}
+            {/* Premium Prominent Sponsor Showcase Section - Tailored for Frontend Devs & Web Designers */}
             <section
               className="fade relative mt-16 overflow-hidden rounded-3xl border border-[#28c1f5]/30 bg-gradient-to-br from-[#121c2a] via-[#1a2332] to-[#0b1017] p-6 shadow-2xl shadow-[#28c1f5]/15 sm:p-8 md:p-10"
               aria-labelledby="sponsor-heading"
@@ -689,7 +689,7 @@ const Session69Single = () => {
               <div className="relative z-10 text-center md:text-right">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#28c1f5]/40 bg-[#28c1f5]/10 px-4 py-1.5 text-xs font-bold text-[#28c1f5] backdrop-blur-md shadow-sm">
                   <IoSparklesOutline className="h-4 w-4 text-[#87fcc4]" />
-                  حامی رسمی و اختصاصی جلسه‌ی ۶۹ فرانت‌چپتر
+                  حامی رسمی جامعه فرانت‌اند و جلسه‌ی ۶۹ فرانت‌چپتر
                 </span>
               </div>
 
@@ -717,26 +717,31 @@ const Session69Single = () => {
                     id="sponsor-heading"
                     className="mt-4 text-xl font-extrabold text-white sm:text-2xl"
                   >
-                    لیارا؛ سکوی ابری توسعه‌دهندگان و کسب‌وکارهای مدرن
+                    لیارا؛ خانه ابری پروژه‌های فرانت‌اند و طراحان وب
                   </h3>
 
                   <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm md:text-base">
-                    استقرار آنی برنامه‌های مدرن وب (Next.js, React, Node.js,
-                    Python, Laravel)، دیتابیس‌های ابری مدیریت‌شده و ذخیره‌سازی
-                    داده بدون دغدغه سرور و زیرساخت. لیارا با تضمین پایداری بالا،
-                    همراه همیشگی فرانت‌چپتر و جامعه توسعه‌دهندگان ایران است.
+                    استقرار بی‌دغدغه‌ی برنامه‌های Next.js، React، Vue، Astro و
+                    سایت‌های مدرن فقط با یک دستور. بدون درگیری با سرور و داکر؛
+                    پروژه‌ها، پورتفولیو و صفحات لندینگ خودت رو با SSL رایگان،
+                    شبکه CDN پرسرعت و پشتیبانی کامل از SSR و Server Actions روی
+                    لیارا بالا بیار و تمام تمرکزت رو بذار روی کدنویسی تمیز و
+                    طراحی رابط کاربری (UI/UX).
                   </p>
 
-                  {/* Feature Tags */}
+                  {/* Feature Tags for Frontend & Web Designers */}
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-2 lg:justify-start">
                     <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
-                      ⚡ استقرار آنی و خودکار با Git
+                      ⚛️ استقرار یک‌کلیکه Next.js, React & Vue
                     </span>
                     <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
-                      🛡 دیتابیس‌های ابری مقیاس‌پذیر
+                      ⚡ CDN داخلی پرسرعت + SSL خودکار
                     </span>
                     <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
-                      🚀 زیرساخت پرسرعت و پایدار ابری
+                      🔄 دیپلوی آنی با هر Push به گیت‌هاب
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 backdrop-blur-sm">
+                      📦 راه‌اندازی سریع Headless CMS و دیتابیس
                     </span>
                   </div>
                 </div>
@@ -744,8 +749,8 @@ const Session69Single = () => {
                 {/* Call to Action Box (5 Cols) */}
                 <div className="lg:col-span-5">
                   <div className="flex flex-col items-center rounded-2xl border border-white/15 bg-white/[0.04] p-6 text-center shadow-inner backdrop-blur-md">
-                    <span className="text-xs font-medium text-slate-300 sm:text-sm">
-                      همراه مطمئن هزاران تیم و برنامه‌نویس در ایران
+                    <span className="text-xs font-semibold text-slate-200 sm:text-sm">
+                      توسعه بدون دردسر سرور برای فرانت‌اند کارها
                     </span>
 
                     <Link
@@ -754,12 +759,13 @@ const Session69Single = () => {
                       rel="noopener noreferrer"
                       className="btn mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#28c1f5] to-[#87fcc4] px-6 py-3.5 text-center text-sm font-extrabold text-slate-950 shadow-lg shadow-[#28c1f5]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[#28c1f5]/40 sm:text-base"
                     >
-                      ورود به وب‌سایت لیارا (liara.ir)
+                      استقرار رایگان اولین پروژه در لیارا
                       <span aria-hidden="true">↗</span>
                     </Link>
 
                     <span className="mt-3 text-[11px] text-slate-400">
-                      مشاهده خدمات ابری، داکیومنت‌ها و شروع رایگان
+                      مناسب برای پورتفولیو، لندینگ پیج‌ها، Next.js و اپ‌های
+                      تجاری
                     </span>
                   </div>
                 </div>
