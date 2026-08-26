@@ -772,125 +772,192 @@ const Session69Single = () => {
               </div>
             </section>
 
-            {/* High-Converting Ticket Section with Price Anchoring & Urgency */}
-            <section className="fade mt-14" aria-labelledby="tickets-heading">
+            {/* High-Converting Full-Width Ticket Section with Price Anchoring & Urgency */}
+            <section className="fade mt-16" aria-labelledby="tickets-heading">
               <SectionHeading
                 id="tickets-heading"
                 as="h2"
                 centered
-                className="w-full mb-6"
+                className="w-full mb-8"
               >
                 بلیت و ثبت‌نام در رویداد
               </SectionHeading>
 
-              <div className="mx-auto max-w-xl">
-                <article className="relative overflow-hidden rounded-2xl border-2 border-primary bg-surface-solid p-6 shadow-2xl shadow-primary/20 md:p-8">
-                  {/* Top Badge Strip */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/80 pb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
-                      <IoSparklesOutline className="h-4 w-4" />
-                      ظرفیت محدود ۵۰ نفر
-                    </span>
-                    <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-bold text-green-600 dark:text-green-400">
-                      ٪۶۷ تخفیف ویژه هویجی‌ها
-                    </span>
-                  </div>
+              <article className="relative overflow-hidden rounded-3xl border-2 border-primary/40 bg-surface-solid p-6 md:p-10 shadow-2xl shadow-primary/15">
+                {/* Glowing Background Corner Orb */}
+                <div
+                  className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl"
+                  aria-hidden="true"
+                />
 
-                  {/* Title & Price Anchoring */}
-                  <div className="mt-5">
-                    <h3 className="text-xl font-bold text-dark sm:text-2xl">
-                      بلیت جلسه‌ی ۶۹: بقا (حضوری)
-                    </h3>
-                    <p className="mt-1 text-xs text-muted sm:text-sm">
-                      شامل دسترسی کامل به دو سخنرانی، گروه تراپی و پذیرایی
-                    </p>
-
-                    <div className="mt-4 flex items-baseline gap-3">
-                      <span className="text-base text-muted line-through sm:text-lg">
-                        ۱,۳۵۰,۰۰۰ تومان
-                      </span>
-                      <span className="text-3xl font-extrabold text-primary sm:text-4xl">
-                        ۴۴۵,۰۰۰ تومان
-                      </span>
-                    </div>
-
-                    {/* Urgency Progress / Indicator */}
-                    <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-3">
-                      <div className="flex items-center justify-between text-xs font-semibold text-dark">
-                        <span className="flex items-center gap-1 text-primary">
-                          <IoFlame className="h-4 w-4" />
-                          ظرفیت محدود به ۵۰ نفر
+                <div className="relative z-10 grid grid-cols-1 gap-8 items-stretch lg:grid-cols-12">
+                  {/* Right Column: Inclusions & Value (7 Cols) */}
+                  <div className="flex flex-col justify-between lg:col-span-7">
+                    <div>
+                      {/* Badge Strip */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
+                          <IoSparklesOutline className="h-4 w-4" />
+                          ظرفیت اختصاصی ۵۰ نفر
                         </span>
-                        <span>{REGISTERED_SEATS} صندلی رزرو شده</span>
+                        <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-bold text-green-600 dark:text-green-400">
+                          ٪۶۷ تخفیف ویژه هویجی‌ها
+                        </span>
+                        <span className="rounded-full border border-border bg-theme-light px-3 py-1 text-xs font-medium text-muted">
+                          📍 حضوری در زاویه
+                        </span>
                       </div>
-                      <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-border">
-                        <div
-                          className="h-full rounded-full bg-primary transition-all duration-500"
-                          style={{
-                            width: `${(REGISTERED_SEATS / TOTAL_CAPACITY) * 100}%`,
-                          }}
-                        />
+
+                      {/* Title & Description */}
+                      <h3 className="mt-4 text-xl font-bold text-dark sm:text-2xl md:text-3xl">
+                        بلیت جلسه‌ی ۶۹: بقا (حضوری)
+                      </h3>
+                      <p className="mt-2 text-xs leading-relaxed text-muted sm:text-sm md:text-base">
+                        رویداد حضوری ۳٫۵ ساعته شامل دو سخنرانی تخصصی روانشناسی و
+                        مهندسی، کارگاه تعاملی گروه تراپی، پذیرایی در دو نوبت و
+                        شبکه‌سازی مستقیم در فضای کار اشتراکی زاویه.
+                      </p>
+
+                      {/* 2-Column Structured Benefits Grid */}
+                      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-theme-light p-3">
+                          <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                          <span className="text-xs leading-relaxed text-text sm:text-sm">
+                            سخنرانی تخصصی روانشناسی مهیار پویامهر (مدیریت بحران)
+                          </span>
+                        </div>
+
+                        <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-theme-light p-3">
+                          <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                          <span className="text-xs leading-relaxed text-text sm:text-sm">
+                            سخنرانی تجربی صالح شجاعی (انطباق فنی با هوش مصنوعی)
+                          </span>
+                        </div>
+
+                        <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-theme-light p-3">
+                          <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                          <span className="text-xs leading-relaxed text-text sm:text-sm">
+                            مشارکت فعال در کارگاه گروه تراپی جمعی ۵۰ نفره
+                          </span>
+                        </div>
+
+                        <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-theme-light p-3">
+                          <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                          <span className="text-xs leading-relaxed text-text sm:text-sm">
+                            دو نوبت پذیرایی کامل (خوش‌آمدگویی + میان‌وعده
+                            عصرانه)
+                          </span>
+                        </div>
+
+                        <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-theme-light p-3">
+                          <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                          <span className="text-xs leading-relaxed text-text sm:text-sm">
+                            فضای کار اشتراکی زاویه (کارخانه نوآوری آزادی)
+                          </span>
+                        </div>
+
+                        <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-theme-light p-3">
+                          <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                          <span className="text-xs leading-relaxed text-text sm:text-sm">
+                            نشان یادبود و شبکه‌سازی با جامعه فرانت‌چپتر
+                          </span>
+                        </div>
                       </div>
+                    </div>
+
+                    {/* Social Assistance Note */}
+                    <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 p-3.5 text-xs leading-relaxed text-muted">
+                      <p className="mb-1 flex items-center gap-1.5 font-bold text-dark">
+                        <IoHeartOutline className="h-4 w-4 text-primary" />
+                        مسئولیت اجتماعی فرانت‌چپتر
+                      </p>
+                      اگه به این جلسه نیاز داری ولی شرایط مالی اجازه نمیده،
+                      برامون ایمیل بزن:{' '}
+                      <a
+                        href="mailto:frontchapter.ir@gmail.com"
+                        className="font-bold text-primary underline underline-offset-4 hover:text-primary/80"
+                      >
+                        frontchapter.ir@gmail.com
+                      </a>{' '}
+                      تا با کمال میل میزبان شما باشیم.
                     </div>
                   </div>
 
-                  {/* Feature Checklist */}
-                  <ul className="mt-6 flex flex-1 flex-col gap-3 text-sm leading-relaxed text-text">
-                    <li className="flex items-start gap-2.5">
-                      <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span>حضور در سخنرانی تخصصی روانشناسی مهیار پویامهر</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span>حضور در سخنرانی فنی و تجربی صالح شجاعی</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span>مشارکت فعال در کارگاه گروه تراپی ۵۰ نفره</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span>دو نوبت پذیرایی اولیه و میان‌وعده کامل</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <IoCheckmarkCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                      <span>
-                        شبکه‌سازی مستقیم با جامعه فرانت‌چپتر در فضای کار اشتراکی
-                        زاویه
-                      </span>
-                    </li>
-                  </ul>
+                  {/* Left Column: Price Box, Live Progress & Purchase (5 Cols) */}
+                  <div className="flex flex-col justify-between rounded-2xl border border-border bg-theme-light p-5 sm:p-6 shadow-sm lg:col-span-5">
+                    <div className="space-y-4">
+                      {/* Clean Stacked Price Card */}
+                      <div className="rounded-xl border border-primary/20 bg-surface-solid p-4 shadow-sm">
+                        <div className="flex items-center justify-between border-b border-border/70 pb-2.5 text-xs text-muted">
+                          <span>قیمت آزاد رویدادهای مشابه</span>
+                          <span className="font-medium line-through">
+                            ۱,۳۵۰,۰۰۰ تومان
+                          </span>
+                        </div>
 
-                  {/* Giant CTA Button */}
-                  <div className="mt-8">
-                    <Link
-                      href={EVAND_TICKET_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-primary flex w-full items-center justify-center gap-2.5 text-center text-lg font-bold shadow-xl shadow-primary/30 transition-all hover:scale-[1.02]"
-                    >
-                      <IoTicketOutline className="h-6 w-6" />
-                      ثبت‌نام و خرید بلیت در ایوند
-                    </Link>
-                  </div>
+                        <div className="mt-3 flex items-center justify-between">
+                          <span className="rounded-full bg-green-500/10 px-2.5 py-1 text-[11px] font-bold text-green-600 dark:text-green-400">
+                            ٪۶۷ تخفیف ویژه هویجی‌ها
+                          </span>
+                          <span className="text-[11px] font-medium text-muted">
+                            پذیرایی و دسترسی کامل
+                          </span>
+                        </div>
 
-                  {/* Supportive Assistance Note */}
-                  <div className="mt-5 rounded-lg bg-theme-light p-3 text-center text-xs leading-relaxed text-muted">
-                    <p className="flex items-center justify-center gap-1 font-medium text-dark mb-1">
-                      <IoHeartOutline className="h-4 w-4 text-primary" />
-                      مسئولیت اجتماعی فرانت‌چپتر
-                    </p>
-                    اگه به این جلسه نیاز داری ولی استطاعت مالی پرداخت بلیت رو
-                    نداری، برامون ایمیل بزن:{' '}
-                    <a
-                      href="mailto:frontchapter.ir@gmail.com"
-                      className="font-bold text-primary underline underline-offset-4 hover:text-primary/80"
-                    >
-                      frontchapter.ir@gmail.com
-                    </a>
+                        <div className="mt-3 flex items-baseline justify-center gap-2 rounded-xl bg-primary/10 py-3">
+                          <span className="text-3xl font-black tracking-tight text-primary sm:text-4xl">
+                            ۴۴۵,۰۰۰
+                          </span>
+                          <span className="text-sm font-extrabold text-primary">
+                            تومان
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Urgency Progress Bar */}
+                      <div className="rounded-xl border border-primary/20 bg-surface-solid p-4 shadow-sm">
+                        <div className="flex items-center justify-between text-xs font-semibold text-dark">
+                          <span className="flex items-center gap-1 text-primary">
+                            <IoFlame className="h-4 w-4" />
+                            ظرفیت محدود ۵۰ نفر
+                          </span>
+                          <span>{REGISTERED_SEATS} صندلی رزرو شده</span>
+                        </div>
+                        <div className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full bg-border">
+                          <div
+                            className="h-full rounded-full bg-primary transition-all duration-500"
+                            style={{
+                              width: `${(REGISTERED_SEATS / TOTAL_CAPACITY) * 100}%`,
+                            }}
+                          />
+                        </div>
+                        <p className="mt-2 text-center text-[11px] font-bold text-primary">
+                          🔥 فقط {TOTAL_CAPACITY - REGISTERED_SEATS} صندلی تا
+                          تکمیل نهایی ظرفیت باقی‌مانده
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* CTA Button & Trust Note */}
+                    <div className="mt-6">
+                      <Link
+                        href={EVAND_TICKET_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary flex w-full items-center justify-center gap-2.5 py-3.5 text-center text-base font-bold shadow-xl shadow-primary/30 transition-all hover:scale-[1.02] sm:text-lg"
+                      >
+                        <IoTicketOutline className="h-6 w-6" />
+                        ثبت‌نام و خرید بلیت در ایوند
+                      </Link>
+
+                      <p className="mt-3 text-center text-[11px] text-muted">
+                        🔒 پرداخت امن و صدور آنی بلیت دیجیتال در سامانه رسمی
+                        ایوند
+                      </p>
+                    </div>
                   </div>
-                </article>
-              </div>
+                </div>
+              </article>
             </section>
 
             {/* Organizing Team */}
