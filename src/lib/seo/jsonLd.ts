@@ -1,6 +1,7 @@
 import config from '@config/config.json';
 import social from '@config/social.json';
 import { conferencePath } from '@lib/conferences.paths';
+import { speakerPath, type SpeakerProfile } from '@lib/speakers';
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
@@ -379,6 +380,125 @@ export const buildAboutJsonLd = ({
         url: SITE_URL,
         description: pageDescription,
         ...(employee.length ? { employee } : {}),
+      },
+    ],
+  };
+};
+
+export interface SpeakerJsonLdInput {
+  speaker: SpeakerProfile;
+}
+
+export const buildSpeakerJsonLd = ({ speaker }: SpeakerJsonLdInput) => {
+  const profileUrl = `${SITE_URL}${speakerPath(speaker.slug)}`;
+  const speakersUrl = `${SITE_URL}/speakers/`;
+  const avatarUrl = speaker.avatar
+    ? resolveAbsoluteUrl(speaker.avatar)
+    : `${SITE_URL}${DEFAULT_OG_IMAGE}`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${profileUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'پیشگامان گفت‌وگو',
+            item: speakersUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: speaker.name,
+            item: profileUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'ProfilePage',
+        '@id': `${profileUrl}#webpage`,
+        url: profileUrl,
+        name: `${speaker.name} | پیشگامان گفت‌وگو`,
+        description: `پروفایل و آرشیو جلسات ${speaker.name} در فرانت‌چپتر`,
+        inLanguage: 'fa-IR',
+        isPartOf: {
+          '@id': websiteId,
+        },
+        mainEntity: {
+          '@id': `${profileUrl}#person`,
+        },
+      },
+      {
+        '@type': 'Person',
+        '@id': `${profileUrl}#person`,
+        name: speaker.name,
+        jobTitle: 'پیشگام گفت‌وگو در فرانت‌چپتر',
+        image: avatarUrl,
+        url: profileUrl,
+        ...(speaker.linkedin ? { sameAs: [speaker.linkedin] } : {}),
+        worksFor: {
+          '@id': organizationId,
+        },
+      },
+    ],
+  };
+};
+
+export const buildSpeakersListJsonLd = (speakers: SpeakerProfile[]) => {
+  const speakersUrl = `${SITE_URL}/speakers/`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${speakersUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'پیشگامان گفت‌وگو',
+            item: speakersUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'CollectionPage',
+        '@id': `${speakersUrl}#webpage`,
+        url: speakersUrl,
+        name: 'پیشگامان گفت‌وگو در فرانت‌چپتر',
+        description: 'فهرست سخنرانان و ارائه‌دهندگان جلسات آنلاین فرانت‌چپتر',
+        inLanguage: 'fa-IR',
+        isPartOf: {
+          '@id': websiteId,
+        },
+        publisher: {
+          '@id': organizationId,
+        },
+        hasPart: speakers.map((speaker) => ({
+          '@type': 'Person',
+          name: speaker.name,
+          url: `${SITE_URL}${speakerPath(speaker.slug)}`,
+          ...(speaker.avatar
+            ? { image: resolveAbsoluteUrl(speaker.avatar) }
+            : {}),
+          ...(speaker.linkedin ? { sameAs: [speaker.linkedin] } : {}),
+        })),
       },
     ],
   };

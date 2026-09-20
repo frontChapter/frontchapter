@@ -16,11 +16,17 @@ if (isGithubActions) {
   basePath = branch === 'main' ? '' : `/${branch}`;
 }
 
+const isProduction =
+  process.env.NODE_ENV === 'production' ||
+  process.argv.includes('build') ||
+  process.argv.some((arg) => arg.endsWith('/next') || arg.endsWith('/next.js'));
+
 const nextConfig = {
   reactStrictMode: true,
+  distDir: isProduction ? 'out' : '.next',
   // Static export only for production builds (GH Pages).
-  // next.devs stays dynamic so new /members/[slug] works without rebuild.
-  ...(process.env.NODE_ENV === 'production' ? { output: 'export' } : {}),
+  // next dev stays dynamic so new /members/[slug] works without rebuild.
+  ...(isProduction ? { output: 'export' } : {}),
   images: {
     unoptimized: true,
   },

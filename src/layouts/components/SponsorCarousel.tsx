@@ -35,9 +35,10 @@ const SponsorLink = ({
     <a
       href={sponsorUrl}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noopener noreferrer sponsored"
       className="flex min-h-12 h-full items-center justify-center gap-2.5"
       aria-label={`وب‌سایت ${sponsor.name}`}
+      title={`حامی فرانت‌چپتر: ${sponsor.name}`}
     >
       <div
         className={`relative h-10 w-12 shrink-0 md:h-11 md:w-14${

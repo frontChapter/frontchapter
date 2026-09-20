@@ -623,13 +623,29 @@ export const buildConferencesListJsonLd = (
       publisher: {
         '@id': organizationId,
       },
-      hasPart: conferences.map((conference) => ({
-        '@type': 'Event',
-        '@id': `${SITE_URL}${conferencePath(conference.slug)}#event`,
-        name: formatConferenceLabel(conference.title, conference.year),
-        url: `${SITE_URL}${conferencePath(conference.slug)}`,
-        startDate: conference.startDate,
-      })),
+      hasPart: [
+        {
+          '@type': 'Event',
+          '@id': `${SITE_URL}/events/dar-miyan-e-meh/#event`,
+          name: 'رویداد حضوری در میان مِه',
+          url: `${SITE_URL}/events/dar-miyan-e-meh/`,
+          startDate: '2026-09-24T15:00:00+03:30',
+        },
+        {
+          '@type': 'Event',
+          '@id': `${SITE_URL}/events/session-69-ai-and-future/#event`,
+          name: 'جلسه ۶۹ فرانت‌چپتر (بقا: هوش‌مصنوعی و آینده)',
+          url: `${SITE_URL}/events/session-69-ai-and-future/`,
+          startDate: '2026-09-17T16:00:00+03:30',
+        },
+        ...conferences.map((conference) => ({
+          '@type': 'Event',
+          '@id': `${SITE_URL}${conferencePath(conference.slug)}#event`,
+          name: formatConferenceLabel(conference.title, conference.year),
+          url: `${SITE_URL}${conferencePath(conference.slug)}`,
+          startDate: conference.startDate,
+        })),
+      ],
     },
   ],
 });

@@ -26,10 +26,11 @@ const Social = ({ source, className }: SocialProps) => {
       {instagram && (
         <li className="inline-block">
           <a
-            aria-label="instagram"
+            aria-label="اینستاگرام فرانت‌چپتر"
+            title="اینستاگرام فرانت‌چپتر"
             href={instagram}
             target="_blank"
-            rel="noopener noreferrer nofollow"
+            rel="noopener noreferrer"
           >
             <IoLogoInstagram />
           </a>
@@ -38,10 +39,11 @@ const Social = ({ source, className }: SocialProps) => {
       {youtube && (
         <li className="inline-block">
           <a
-            aria-label="youtube"
+            aria-label="کانال یوتیوب فرانت‌چپتر"
+            title="کانال یوتیوب فرانت‌چپتر"
             href={youtube}
             target="_blank"
-            rel="noopener noreferrer nofollow"
+            rel="noopener noreferrer"
           >
             <IoLogoYoutube />
           </a>
@@ -50,10 +52,11 @@ const Social = ({ source, className }: SocialProps) => {
       {linkedin && (
         <li className="inline-block">
           <a
-            aria-label="linkedin"
+            aria-label="صفحه لینکدین فرانت‌چپتر"
+            title="صفحه لینکدین فرانت‌چپتر"
             href={linkedin}
             target="_blank"
-            rel="noopener noreferrer nofollow"
+            rel="noopener noreferrer"
           >
             <IoLogoLinkedin />
           </a>
@@ -62,10 +65,11 @@ const Social = ({ source, className }: SocialProps) => {
       {github && (
         <li className="inline-block">
           <a
-            aria-label="github"
+            aria-label="گیت‌هاب فرانت‌چپتر"
+            title="گیت‌هاب فرانت‌چپتر"
             href={github}
             target="_blank"
-            rel="noopener noreferrer nofollow"
+            rel="noopener noreferrer"
           >
             <IoLogoGithub />
           </a>
@@ -74,10 +78,11 @@ const Social = ({ source, className }: SocialProps) => {
       {telegram && (
         <li className="inline-block">
           <a
-            aria-label="telegram"
+            aria-label="کانال تلگرام فرانت‌چپتر"
+            title="کانال تلگرام فرانت‌چپتر"
             href={telegram}
             target="_blank"
-            rel="noopener noreferrer nofollow"
+            rel="noopener noreferrer"
           >
             <IoPaperPlane />
           </a>
@@ -85,7 +90,11 @@ const Social = ({ source, className }: SocialProps) => {
       )}
       {email && (
         <li className="inline-block">
-          <a aria-label="email" href={`mailto:${email}`}>
+          <a
+            aria-label="ایمیل به فرانت‌چپتر"
+            title="ارسال ایمیل به فرانت‌چپتر"
+            href={`mailto:${email}`}
+          >
             <IoMail />
           </a>
         </li>

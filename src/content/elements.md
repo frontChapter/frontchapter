@@ -1,6 +1,7 @@
 ---
 title: 'المان‌ها'
-draft: false
+draft: true
+noindex: true
 ---
 
 # عنوان ۱

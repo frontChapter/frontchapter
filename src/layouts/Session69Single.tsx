@@ -825,7 +825,7 @@ const Session69Single = () => {
                   <Link
                     href={withSponsorReferral('https://liara.ir')}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer sponsored"
                     className="inline-block transition-transform duration-300 hover:scale-105"
                     aria-label="وب‌سایت لیارا — سکوی ابری توسعه‌دهندگان"
                   >
@@ -881,7 +881,7 @@ const Session69Single = () => {
                     <Link
                       href={withSponsorReferral('https://liara.ir')}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="noopener noreferrer sponsored"
                       className="btn mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#28c1f5] to-[#87fcc4] px-6 py-3.5 text-center text-sm font-extrabold text-slate-950 shadow-lg shadow-[#28c1f5]/25 transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-[#28c1f5]/40 sm:text-base"
                     >
                       استقرار رایگان اولین پروژه در لیارا

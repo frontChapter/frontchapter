@@ -30,7 +30,7 @@ const ConferenceSponsors = () => (
           <a
             href={withSponsorReferral(sponsor.url)}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener noreferrer sponsored"
             className="block opacity-80 transition-opacity hover:opacity-100"
             aria-label={`وب‌سایت ${sponsor.name}`}
           >

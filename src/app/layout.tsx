@@ -1,7 +1,7 @@
-'use client';
-
+import type { Metadata, Viewport } from 'next';
 import config from '@config/config.json';
 import NextTopLoader from 'nextjs-toploader';
+import type { ReactNode } from 'react';
 import {
   Ga4Head,
   GtmBodyNoscript,
@@ -12,41 +12,96 @@ import TwSizeIndicator from '../layouts/components/TwSizeIndicator';
 import Footer from '../layouts/partials/Footer';
 import Header from '../layouts/partials/Header';
 import '../styles/style.scss';
-
-import type { ReactNode } from 'react';
-import { RTLProvider, useRTL } from '../hooks/useRTL';
+import { RTLProvider } from '../hooks/useRTL';
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
+  SITE_NAME,
+  SITE_URL,
+} from '../lib/seo/constants';
 
 interface RootLayoutProps {
   children: ReactNode;
 }
 
-function LayoutContent({ children }: RootLayoutProps) {
-  const { isRTL } = useRTL();
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f1419' },
+  ],
+};
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | جامعه و کامیونتی فرانت‌اند ایران`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      'fa-IR': SITE_URL,
+    },
+  },
+  openGraph: {
+    siteName: SITE_NAME,
+    locale: 'fa_IR',
+    type: 'website',
+    url: SITE_URL,
+    title: `${SITE_NAME} | جامعه و کامیونتی فرانت‌اند ایران`,
+    description: DEFAULT_DESCRIPTION,
+    images: [
+      {
+        url: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+        width: OG_IMAGE_WIDTH,
+        height: OG_IMAGE_HEIGHT,
+        alt: SITE_NAME,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE_NAME} | جامعه و کامیونتی فرانت‌اند ایران`,
+    description: DEFAULT_DESCRIPTION,
+    images: [`${SITE_URL}${DEFAULT_OG_IMAGE}`],
+  },
+  icons: {
+    icon: config.site.favicon,
+    shortcut: config.site.favicon,
+    apple: config.site.favicon,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html
-      suppressHydrationWarning={true}
-      lang={isRTL ? 'fa' : 'en'}
-      dir={isRTL ? 'rtl' : 'ltr'}
-    >
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
       <head>
         <GtmHead />
         <Ga4Head />
-
-        {/* responsive meta */}
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=5"
-        />
-
         <SiteVerification />
 
-        {/* favicon */}
-        <link rel="shortcut icon" href={config.site.favicon} />
-        {/* theme meta */}
-        <meta name="theme-name" content="andromeda-light-nextjs" />
-
-        {/* google font css */}
-        {/* DanaVF local font */}
+        {/* DanaVF local font preload */}
         <link
           rel="preload"
           href="/fonts/DanaVF.woff2"
@@ -55,21 +110,10 @@ function LayoutContent({ children }: RootLayoutProps) {
           crossOrigin="anonymous"
         />
 
-        {/* theme meta */}
         <meta name="theme-name" content="andromeda-light-nextjs" />
         <meta name="msapplication-TileColor" content="#000000" />
-        <meta
-          name="theme-color"
-          media="(prefers-color-scheme: light)"
-          content="#fff"
-        />
-        <meta
-          name="theme-color"
-          media="(prefers-color-scheme: dark)"
-          content="#0f1419"
-        />
       </head>
-      <body suppressHydrationWarning={true} className="overflow-x-hidden">
+      <body suppressHydrationWarning className="overflow-x-hidden">
         <GtmBodyNoscript />
         <NextTopLoader color="#fe6019" height={3} showSpinner={false} />
         <a
@@ -79,18 +123,12 @@ function LayoutContent({ children }: RootLayoutProps) {
           رفتن به محتوای اصلی
         </a>
         <TwSizeIndicator />
-        <Header />
-        {children}
-        <Footer />
+        <RTLProvider>
+          <Header />
+          {children}
+          <Footer />
+        </RTLProvider>
       </body>
     </html>
-  );
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <RTLProvider>
-      <LayoutContent>{children}</LayoutContent>
-    </RTLProvider>
   );
 }

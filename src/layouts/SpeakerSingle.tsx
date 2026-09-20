@@ -1,5 +1,9 @@
 import config from '@config/config.json';
-import { getPostsForSpeaker, type SpeakerProfile } from '@lib/speakers';
+import {
+  getPostsForSpeaker,
+  speakerPath,
+  type SpeakerProfile,
+} from '@lib/speakers';
 import { buildPageMetadata } from '@lib/seo/metadata';
 import { getSinglePage } from '@lib/contentParser';
 import { sortByDate } from '@lib/utils/sortFunctions';
@@ -86,8 +90,16 @@ export async function buildSpeakerMetadata(speaker: SpeakerProfile) {
   return buildPageMetadata({
     title: `${speaker.name} | پیشگامان گفت‌وگو`,
     meta_title: `${speaker.name} | پیشگامان گفت‌وگو | فرانت‌چپتر`,
-    description: `آرشیو جلسات آنلاین فرانت‌چپتر با ${speaker.name} به عنوان پیشگام گفت‌وگو. مرور موضوعات، ضبط‌ها و لینک لینکدین.`,
+    description: `آرشیو جلسات آنلاین فرانت‌چپتر با حضور ${speaker.name}. مرور ارائه‌ها، موضوعات تخصصی و شبکه‌های اجتماعی.`,
     image: speaker.avatar,
+    canonical: speakerPath(speaker.slug),
+    keywords: [
+      speaker.name,
+      'پیشگامان گفتگو',
+      'سخنران فرانت‌چپتر',
+      'ارائه آنلاین فرانت‌اند',
+      'فرانت‌چپتر',
+    ],
   });
 }
 

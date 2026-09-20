@@ -1,3 +1,5 @@
+'use client';
+
 import config from '@config/config.json';
 import menu from '@config/menu.json';
 import clsx from 'clsx';
