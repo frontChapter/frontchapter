@@ -89,7 +89,6 @@ const SpeakerSingle = async ({ speaker }: SpeakerSingleProps) => {
 export async function buildSpeakerMetadata(speaker: SpeakerProfile) {
   return buildPageMetadata({
     title: `${speaker.name} | پیشگامان گفت‌وگو`,
-    meta_title: `${speaker.name} | پیشگامان گفت‌وگو | فرانت‌چپتر`,
     description: `آرشیو جلسات آنلاین فرانت‌چپتر با حضور ${speaker.name}. مرور ارائه‌ها، موضوعات تخصصی و شبکه‌های اجتماعی.`,
     image: speaker.avatar,
     canonical: speakerPath(speaker.slug),
