@@ -563,16 +563,26 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
     },
   ];
 
-  if (conference.video?.src) {
+  const video =
+    conference.video ??
+    (conference.media?.video
+      ? {
+          src: conference.media.video,
+          label: conference.media.video_label ?? 'ویدیو',
+          poster: conference.media.video_poster,
+        }
+      : undefined);
+
+  if (video?.src) {
     graph.push({
       '@type': 'VideoObject',
       '@id': `${eventUrl}#video`,
-      name: `${pageName} — ${conference.video.label}`,
+      name: `${pageName} — ${video.label}`,
       description: buildConferenceMetaDescription(conference),
-      thumbnailUrl: conference.video.poster
-        ? resolveAbsoluteUrl(conference.video.poster)
-        : images[0],
-      contentUrl: resolveAbsoluteUrl(conference.video.src),
+      thumbnailUrl: video.poster
+        ? resolveAbsoluteUrl(video.poster)
+        : (images[0] ?? `${SITE_URL}${DEFAULT_OG_IMAGE}`),
+      contentUrl: resolveAbsoluteUrl(video.src),
       uploadDate: conference.startDate,
       inLanguage: 'fa-IR',
       publisher: {

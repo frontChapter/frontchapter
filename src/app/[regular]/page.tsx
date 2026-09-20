@@ -122,6 +122,15 @@ const RegularPages = async ({
               })
             ),
           ],
+          video: fm.video
+            ? {
+                src: fm.video.src,
+                title: fm.video.title,
+                description: fm.video.description,
+                poster: fm.video.poster,
+                uploadDate: '2025-02-27',
+              }
+            : undefined,
         })
       : null;
 

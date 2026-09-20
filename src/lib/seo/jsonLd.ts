@@ -171,7 +171,19 @@ export const buildBlogListJsonLd = ({ title, page = 1 }: BlogListInput) => {
   };
 };
 
-export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
+export interface HomeVideoInput {
+  name?: string;
+  description?: string;
+  thumbnailUrl?: string;
+  uploadDate?: string;
+  contentUrl?: string;
+  embedUrl?: string;
+}
+
+export const buildHomeJsonLd = (
+  events: CommunityEventInput[] = [],
+  video?: HomeVideoInput
+) => {
   const { logo } = config.site as { logo: string };
   const { email, location } = config.contact_info as {
     email: string;
@@ -291,6 +303,30 @@ export const buildHomeJsonLd = (events: CommunityEventInput[] = []) => {
     });
   }
 
+  if (video?.contentUrl || video?.embedUrl) {
+    graph.push({
+      '@type': 'VideoObject',
+      '@id': `${SITE_URL}/#hero-video`,
+      name: video.name ?? 'جامعه‌ی فرانت‌اند فرانت‌چپتر — ویدیوی معرفی',
+      description: plainifySync(
+        video.description ??
+          'معرفی جامعه‌ی فرانت‌چپتر؛ محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان فرانت‌اند'
+      ),
+      thumbnailUrl: video.thumbnailUrl
+        ? resolveAbsoluteUrl(video.thumbnailUrl)
+        : `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+      ...(video.contentUrl
+        ? { contentUrl: resolveAbsoluteUrl(video.contentUrl) }
+        : {}),
+      ...(video.embedUrl ? { embedUrl: video.embedUrl } : {}),
+      uploadDate: video.uploadDate ?? '2025-02-27',
+      inLanguage: 'fa-IR',
+      publisher: {
+        '@id': organizationId,
+      },
+    });
+  }
+
   return {
     '@context': 'https://schema.org',
     '@graph': graph,
@@ -309,6 +345,13 @@ export interface AboutJsonLdInput {
   description: string;
   image?: string;
   people?: AboutPersonInput[];
+  video?: {
+    src?: string;
+    title?: string;
+    description?: string;
+    poster?: string;
+    uploadDate?: string;
+  };
 }
 
 export const buildAboutJsonLd = ({
@@ -316,6 +359,7 @@ export const buildAboutJsonLd = ({
   description,
   image,
   people = [],
+  video,
 }: AboutJsonLdInput) => {
   const aboutUrl = `${SITE_URL}/about/`;
   const pageDescription = plainifySync(description || DEFAULT_DESCRIPTION);
@@ -336,52 +380,70 @@ export const buildAboutJsonLd = ({
     };
   });
 
+  const graph: Record<string, unknown>[] = [
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${aboutUrl}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: SITE_NAME,
+          item: SITE_URL,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: pageTitle,
+          item: aboutUrl,
+        },
+      ],
+    },
+    {
+      '@type': 'AboutPage',
+      '@id': `${aboutUrl}#webpage`,
+      url: aboutUrl,
+      name: pageTitle,
+      description: pageDescription,
+      inLanguage: 'fa-IR',
+      isPartOf: { '@id': websiteId },
+      about: { '@id': organizationId },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: imageUrl,
+      },
+      publisher: { '@id': organizationId },
+    },
+    {
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: SITE_NAME,
+      alternateName: 'Front Chapter',
+      url: SITE_URL,
+      description: pageDescription,
+      ...(employee.length ? { employee } : {}),
+    },
+  ];
+
+  if (video?.src) {
+    graph.push({
+      '@type': 'VideoObject',
+      '@id': `${aboutUrl}#video`,
+      name: video.title ? plainifySync(video.title) : 'معرفی فرانت‌چپتر',
+      description: plainifySync(video.description || pageDescription),
+      thumbnailUrl: video.poster ? resolveAbsoluteUrl(video.poster) : imageUrl,
+      contentUrl: resolveAbsoluteUrl(video.src),
+      uploadDate: video.uploadDate ?? '2025-02-27',
+      inLanguage: 'fa-IR',
+      publisher: {
+        '@id': organizationId,
+      },
+    });
+  }
+
   return {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BreadcrumbList',
-        '@id': `${aboutUrl}#breadcrumb`,
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: SITE_NAME,
-            item: SITE_URL,
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: pageTitle,
-            item: aboutUrl,
-          },
-        ],
-      },
-      {
-        '@type': 'AboutPage',
-        '@id': `${aboutUrl}#webpage`,
-        url: aboutUrl,
-        name: pageTitle,
-        description: pageDescription,
-        inLanguage: 'fa-IR',
-        isPartOf: { '@id': websiteId },
-        about: { '@id': organizationId },
-        primaryImageOfPage: {
-          '@type': 'ImageObject',
-          url: imageUrl,
-        },
-        publisher: { '@id': organizationId },
-      },
-      {
-        '@type': 'Organization',
-        '@id': organizationId,
-        name: SITE_NAME,
-        alternateName: 'Front Chapter',
-        url: SITE_URL,
-        description: pageDescription,
-        ...(employee.length ? { employee } : {}),
-      },
-    ],
+    '@graph': graph,
   };
 };
 

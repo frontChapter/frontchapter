@@ -151,6 +151,16 @@ const buildConferenceProfile = (
 
   const pageData = getConferencePageData(entry.slug);
 
+  const video =
+    year.video ??
+    (conference.images?.video
+      ? {
+          src: conference.images.video,
+          label: conference.images.video_label ?? 'ویدیو',
+          poster: conference.images.video_poster,
+        }
+      : undefined);
+
   return {
     slug: entry.slug,
     title: conference.title,
@@ -162,7 +172,7 @@ const buildConferenceProfile = (
     stats: year.stats ?? [],
     speakers: year.speakers,
     images: year.images,
-    video: year.video,
+    video,
     galleryTitle: year.galleryTitle,
     media: conference.images,
     schedule: pageData.schedule,

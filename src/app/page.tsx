@@ -32,48 +32,65 @@ const Home = async () => {
   const mapSpeakers = (speakers?: { list?: { name: string }[] }) =>
     speakers?.list?.map((speaker) => speaker.name) ?? [];
 
-  const jsonLd = buildHomeJsonLd([
+  const heroVideoSrc = banner?.video
+    ? banner.video.startsWith('/') || banner.video.startsWith('http')
+      ? banner.video
+      : `/videos/${banner.video}`
+    : '/videos/frontchapter-banner.mp4';
+
+  const jsonLd = buildHomeJsonLd(
+    [
+      {
+        name: yearOne.conference.title,
+        description: yearOne.conference.description,
+        year: yearOne.year,
+        startDate: yearOne.conference.startDate,
+        endDate: yearOne.conference.endDate,
+        locationName: yearOne.conference.locationName,
+        performers: mapSpeakers(yearOne.speakers),
+        slug: '1400',
+      },
+      {
+        name: yearThree.conference.title,
+        description: yearThree.conference.description,
+        year: yearThree.year,
+        startDate: yearThree.conference.startDate,
+        endDate: yearThree.conference.endDate,
+        locationName: yearThree.conference.locationName,
+        performers: mapSpeakers(yearThree.speakers),
+        slug: '1402',
+      },
+      {
+        name: yearFour.conference?.title ?? 'همایش فرانت‌چپتر',
+        description: yearFour.conference?.description,
+        year: yearFour.year,
+        startDate: yearFour.conference.startDate,
+        endDate: yearFour.conference.endDate,
+        locationName: yearFour.conference.locationName,
+        performers: mapSpeakers(yearFour.speakers),
+        slug: '1403',
+      },
+      {
+        name: yearThree.festival.title,
+        description: yearThree.festival.description,
+        year: yearThree.year,
+        startDate: yearThree.festival.startDate,
+        endDate: yearThree.festival.endDate,
+        locationName: yearThree.festival.locationName,
+        eventAttendanceMode: yearThree.festival.eventAttendanceMode,
+        offersUrl: yearThree.festival.link.href,
+      },
+    ],
     {
-      name: yearOne.conference.title,
-      description: yearOne.conference.description,
-      year: yearOne.year,
-      startDate: yearOne.conference.startDate,
-      endDate: yearOne.conference.endDate,
-      locationName: yearOne.conference.locationName,
-      performers: mapSpeakers(yearOne.speakers),
-      slug: '1400',
-    },
-    {
-      name: yearThree.conference.title,
-      description: yearThree.conference.description,
-      year: yearThree.year,
-      startDate: yearThree.conference.startDate,
-      endDate: yearThree.conference.endDate,
-      locationName: yearThree.conference.locationName,
-      performers: mapSpeakers(yearThree.speakers),
-      slug: '1402',
-    },
-    {
-      name: yearFour.conference?.title ?? 'همایش فرانت‌چپتر',
-      description: yearFour.conference?.description,
-      year: yearFour.year,
-      startDate: yearFour.conference.startDate,
-      endDate: yearFour.conference.endDate,
-      locationName: yearFour.conference.locationName,
-      performers: mapSpeakers(yearFour.speakers),
-      slug: '1403',
-    },
-    {
-      name: yearThree.festival.title,
-      description: yearThree.festival.description,
-      year: yearThree.year,
-      startDate: yearThree.festival.startDate,
-      endDate: yearThree.festival.endDate,
-      locationName: yearThree.festival.locationName,
-      eventAttendanceMode: yearThree.festival.eventAttendanceMode,
-      offersUrl: yearThree.festival.link.href,
-    },
-  ]);
+      name: 'جامعه‌ی فرانت‌اند فرانت‌چپتر — ویدیوی معرفی و تیزر',
+      description:
+        banner?.subtitle ??
+        'محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان وب',
+      contentUrl: heroVideoSrc,
+      thumbnailUrl: banner?.image,
+      uploadDate: yearFour.conference?.startDate ?? '2025-02-27',
+    }
+  );
 
   return (
     <>
