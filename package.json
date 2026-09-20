@@ -16,7 +16,8 @@
     "export": "NODE_ENV=production next build",
     "postexport": "echo 'frontchapter.ir' > out/CNAME",
     "build:pages": "pnpm run sitemap && NODE_ENV=production next build && echo 'frontchapter.ir' > out/CNAME && touch out/.nojekyll",
-    "deploy": "pnpm run build:pages && gh-pages -d out --dotfiles",
+    "preview": "pnpm run build:pages && npx serve out",
+    "deploy": "echo 'Manual deploy is disabled. Push to main to trigger GitHub Actions automated deployment.' && exit 1",
     "deploy:backend": "node scripts/deploy-backend.mjs",
     "lint": "next lint",
     "start": "next start"
