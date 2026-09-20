@@ -220,3 +220,13 @@
 | `https://frontchapter.ir/speakers/ali-golkar/` | ۱ | ۲۲ | ۴.۵٪ | ۷.۲ |
 | `https://frontchapter.ir/speakers/nima-rahmati/` | ۱ | ۲۵ | ۴.۰٪ | ۸.۱ |
 | `https://frontchapter.ir/speakers/sajjad-monshi/` | ۱ | ۶ | ۱۶.۷٪ | ۱.۷ |
+
+---
+
+## ۹. زیرساخت غنی‌سازی محتوای صفحات سخنرانان (مقابله با Thin Content)
+
+برای تقویت متن اختصاصی صفحات سخنرانان و جلوگیری از خطای محتوای کم‌حجم یا ادغام با اسکرپرها:
+1. فیلدهای اختیاری `bio` (بیوگرافی)، `quote` (نقل‌قول) و `links` (لینک‌های شخصی) به اینترفیس `SpeakerProfile` در [speakers.ts](file:///Users/saleh/Projects/personal/frontchapter/src/lib/speakers.ts) اضافه شدند.
+2. کامپوننت [SpeakerSingle.tsx](file:///Users/saleh/Projects/personal/frontchapter/src/layouts/SpeakerSingle.tsx) برای رندر بخش معنایی «درباره سخنران»، بلوک نقل‌قول و پیوندهای خارجی در کنار لینکدین ارتقا یافت (با حفظ fallback کامل در صورت خالی بودن).
+3. استراکچردیتای [jsonLd.ts](file:///Users/saleh/Projects/personal/frontchapter/src/lib/seo/jsonLd.ts) به گونه‌ای به‌روزرسانی شد که با پر شدن `bio`، به طور خودکار به عنوان `description` در اسکیمای `Person` و `ProfilePage` قرار گیرد و لینک‌ها در آرایه `sameAs` درج شوند.
+4. راهنمای گام‌به‌گام و نمونه ساختار برای تکمیل توسط کاربر در فایل [CONTENT-TODO.md](file:///Users/saleh/Projects/personal/frontchapter/CONTENT-TODO.md) مستند شد.

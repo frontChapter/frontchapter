@@ -396,6 +396,18 @@ export const buildSpeakerJsonLd = ({ speaker }: SpeakerJsonLdInput) => {
     ? resolveAbsoluteUrl(speaker.avatar)
     : `${SITE_URL}${DEFAULT_OG_IMAGE}`;
 
+  const bioText = Array.isArray(speaker.bio)
+    ? speaker.bio.join(' ')
+    : speaker.bio;
+  const description = bioText
+    ? plainifySync(bioText)
+    : `پروفایل و آرشیو جلسات ${speaker.name} در فرانت‌چپتر`;
+
+  const speakerLinks = [
+    speaker.linkedin,
+    ...(speaker.links?.map((l) => l.url) || []),
+  ].filter(Boolean) as string[];
+
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -428,7 +440,7 @@ export const buildSpeakerJsonLd = ({ speaker }: SpeakerJsonLdInput) => {
         '@id': `${profileUrl}#webpage`,
         url: profileUrl,
         name: `${speaker.name} | پیشگامان گفت‌وگو`,
-        description: `پروفایل و آرشیو جلسات ${speaker.name} در فرانت‌چپتر`,
+        description,
         inLanguage: 'fa-IR',
         isPartOf: {
           '@id': websiteId,
@@ -441,10 +453,11 @@ export const buildSpeakerJsonLd = ({ speaker }: SpeakerJsonLdInput) => {
         '@type': 'Person',
         '@id': `${profileUrl}#person`,
         name: speaker.name,
+        description,
         jobTitle: 'پیشگام گفت‌وگو در فرانت‌چپتر',
         image: avatarUrl,
         url: profileUrl,
-        ...(speaker.linkedin ? { sameAs: [speaker.linkedin] } : {}),
+        ...(speakerLinks.length > 0 ? { sameAs: speakerLinks } : {}),
         worksFor: {
           '@id': organizationId,
         },
@@ -490,15 +503,22 @@ export const buildSpeakersListJsonLd = (speakers: SpeakerProfile[]) => {
         publisher: {
           '@id': organizationId,
         },
-        hasPart: speakers.map((speaker) => ({
-          '@type': 'Person',
-          name: speaker.name,
-          url: `${SITE_URL}${speakerPath(speaker.slug)}`,
-          ...(speaker.avatar
-            ? { image: resolveAbsoluteUrl(speaker.avatar) }
-            : {}),
-          ...(speaker.linkedin ? { sameAs: [speaker.linkedin] } : {}),
-        })),
+        hasPart: speakers.map((speaker) => {
+          const speakerLinks = [
+            speaker.linkedin,
+            ...(speaker.links?.map((l) => l.url) || []),
+          ].filter(Boolean) as string[];
+
+          return {
+            '@type': 'Person',
+            name: speaker.name,
+            url: `${SITE_URL}${speakerPath(speaker.slug)}`,
+            ...(speaker.avatar
+              ? { image: resolveAbsoluteUrl(speaker.avatar) }
+              : {}),
+            ...(speakerLinks.length > 0 ? { sameAs: speakerLinks } : {}),
+          };
+        }),
       },
     ],
   };

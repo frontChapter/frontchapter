@@ -7,13 +7,14 @@ import {
 import { buildPageMetadata } from '@lib/seo/metadata';
 import { getSinglePage } from '@lib/contentParser';
 import { sortByDate } from '@lib/utils/sortFunctions';
-import { IoLogoLinkedin } from 'react-icons/io5';
+import { IoLogoLinkedin, IoLinkOutline } from 'react-icons/io5';
 import Link from 'next/link';
 import React from 'react';
 import Banner from './components/Banner';
 import Cta from './components/Cta';
 import ImageFallback from './components/ImageFallback';
 import Post, { type PostType } from './partials/Post';
+import { plainifySync } from '@lib/seo/plainify';
 
 interface SpeakerSingleProps {
   speaker: SpeakerProfile;
@@ -25,6 +26,8 @@ const SpeakerSingle = async ({ speaker }: SpeakerSingleProps) => {
   const speakerPosts = sortByDate(
     getPostsForSpeaker(speaker, allPosts)
   ) as PostType[];
+
+  const hasExtraLinks = speaker.links && speaker.links.length > 0;
 
   return (
     <>
@@ -50,19 +53,64 @@ const SpeakerSingle = async ({ speaker }: SpeakerSingleProps) => {
                 <p className="mt-2 text-sm text-muted">
                   {speakerPosts.length} جلسه آنلاین در آرشیو فرانت‌چپتر
                 </p>
-                {speaker.linkedin && (
-                  <Link
-                    href={speaker.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="mt-4 inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-dark transition-colors hover:border-primary hover:text-primary"
-                  >
-                    <IoLogoLinkedin className="h-4 w-4" aria-hidden="true" />
-                    پروفایل لینکدین
-                  </Link>
+
+                {(speaker.linkedin || hasExtraLinks) && (
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5 sm:justify-start">
+                    {speaker.linkedin && (
+                      <Link
+                        href={speaker.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-dark transition-colors hover:border-primary hover:text-primary"
+                      >
+                        <IoLogoLinkedin
+                          className="h-4 w-4"
+                          aria-hidden="true"
+                        />
+                        پروفایل لینکدین
+                      </Link>
+                    )}
+                    {speaker.links?.map((link, idx) => (
+                      <Link
+                        key={idx}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-dark transition-colors hover:border-primary hover:text-primary"
+                      >
+                        <IoLinkOutline className="h-4 w-4" aria-hidden="true" />
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
+
+            {speaker.quote && (
+              <blockquote className="mt-6 rounded-2xl border-r-4 border-primary bg-primary/5 p-5 text-dark">
+                <p className="font-medium italic leading-relaxed">
+                  «{speaker.quote}»
+                </p>
+              </blockquote>
+            )}
+
+            {speaker.bio && (
+              <section className="mt-8 rounded-2xl border border-border bg-surface-solid p-6">
+                <h2 className="mb-4 text-h6 font-bold text-dark">
+                  درباره {speaker.name}
+                </h2>
+                <div className="space-y-3 text-sm leading-relaxed text-text">
+                  {Array.isArray(speaker.bio) ? (
+                    speaker.bio.map((paragraph, idx) => (
+                      <p key={idx}>{paragraph}</p>
+                    ))
+                  ) : (
+                    <p>{speaker.bio}</p>
+                  )}
+                </div>
+              </section>
+            )}
 
             <div className="mt-10">
               <h2 className="section-title text-h5">جلسات آنلاین</h2>
@@ -87,9 +135,16 @@ const SpeakerSingle = async ({ speaker }: SpeakerSingleProps) => {
 };
 
 export async function buildSpeakerMetadata(speaker: SpeakerProfile) {
+  const bioText = Array.isArray(speaker.bio)
+    ? speaker.bio.join(' ')
+    : speaker.bio;
+  const metaDescription = bioText
+    ? plainifySync(bioText).slice(0, 160)
+    : `آرشیو جلسات آنلاین فرانت‌چپتر با حضور ${speaker.name}. مرور ارائه‌ها، موضوعات تخصصی و شبکه‌های اجتماعی.`;
+
   return buildPageMetadata({
     title: `${speaker.name} | پیشگامان گفت‌وگو`,
-    description: `آرشیو جلسات آنلاین فرانت‌چپتر با حضور ${speaker.name}. مرور ارائه‌ها، موضوعات تخصصی و شبکه‌های اجتماعی.`,
+    description: metaDescription,
     image: speaker.avatar,
     canonical: speakerPath(speaker.slug),
     keywords: [

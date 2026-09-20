@@ -1,11 +1,19 @@
 import speakersData from '../data/speakers.json';
 import type { SinglePageData } from '@lib/contentParser';
 
+export interface SpeakerLink {
+  name: string;
+  url: string;
+}
+
 export interface SpeakerProfile {
   slug: string;
   name: string;
   avatar: string;
   linkedin?: string;
+  bio?: string | string[];
+  quote?: string;
+  links?: SpeakerLink[];
   aliases: string[];
   sessions: number[];
 }
