@@ -132,7 +132,7 @@ example.com (اما نه در گیت‌هاب، برای مثال).
 
 ### دکمه
 
-<Button href="#" type="solid">Button</Button>
+<Button href="/" type="solid">Button</Button>
 
 ---
 

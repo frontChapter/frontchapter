@@ -25,6 +25,11 @@ interface FeaturesProps {
 
 const Features: React.FC<FeaturesProps> = ({ features }) => {
   const paginationRef = useRef<HTMLDivElement>(null);
+
+  if (!features || !features.list || features.list.length === 0) {
+    return null;
+  }
+
   return (
     <section className="section">
       <div className="container text-center">

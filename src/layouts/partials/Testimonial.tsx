@@ -27,6 +27,10 @@ interface TestimonialProps {
 const Testimonial: React.FC<TestimonialProps> = ({ testimonial }) => {
   const testimonialPaginationRef = useRef<HTMLDivElement | null>(null);
 
+  if (!testimonial || !testimonial.list || testimonial.list.length === 0) {
+    return null;
+  }
+
   return (
     <section className="section pt-0">
       <div className="container">

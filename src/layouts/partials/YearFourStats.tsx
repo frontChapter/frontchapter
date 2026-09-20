@@ -56,7 +56,7 @@ export interface YearFourStatsProps {
     title: string;
     description: string;
     image: string;
-    link: {
+    link?: {
       label: string;
       href: string;
     };
@@ -446,15 +446,19 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           {event.description}
                         </p>
                       </div>
-                      <div>
-                        <CarrotButton
-                          href={event.link.href}
-                          variant="primary"
-                          {...externalLinkProps(event.link.href)}
-                        >
-                          {event.link.label}
-                        </CarrotButton>
-                      </div>
+                      {event.link &&
+                        event.link.href &&
+                        event.link.href !== '#' && (
+                          <div>
+                            <CarrotButton
+                              href={event.link.href}
+                              variant="primary"
+                              {...externalLinkProps(event.link.href)}
+                            >
+                              {event.link.label}
+                            </CarrotButton>
+                          </div>
+                        )}
                     </div>
                   </>
                 ) : (
@@ -469,15 +473,19 @@ const YearFourStats: React.FC<YearFourStatsProps> = ({
                           {event.description}
                         </p>
                       </div>
-                      <div>
-                        <CarrotButton
-                          href={event.link.href}
-                          variant="primary"
-                          {...externalLinkProps(event.link.href)}
-                        >
-                          {event.link.label}
-                        </CarrotButton>
-                      </div>
+                      {event.link &&
+                        event.link.href &&
+                        event.link.href !== '#' && (
+                          <div>
+                            <CarrotButton
+                              href={event.link.href}
+                              variant="primary"
+                              {...externalLinkProps(event.link.href)}
+                            >
+                              {event.link.label}
+                            </CarrotButton>
+                          </div>
+                        )}
                     </div>
                     {/* Image (Right) */}
                     <figure className="image-container group relative overflow-hidden rounded-xl shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all duration-300 cursor-pointer aspect-video w-full">
