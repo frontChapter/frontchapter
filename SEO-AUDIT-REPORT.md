@@ -124,9 +124,9 @@
 - مقدار: کدی که گوگل در بخش Domain Verification سرچ کنسول ارائه می‌دهد (مثلاً `google-site-verification=...`).
 - *روش جایگزین:* کد تایید را می‌توانید در متغیر محیطی `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` یا فایل `src/config/config.json` در بخش `analytics.google_site_verification` قرار دهید؛ کامپوننت `SiteVerification.tsx` به صورت خودکار آن را در `<head>` رندر می‌کند.
 
-## ۷. وضعیت استقرار و راهنمای گام‌به‌گام اتصال ابزارها
+## ۷. وضعیت استقرار و اتصال ابزارها (تاییدشده ۱۰۰٪)
 
-### ۱. وضعیت استقرار زنده (تاییدشده ۱۰۰٪)
+### ۱. وضعیت استقرار زنده در GitHub Pages
 - **پایپ‌لاین دیپلوی خودکار GitHub Actions:**
   - تنها و رسمی‌ترین مسیر دیپلوی به برنچ `gh-pages` از طریق ورک‌فلوهای GitHub Actions تنظیم و یکپارچه‌سازی شد.
   - اسکریپت دستی `deploy` در `package.json` مسدود و ایمن شد تا هیچ تغییر دستی یا مغایرتی روی `gh-pages` اعمال نگردد.
@@ -140,27 +140,82 @@
 
 ---
 
-### ۲. وضعیت تایید مالکیت و ثبت نقشه سایت
-- **گوگل سرچ کنسول (Google Search Console):**
-  - مالکیت دامنه `frontchapter.ir` از طریق رکورد **DNS TXT** در کنترل‌پنل دامنه با موفقیت تایید شد.
-  - ثبت نقشه سایت مستقیماً از طریق ابزار سرور `mcp-gsc` پس از دریافت توکن انجام خواهد شد (یا کاربر می‌تواند موقتاً عبارت `sitemap.xml` را در بخش Indexing > Sitemaps پنل وب ثبت کند).
+### ۲. وضعیت تایید مالکیت و ثبت نقشه سایت در Search Console
+- **تایید مالکیت دامنه:**
+  - دامین پراپرتی `sc-domain:frontchapter.ir` با سطح دسترسی مالک کامل (`siteOwner`) تایید شد.
+- **ثبت موفق نقشه سایت (Sitemap Submission):**
+  - نقشه سایت `https://frontchapter.ir/sitemap.xml` مستقیماً از طریق API ثبت شد.
+  - وضعیت خروجی سرچ کنسول:
+    - **Status:** `Valid`
+    - **Indexed URLs:** `119`
+    - **Errors:** `0`
+    - **Warnings:** `0`
+    - **Last Downloaded:** `2026-09-20 16:32`
 - **بینگ وبمستر تولز (Bing Webmaster Tools - اقدام دستی کاربر):**
   > [!IMPORTANT]
   > **اقدام دستی خارج از توان ابزارهای خودکار:**  
-  > اتصال و ثبت نقشه سایت در **Bing Webmaster Tools** نیازمند ورود به حساب مایکروسافت خود کاربر در [bing.com/webmasters](https://www.bing.com/webmasters) و افزودن نقشه سایت `https://frontchapter.ir/sitemap.xml` است (یا استفاده از دکمه Import from Google Search Console که بلافاصله مالکیت و سایت‌مپ را همگام می‌کند).
+  > اتصال و ثبت نقشه سایت در **Bing Webmaster Tools** نیازمند ورود با حساب مایکروسافت در [bing.com/webmasters](https://www.bing.com/webmasters) و کلیک روی گزینه **Import from Google Search Console** است تا سایت‌مپ و دسترسی دامنه با یک کلیک همگام‌سازی شوند.
 
 ---
 
-### ۳. آماده‌سازی سرور محلی MCP Google Search Console (`mcp-gsc`)
-- **وضعیت پیاده‌سازی توسط ایجنت:**
-  - ریپازیتوری رسمی در مسیر `/Users/saleh/Projects/personal/mcp-gsc` کلون شد.
-  - محیط مجازی اختصاصی پایتون نسخه ۳.۱۴ در مسیر `/Users/saleh/Projects/personal/mcp-gsc/.venv` ایجاد گردید.
-  - تمام پکیج‌ها و وابستگی‌های مورد نیاز (`google-api-python-client`, `google-auth-oauthlib`, `mcp`, و غیره) با موفقیت نصب شدند.
-  - فایل نمونه تنظیمات در `/Users/saleh/Projects/personal/mcp-gsc/.env.example` ایجاد شد.
-- **اقدام دستی لازم توسط کاربر (نقطه توقف و انتظار):**
-  - کاربر باید فایل **`client_secrets.json`** را از Google Cloud Console دانلود کرده و در مسیر زیر قرار دهد:
-    ```
-    /Users/saleh/Projects/personal/mcp-gsc/client_secrets.json
-    ```
-  - پس از قرارگیری این فایل، ایجنت سرور را اجرا می‌کند تا پنجره مرورگر برای ورود به اکانت گوگل کاربر باز شود و مجوزهای لازم صادر گردد.
-  - به محض اعطای دسترسی، عملیات خودکار ثبت sitemap، ایندکس چک و آنالیتیکس کوئری‌ها اجرا خواهد شد.
+### ۳. راه‌اندازی سرور محلی MCP Google Search Console (`mcp-gsc`)
+- **احراز هویت و ذخیره نشست:**
+  - فرآیند احراز هویت OAuth با فایل `client_secrets.json` انجام شد و توکن پایدار در مسیر `/Users/saleh/Library/Application Support/mcp-gsc/token.json` ذخیره گردید.
+- **کانفیگ دائمی در Antigravity:**
+  - سرور در فایل کانفیگ جهانی `/Users/saleh/.gemini/config/mcp_config.json` تحت کلید `gsc` با مفسر اختصاصی پایتون ۳.۱۴ در محیط مجازی `.venv` ثبت شد.
+
+---
+
+## ۸. نتایج زنده بازرسی صفحات (URL Inspection) و تحلیل عملکرد (Search Analytics)
+
+### ۱. جدول بازرسی وضعیت زنده ایندکس صفحات کلیدی (Google URL Inspection API)
+
+| نشانی اینترنتی (URL) | وضعیت ایندکس (Coverage State) | وضعیت کلی (Verdict) | تاریخ آخرین خزش گوگل | کانونیکال اعلامی کاربر | کانونیکال انتخابی گوگل | وضعیت ربات‌ها | وضعیت ایندکس‌پذیری |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `https://frontchapter.ir/` | **Submitted and indexed** | `PASS` | ۲۰۲۶-۰۹-۱۹ ۱۶:۵۲ | `https://frontchapter.ir/` | `https://frontchapter.ir/` | `ALLOWED` | `INDEXING_ALLOWED` |
+| `https://frontchapter.ir/events/dar-miyan-e-meh/` | **Discovered - currently not indexed** | `NEUTRAL` | در صف خزش (هنوز خزش نشده) | — | — | — | در انتظار خزش سایت‌مپ |
+| `https://frontchapter.ir/conferences/1403/` | **Submitted and indexed** | `PASS` | ۲۰۲۶-۰۸-۱۹ ۲۱:۳۹ | `https://frontchapter.ir/conferences/1403/` | `https://frontchapter.ir/conferences/1403/` | `ALLOWED` | `INDEXING_ALLOWED` |
+| `https://frontchapter.ir/speakers/saleh-shojaei/` | **Duplicate without user-selected canonical** | `NEUTRAL` | ۲۰۲۶-۰۷-۰۲ ۱۱:۴۹ *(خزش قدیمی)* | قبلاً `null` (اکنون اصلاح شد) | نامعتبر در گذشته | `ALLOWED` | `INDEXING_ALLOWED` |
+| `https://frontchapter.ir/mist/` | **URL is unknown to Google** | `NEUTRAL` | خزش نشده (فاقد لینک/ورودی) | — | — | — | خارج از نقشه سایت (درست) |
+
+> [!NOTE]
+> **تحلیل دقیق خطاهای خام گوگل:**
+> 1. صفحه رویداد «در میان مِه» به دلیل جدید بودن، وضعیت **`Discovered - currently not indexed`** دارد. این یعنی گوگل آن را از طریق نقشه سایت یا پیوندها کشف کرده و در صف خزش اولیه قرار داده است.
+> 2. وضعیت صفحه سخنران مربوط به خزش ۲ ماه قبل (جولای ۲۰۲۶) بوده که تگ کانونیکال روی پروفایل سخنرانان وجود نداشت (`user_canonical: null`). در اصلاحات اخیر، تگ کانونیکال معتبر به تمامی صفحات سخنرانان اضافه شد و با ثبت نقشه سایت ۱۱۹ آدرسی در این مرحله، در خزش بعدی این مورد به طور خودکار برطرف خواهد شد.
+> 3. صفحه ریدایرکت `/mist/` وضعیت **`URL is unknown to Google`** دارد؛ زیرا به درستی از نقشه سایت حذف شده و موتور جستجو دلیلی برای صرف بودجه خزش روی آن ندارد.
+
+---
+
+### ۲. گزارش پایه عملکرد ۲۸ روز اخیر (Search Analytics Baseline)
+این داده‌ها عملکرد واقعی دامنه پیش از ایندکس تغییرات جدید است و به عنوان مبنای مقایسه (Baseline) برای سنجش رشد سئو استفاده می‌شود:
+
+- **مجموع کلیک‌ها (Clicks):** ۶۱ کلیک
+- **مجموع نمایش در نتایج (Impressions):** ۱,۰۵۳ نمایش
+- **نرخ کلیک میانگین (Average CTR):** ۵.۷۹٪
+- **جایگاه میانگین در نتایج (Average Position):** ۶.۷
+
+#### کوئری‌های برتر جستجو (Top Queries):
+| عبارت جستجو (Query) | تعداد کلیک | تعداد نمایش (Impressions) | نرخ کلیک (CTR) | جایگاه میانگین |
+| :--- | :---: | :---: | :---: | :---: |
+| **فرانت چپتر** | ۱۴ | ۲۵ | ۵۶.۰٪ | ۱.۰ |
+| **حسام موسوی** | ۵ | ۸۹ | ۵.۶٪ | ۵.۴ |
+| **سجاد منشی** | ۱ | ۳ | ۳۳.۳٪ | ۱.۷ |
+| **علی گلکار** | ۱ | ۱۶ | ۶.۲٪ | ۷.۹ |
+| **مسعود بیگی** | ۱ | ۵۲ | ۱.۹٪ | ۵.۵ |
+| **نیما رحمتی** | ۱ | ۲۲ | ۴.۵٪ | ۸.۱ |
+| **چپتر** | ۰ | ۲۳۱ | ۰٪ | ۸.۴ |
+| **وحید محمدی** | ۰ | ۷۵ | ۰٪ | ۷.۹ |
+
+#### صفحات برتر دارای کلیک و نمایش (Top Pages):
+| نشانی صفحه (Page) | تعداد کلیک | تعداد نمایش (Impressions) | نرخ کلیک (CTR) | جایگاه میانگین |
+| :--- | :---: | :---: | :---: | :---: |
+| `https://frontchapter.ir/` (صفحه اصلی) | ۳۷ | ۳۶۸ | ۱۰.۱٪ | ۷.۱ |
+| `https://frontchapter.ir/speakers/hesam-mousavi/` | ۶ | ۱۵۷ | ۳.۸٪ | ۶.۱ |
+| `https://frontchapter.ir/speakers/pouria-babaali/` | ۳ | ۸ | ۳۷.۵٪ | ۳.۴ |
+| `https://frontchapter.ir/speakers/behnia-azad/` | ۲ | ۶ | ۳۳.۳٪ | ۲.۷ |
+| `https://frontchapter.ir/speakers/masoud-beigi/` | ۲ | ۶۹ | ۲.۹٪ | ۵.۶ |
+| `https://frontchapter.ir/conferences/1400/` | ۱ | ۷ | ۱۴.۳٪ | ۵.۴ |
+| `https://frontchapter.ir/posts/` | ۱ | ۳۳ | ۳.۰٪ | ۳.۲ |
+| `https://frontchapter.ir/speakers/ali-golkar/` | ۱ | ۲۲ | ۴.۵٪ | ۷.۲ |
+| `https://frontchapter.ir/speakers/nima-rahmati/` | ۱ | ۲۵ | ۴.۰٪ | ۸.۱ |
+| `https://frontchapter.ir/speakers/sajjad-monshi/` | ۱ | ۶ | ۱۶.۷٪ | ۱.۷ |
