@@ -94,5 +94,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   });
 
+  entries.push({
+    url: `${SITE_URL}/events/dar-miyan-e-meh/`,
+    changeFrequency: 'weekly',
+    priority: 0.9,
+  });
+
   return entries;
 }

@@ -500,7 +500,7 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
         {
           '@type': 'ListItem',
           position: 2,
-          name: 'همایش‌ها',
+          name: 'رویدادهای حضوری',
           item: `${SITE_URL}/conferences/`,
         },
         {
@@ -605,7 +605,7 @@ export const buildConferencesListJsonLd = (
         {
           '@type': 'ListItem',
           position: 2,
-          name: 'همایش‌ها',
+          name: 'رویدادهای حضوری',
           item: `${SITE_URL}/conferences/`,
         },
       ],
@@ -614,7 +614,7 @@ export const buildConferencesListJsonLd = (
       '@type': 'CollectionPage',
       '@id': `${SITE_URL}/conferences/#webpage`,
       url: `${SITE_URL}/conferences/`,
-      name: 'همایش‌های فرانت‌چپتر',
+      name: 'رویدادهای حضوری فرانت‌چپتر',
       description: plainifySync(DEFAULT_DESCRIPTION),
       inLanguage: 'fa-IR',
       isPartOf: {
