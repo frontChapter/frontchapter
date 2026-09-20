@@ -9,12 +9,43 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 
 const SITE_URL = 'https://frontchapter.ir';
 
+function escapeXml(unsafe) {
+  return String(unsafe)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function renderVideoXml(video) {
+  if (!video) return '';
+  return `
+    <video:video>
+      <video:thumbnail_loc>${video.thumbnail_loc}</video:thumbnail_loc>
+      <video:title>${escapeXml(video.title)}</video:title>
+      <video:description>${escapeXml(video.description)}</video:description>
+      <video:content_loc>${video.content_loc}</video:content_loc>
+      <video:publication_date>${video.publication_date}</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>`;
+}
+
 function generateSitemap() {
   const entries = [
     {
       loc: `${SITE_URL}/`,
       changefreq: 'weekly',
       priority: '1.0',
+      video: {
+        thumbnail_loc: `${SITE_URL}/images/banner-app.png`,
+        title: 'جامعه‌ی فرانت‌اند فرانت‌چپتر — ویدیوی معرفی',
+        description:
+          'محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان وب',
+        content_loc: `${SITE_URL}/videos/frontchapter-banner.mp4`,
+        publication_date: '2025-02-27T08:00:00+03:30',
+      },
     },
     {
       loc: `${SITE_URL}/events/dar-miyan-e-meh/`,
@@ -38,18 +69,42 @@ function generateSitemap() {
       lastmod: '2025-03-07',
       changefreq: 'weekly',
       priority: '0.85',
+      video: {
+        thumbnail_loc: `${SITE_URL}/images/1403/video_poster.jpg`,
+        title: 'تیزر رسمی همایش شیراز ۱۴۰۳ فرانت‌چپتر',
+        description:
+          'تیزر ویدیویی همایش بزرگ توسعه‌دهندگان فرانت در شیراز با حضور سخنرانان برجسته و کارگاه‌های تخصصی برنامه‌نویسی وب',
+        content_loc: `${SITE_URL}/videos/frontchapter-1403.mp4`,
+        publication_date: '2025-02-27T08:00:00+03:30',
+      },
     },
     {
       loc: `${SITE_URL}/conferences/1402/`,
       lastmod: '2024-03-08',
       changefreq: 'monthly',
       priority: '0.70',
+      video: {
+        thumbnail_loc: `${SITE_URL}/images/1402/01.webp`,
+        title: 'ویدیوی دومین همایش فرانت‌اند ایران در آمل ۱۴۰۲',
+        description:
+          'مروری بر دومین همایش فرانت‌اند فرانت‌چپتر در آمل، مازندران با حضور برنامه‌نویسان وب',
+        content_loc: `${SITE_URL}/videos/frontchapter-banner.mp4`,
+        publication_date: '2024-02-28T08:00:00+03:30',
+      },
     },
     {
       loc: `${SITE_URL}/conferences/1400/`,
       lastmod: '2022-03-04',
       changefreq: 'monthly',
       priority: '0.70',
+      video: {
+        thumbnail_loc: `${SITE_URL}/images/1400/video_poster.webp`,
+        title: 'ویدیوی اولین همایش فرانت‌اند کشور در بابلسر ۱۴۰۰',
+        description:
+          'تیزر و لحظات خاطره‌انگیز اولین همایش حضوری فرانت‌چپتر در بابلسر، مازندران',
+        content_loc: `${SITE_URL}/videos/FrontChapter1400.mp4`,
+        publication_date: '2022-03-01T08:00:00+03:30',
+      },
     },
     {
       loc: `${SITE_URL}/speakers/`,
@@ -120,6 +175,18 @@ function generateSitemap() {
         ...(lastmod ? { lastmod } : {}),
         changefreq: isAbout ? 'monthly' : 'yearly',
         priority: isAbout ? '0.70' : isContact ? '0.50' : '0.30',
+        ...(isAbout
+          ? {
+              video: {
+                thumbnail_loc: `${SITE_URL}/images/1403/video_poster.jpg`,
+                title: 'روایت مسیر فرانت‌چپتر — درباره ما',
+                description:
+                  'داستان شکل‌گیری جامعه‌ی هویجی فرانت‌چپتر و اهداف آن برای توسعه‌دهندگان وب ایران',
+                content_loc: `${SITE_URL}/videos/frontchapter-1403.mp4`,
+                publication_date: '2025-02-27T08:00:00+03:30',
+              },
+            }
+          : {}),
       });
     }
   }
@@ -135,15 +202,16 @@ function generateSitemap() {
     });
   }
 
-  // Generate XML
+  // Generate XML with Google Video extension
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 ${entries
   .map(
     (e) => `  <url>
     <loc>${e.loc}</loc>${e.lastmod ? `\n    <lastmod>${e.lastmod}</lastmod>` : ''}
     <changefreq>${e.changefreq}</changefreq>
-    <priority>${e.priority}</priority>
+    <priority>${e.priority}</priority>${renderVideoXml(e.video)}
   </url>`
   )
   .join('\n')}
@@ -152,7 +220,7 @@ ${entries
 
   const publicSitemapPath = path.join(ROOT_DIR, 'public/sitemap.xml');
   fs.writeFileSync(publicSitemapPath, xml, 'utf-8');
-  console.log(`✓ Generated ${entries.length} URLs in ${publicSitemapPath}`);
+  console.log(`✓ Generated ${entries.length} URLs (including Video sitemap tags) in ${publicSitemapPath}`);
 }
 
 generateSitemap();

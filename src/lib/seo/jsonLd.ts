@@ -7,8 +7,11 @@ import {
   DEFAULT_OG_IMAGE,
   SITE_NAME,
   SITE_URL,
+  formatIsoUploadDate,
 } from './constants';
 import { plainifySync } from './plainify';
+
+export { formatIsoUploadDate };
 
 export {
   buildConferenceJsonLd,
@@ -319,7 +322,7 @@ export const buildHomeJsonLd = (
         ? { contentUrl: resolveAbsoluteUrl(video.contentUrl) }
         : {}),
       ...(video.embedUrl ? { embedUrl: video.embedUrl } : {}),
-      uploadDate: video.uploadDate ?? '2025-02-27',
+      uploadDate: formatIsoUploadDate(video.uploadDate),
       inLanguage: 'fa-IR',
       publisher: {
         '@id': organizationId,
@@ -433,7 +436,7 @@ export const buildAboutJsonLd = ({
       description: plainifySync(video.description || pageDescription),
       thumbnailUrl: video.poster ? resolveAbsoluteUrl(video.poster) : imageUrl,
       contentUrl: resolveAbsoluteUrl(video.src),
-      uploadDate: video.uploadDate ?? '2025-02-27',
+      uploadDate: formatIsoUploadDate(video.uploadDate),
       inLanguage: 'fa-IR',
       publisher: {
         '@id': organizationId,
