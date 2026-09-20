@@ -124,27 +124,43 @@
 - مقدار: کدی که گوگل در بخش Domain Verification سرچ کنسول ارائه می‌دهد (مثلاً `google-site-verification=...`).
 - *روش جایگزین:* کد تایید را می‌توانید در متغیر محیطی `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` یا فایل `src/config/config.json` در بخش `analytics.google_site_verification` قرار دهید؛ کامپوننت `SiteVerification.tsx` به صورت خودکار آن را در `<head>` رندر می‌کند.
 
-### ۲. ثبت نقشه سایت (Sitemap Submission)
-1. وارد **Google Search Console** شوید و پراپرتی `https://frontchapter.ir` (یا دامین پراپرتی `frontchapter.ir`) را انتخاب کنید.
-2. از منوی سمت چپ به بخش **Indexing > Sitemaps** بروید.
-3. در کادر "Add a new sitemap"، عبارت `sitemap.xml` را وارد کرده و دکمه **Submit** را بزنید.
-4. وضعیت نقشه سایت باید بلافاصله یا ظرف چند ساعت به حالت سبز رنگ **Success** درآید.
-5. همین فرآیند را در **Bing Webmaster Tools** در بخش Sitemaps نیز انجام دهید.
+## ۷. وضعیت استقرار و راهنمای گام‌به‌گام اتصال ابزارها
 
-### ۳. بررسی و تست اسکیماها با ابزارهای رسمی گوگل
-برای راستی‌آزمایی اسکیماهای پیاده‌سازی شده، صفحات زیر را در ابزارهای رسمی زیر تست کنید:
-- **ابزار Google Rich Results Test:**  
-  [https://search.google.com/test/rich-results](https://search.google.com/test/rich-results)
-  - صفحه رویداد: `https://frontchapter.ir/events/dar-miyan-e-meh/` (باید نوع **Event** و **Breadcrumbs** را بدون خطا و با سبز بودن تمامی فیلدهای الزامی نمایش دهد).
-  - صفحه همایش ۱۴۰۳: `https://frontchapter.ir/conferences/1403/` (باید نوع **Event**، **Breadcrumbs** و **Video** را شناسایی کند).
-  - صفحه اصلی: `https://frontchapter.ir/` (باید **Organization** را تشخیص دهد).
-- **ابزار Schema Markup Validator:**  
-  [https://validator.schema.org/](https://validator.schema.org/)
-  - تست صفحات تک‌سخنران مانند `https://frontchapter.ir/speakers/saleh-shojaei/` جهت تایید صحت اسکیمای `Person` و `ProfilePage`.
+### ۱. وضعیت استقرار زنده (تاییدشده ۱۰۰٪)
+- **پایپ‌لاین دیپلوی خودکار GitHub Actions:**
+  - تنها و رسمی‌ترین مسیر دیپلوی به برنچ `gh-pages` از طریق ورک‌فلوهای GitHub Actions تنظیم و یکپارچه‌سازی شد.
+  - اسکریپت دستی `deploy` در `package.json` مسدود و ایمن شد تا هیچ تغییر دستی یا مغایرتی روی `gh-pages` اعمال نگردد.
+  - اجرای آخرین ورک‌فلوها (شماره ۳۵۵۲۲۰۹۲۷۸۵ و ۳۵۵۲۲۱۸۲۴۱۶) روی برنچ `main` با موفقیت کامل (`success`) به پایان رسید.
+- **راستی‌آزمایی سرور زنده (`https://frontchapter.ir/`):**
+  - تمامی فایل‌ها و چانک‌های `_next/static/` با کد وضعیت ۲۰۰ سرو می‌شوند.
+  - تگ اولیه `<html lang="fa" dir="rtl">` مستقیماً از سورس اولیه سرور بازگردانده می‌شود.
+  - اسکیمای `SearchAction` به طور کامل حذف شده است.
+  - تگ‌های `rel="noopener noreferrer sponsored"` برای حامیان مالی در سورس زنده اعمال شده‌اند.
+  - فایل `sitemap.xml` با ۱۱۹ آدرس و `robots.txt` با مسدودسازی صحیح به‌صورت زنده در دسترس هستند.
 
-### ۴. همگام‌سازی با ابزار GSC MCP (بخش ۸ پرامپت)
-به محض اینکه مراحل پیشنیاز OAuth سرور `mcp-gsc` را با فایل `client_secrets.json` لوکال انجام دهید و توکن ذخیره شود:
-1. ابزار `list_properties`: اطمینان از دسترسی به دامنه `https://frontchapter.ir`.
-2. ابزار `get_search_analytics`: استخراج صفحات پرایمپرشن و کوئری‌های برتر برای مانیتورینگ روند رشد.
-3. ابزار `inspect_url_enhanced`: بررسی وضعیت زنده ایندکس صفحات اصلی و تایید خروج مسیرهای ریدایرکتی.
-4. ابزار `submit_sitemap`: ارسال مستقیم `https://frontchapter.ir/sitemap.xml` از طریق API سرچ کنسول.
+---
+
+### ۲. وضعیت تایید مالکیت و ثبت نقشه سایت
+- **گوگل سرچ کنسول (Google Search Console):**
+  - مالکیت دامنه `frontchapter.ir` از طریق رکورد **DNS TXT** در کنترل‌پنل دامنه با موفقیت تایید شد.
+  - ثبت نقشه سایت مستقیماً از طریق ابزار سرور `mcp-gsc` پس از دریافت توکن انجام خواهد شد (یا کاربر می‌تواند موقتاً عبارت `sitemap.xml` را در بخش Indexing > Sitemaps پنل وب ثبت کند).
+- **بینگ وبمستر تولز (Bing Webmaster Tools - اقدام دستی کاربر):**
+  > [!IMPORTANT]
+  > **اقدام دستی خارج از توان ابزارهای خودکار:**  
+  > اتصال و ثبت نقشه سایت در **Bing Webmaster Tools** نیازمند ورود به حساب مایکروسافت خود کاربر در [bing.com/webmasters](https://www.bing.com/webmasters) و افزودن نقشه سایت `https://frontchapter.ir/sitemap.xml` است (یا استفاده از دکمه Import from Google Search Console که بلافاصله مالکیت و سایت‌مپ را همگام می‌کند).
+
+---
+
+### ۳. آماده‌سازی سرور محلی MCP Google Search Console (`mcp-gsc`)
+- **وضعیت پیاده‌سازی توسط ایجنت:**
+  - ریپازیتوری رسمی در مسیر `/Users/saleh/Projects/personal/mcp-gsc` کلون شد.
+  - محیط مجازی اختصاصی پایتون نسخه ۳.۱۴ در مسیر `/Users/saleh/Projects/personal/mcp-gsc/.venv` ایجاد گردید.
+  - تمام پکیج‌ها و وابستگی‌های مورد نیاز (`google-api-python-client`, `google-auth-oauthlib`, `mcp`, و غیره) با موفقیت نصب شدند.
+  - فایل نمونه تنظیمات در `/Users/saleh/Projects/personal/mcp-gsc/.env.example` ایجاد شد.
+- **اقدام دستی لازم توسط کاربر (نقطه توقف و انتظار):**
+  - کاربر باید فایل **`client_secrets.json`** را از Google Cloud Console دانلود کرده و در مسیر زیر قرار دهد:
+    ```
+    /Users/saleh/Projects/personal/mcp-gsc/client_secrets.json
+    ```
+  - پس از قرارگیری این فایل، ایجنت سرور را اجرا می‌کند تا پنجره مرورگر برای ورود به اکانت گوگل کاربر باز شود و مجوزهای لازم صادر گردد.
+  - به محض اعطای دسترسی، عملیات خودکار ثبت sitemap، ایندکس چک و آنالیتیکس کوئری‌ها اجرا خواهد شد.
