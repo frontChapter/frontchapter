@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -16,15 +20,33 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@lib/*": ["src/lib/*"],
-      "@config/*": ["src/config/*"],
-      "@layouts/*": ["src/layouts/*"],
-      "@components/*": ["src/layouts/components/*"],
-      "@partials/*": ["src/layouts/partials/*"],
-      "@shortcodes/*": ["src/layouts/shortcodes/*"],
-      "@json/*": ["src/json/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@/*": [
+        "./*"
+      ],
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
+      "@components/*": [
+        "src/layouts/components/*"
+      ],
+      "@partials/*": [
+        "src/layouts/partials/*"
+      ],
+      "@shortcodes/*": [
+        "src/layouts/shortcodes/*"
+      ],
+      "@json/*": [
+        "src/json/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ]
     },
     "plugins": [
       {
@@ -39,7 +61,10 @@
     "src/**/*.js",
     "src/**/*.jsx",
     "src/layouts/partials/SeoMeta.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "out/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

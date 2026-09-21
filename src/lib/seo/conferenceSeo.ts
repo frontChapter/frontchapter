@@ -8,7 +8,6 @@ import {
   DEFAULT_OG_IMAGE,
   SITE_NAME,
   SITE_URL,
-  formatIsoUploadDate,
 } from './constants';
 import { buildPageMetadata } from './metadata';
 import { plainifySync } from './plainify';
@@ -563,34 +562,6 @@ export const buildConferenceJsonLd = (conference: ConferenceProfile) => {
       ...(subEvents.length ? { subEvent: subEvents } : {}),
     },
   ];
-
-  const video =
-    conference.video ??
-    (conference.media?.video
-      ? {
-          src: conference.media.video,
-          label: conference.media.video_label ?? 'ویدیو',
-          poster: conference.media.video_poster,
-        }
-      : undefined);
-
-  if (video?.src) {
-    graph.push({
-      '@type': 'VideoObject',
-      '@id': `${eventUrl}#video`,
-      name: `${pageName} — ${video.label}`,
-      description: buildConferenceMetaDescription(conference),
-      thumbnailUrl: video.poster
-        ? resolveAbsoluteUrl(video.poster)
-        : (images[0] ?? `${SITE_URL}${DEFAULT_OG_IMAGE}`),
-      contentUrl: resolveAbsoluteUrl(video.src),
-      uploadDate: formatIsoUploadDate(conference.startDate),
-      inLanguage: 'fa-IR',
-      publisher: {
-        '@id': organizationId,
-      },
-    });
-  }
 
   return {
     '@context': 'https://schema.org',

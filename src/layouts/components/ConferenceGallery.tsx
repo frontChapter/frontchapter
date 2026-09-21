@@ -2,7 +2,9 @@
 
 import clsx from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { ConferenceProfile } from '@lib/conferences';
+import { SITE_VIDEOS, watchPath } from '@lib/videos';
 import { useImageLightbox } from '../../hooks/useImageLightbox';
 import GalleryClickOverlay from './GalleryClickOverlay';
 import GalleryImageCard from './GalleryImageCard';
@@ -115,6 +117,11 @@ const ConferenceGallery = ({ conference }: ConferenceGalleryProps) => {
   const videoPoster =
     conference.video?.poster ?? conference.media?.video_poster;
   const hasFeaturedLayout = Boolean(videoSrc) && galleryImages.length > 0;
+  const matchingVideo = SITE_VIDEOS.find(
+    (v) =>
+      v.conferenceSlug === conference.slug ||
+      v.conferenceSlug === conference.year
+  );
 
   return (
     <div className="conference-gallery fade relative mt-16 overflow-hidden rounded-3xl border border-[#ffece4]/70 bg-gradient-to-b from-[#fff9f6] via-surface-solid to-[#fff5ef] px-4 py-10 sm:px-6 md:px-8 md:py-14">
@@ -184,6 +191,27 @@ const ConferenceGallery = ({ conference }: ConferenceGalleryProps) => {
                 </span>
               </div>
             </figure>
+            {matchingVideo && (
+              <div className="mt-3 text-center">
+                <Link
+                  href={watchPath(matchingVideo.slug)}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-primary hover:text-primary-dark transition-colors"
+                >
+                  <svg
+                    className="w-4 h-4 shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  مشاهده در صفحه اختصاصی ویدیو
+                </Link>
+              </div>
+            )}
           </div>
 
           <div className="grid w-full grid-cols-2 gap-4 sm:gap-6 md:gap-7">
@@ -214,6 +242,27 @@ const ConferenceGallery = ({ conference }: ConferenceGalleryProps) => {
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                 </div>
               </figure>
+              {matchingVideo && (
+                <div className="mt-2 text-center">
+                  <Link
+                    href={watchPath(matchingVideo.slug)}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary-dark transition-colors"
+                  >
+                    <svg
+                      className="w-3.5 h-3.5 shrink-0"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    مشاهده در صفحه اختصاصی ویدیو
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 

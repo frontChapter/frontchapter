@@ -5,15 +5,6 @@
     <loc>https://frontchapter.ir/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <video:video>
-      <video:thumbnail_loc>https://frontchapter.ir/images/banner-app.png</video:thumbnail_loc>
-      <video:title>جامعه‌ی فرانت‌اند فرانت‌چپتر — ویدیوی معرفی</video:title>
-      <video:description>محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان وب</video:description>
-      <video:content_loc>https://frontchapter.ir/videos/frontchapter-banner.mp4</video:content_loc>
-      <video:publication_date>2025-02-27T08:00:00+03:30</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
-      <video:live>no</video:live>
-    </video:video>
   </url>
   <url>
     <loc>https://frontchapter.ir/events/dar-miyan-e-meh/</loc>
@@ -37,6 +28,24 @@
     <lastmod>2025-03-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://frontchapter.ir/conferences/1402/</loc>
+    <lastmod>2024-03-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://frontchapter.ir/conferences/1400/</loc>
+    <lastmod>2022-03-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://frontchapter.ir/watch/shiraz-1403/</loc>
+    <lastmod>2025-03-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
     <video:video>
       <video:thumbnail_loc>https://frontchapter.ir/images/1403/video_poster.jpg</video:thumbnail_loc>
       <video:title>تیزر رسمی همایش شیراز ۱۴۰۳ فرانت‌چپتر</video:title>
@@ -48,10 +57,10 @@
     </video:video>
   </url>
   <url>
-    <loc>https://frontchapter.ir/conferences/1402/</loc>
+    <loc>https://frontchapter.ir/watch/amol-1402/</loc>
     <lastmod>2024-03-08</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.75</priority>
     <video:video>
       <video:thumbnail_loc>https://frontchapter.ir/images/1402/01.webp</video:thumbnail_loc>
       <video:title>ویدیوی دومین همایش فرانت‌اند ایران در آمل ۱۴۰۲</video:title>
@@ -63,16 +72,31 @@
     </video:video>
   </url>
   <url>
-    <loc>https://frontchapter.ir/conferences/1400/</loc>
+    <loc>https://frontchapter.ir/watch/babolsar-1400/</loc>
     <lastmod>2022-03-04</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.75</priority>
     <video:video>
       <video:thumbnail_loc>https://frontchapter.ir/images/1400/video_poster.webp</video:thumbnail_loc>
       <video:title>ویدیوی اولین همایش فرانت‌اند کشور در بابلسر ۱۴۰۰</video:title>
       <video:description>تیزر و لحظات خاطره‌انگیز اولین همایش حضوری فرانت‌چپتر در بابلسر، مازندران</video:description>
       <video:content_loc>https://frontchapter.ir/videos/FrontChapter1400.mp4</video:content_loc>
       <video:publication_date>2022-03-01T08:00:00+03:30</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:live>no</video:live>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://frontchapter.ir/watch/intro/</loc>
+    <lastmod>2025-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <video:video>
+      <video:thumbnail_loc>https://frontchapter.ir/images/banner-app.png</video:thumbnail_loc>
+      <video:title>ویدیوی معرفی و رسالت جامعه فرانت‌چپتر</video:title>
+      <video:description>محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان وب</video:description>
+      <video:content_loc>https://frontchapter.ir/videos/frontchapter-banner.mp4</video:content_loc>
+      <video:publication_date>2025-02-27T08:00:00+03:30</video:publication_date>
       <video:family_friendly>yes</video:family_friendly>
       <video:live>no</video:live>
     </video:video>
@@ -669,15 +693,6 @@
     <loc>https://frontchapter.ir/about/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
-    <video:video>
-      <video:thumbnail_loc>https://frontchapter.ir/images/1403/video_poster.jpg</video:thumbnail_loc>
-      <video:title>روایت مسیر فرانت‌چپتر — درباره ما</video:title>
-      <video:description>داستان شکل‌گیری جامعه‌ی هویجی فرانت‌چپتر و اهداف آن برای توسعه‌دهندگان وب ایران</video:description>
-      <video:content_loc>https://frontchapter.ir/videos/frontchapter-1403.mp4</video:content_loc>
-      <video:publication_date>2025-02-27T08:00:00+03:30</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
-      <video:live>no</video:live>
-    </video:video>
   </url>
   <url>
     <loc>https://frontchapter.ir/contact/</loc>

@@ -38,14 +38,6 @@ function generateSitemap() {
       loc: `${SITE_URL}/`,
       changefreq: 'weekly',
       priority: '1.0',
-      video: {
-        thumbnail_loc: `${SITE_URL}/images/banner-app.png`,
-        title: 'جامعه‌ی فرانت‌اند فرانت‌چپتر — ویدیوی معرفی',
-        description:
-          'محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان وب',
-        content_loc: `${SITE_URL}/videos/frontchapter-banner.mp4`,
-        publication_date: '2025-02-27T08:00:00+03:30',
-      },
     },
     {
       loc: `${SITE_URL}/events/dar-miyan-e-meh/`,
@@ -69,6 +61,25 @@ function generateSitemap() {
       lastmod: '2025-03-07',
       changefreq: 'weekly',
       priority: '0.85',
+    },
+    {
+      loc: `${SITE_URL}/conferences/1402/`,
+      lastmod: '2024-03-08',
+      changefreq: 'monthly',
+      priority: '0.70',
+    },
+    {
+      loc: `${SITE_URL}/conferences/1400/`,
+      lastmod: '2022-03-04',
+      changefreq: 'monthly',
+      priority: '0.70',
+    },
+    // Dedicated Watch Pages (Video as Primary Main Content)
+    {
+      loc: `${SITE_URL}/watch/shiraz-1403/`,
+      lastmod: '2025-03-07',
+      changefreq: 'monthly',
+      priority: '0.85',
       video: {
         thumbnail_loc: `${SITE_URL}/images/1403/video_poster.jpg`,
         title: 'تیزر رسمی همایش شیراز ۱۴۰۳ فرانت‌چپتر',
@@ -79,10 +90,10 @@ function generateSitemap() {
       },
     },
     {
-      loc: `${SITE_URL}/conferences/1402/`,
+      loc: `${SITE_URL}/watch/amol-1402/`,
       lastmod: '2024-03-08',
       changefreq: 'monthly',
-      priority: '0.70',
+      priority: '0.75',
       video: {
         thumbnail_loc: `${SITE_URL}/images/1402/01.webp`,
         title: 'ویدیوی دومین همایش فرانت‌اند ایران در آمل ۱۴۰۲',
@@ -93,10 +104,10 @@ function generateSitemap() {
       },
     },
     {
-      loc: `${SITE_URL}/conferences/1400/`,
+      loc: `${SITE_URL}/watch/babolsar-1400/`,
       lastmod: '2022-03-04',
       changefreq: 'monthly',
-      priority: '0.70',
+      priority: '0.75',
       video: {
         thumbnail_loc: `${SITE_URL}/images/1400/video_poster.webp`,
         title: 'ویدیوی اولین همایش فرانت‌اند کشور در بابلسر ۱۴۰۰',
@@ -104,6 +115,20 @@ function generateSitemap() {
           'تیزر و لحظات خاطره‌انگیز اولین همایش حضوری فرانت‌چپتر در بابلسر، مازندران',
         content_loc: `${SITE_URL}/videos/FrontChapter1400.mp4`,
         publication_date: '2022-03-01T08:00:00+03:30',
+      },
+    },
+    {
+      loc: `${SITE_URL}/watch/intro/`,
+      lastmod: '2025-02-27',
+      changefreq: 'monthly',
+      priority: '0.80',
+      video: {
+        thumbnail_loc: `${SITE_URL}/images/banner-app.png`,
+        title: 'ویدیوی معرفی و رسالت جامعه فرانت‌چپتر',
+        description:
+          'محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان وب',
+        content_loc: `${SITE_URL}/videos/frontchapter-banner.mp4`,
+        publication_date: '2025-02-27T08:00:00+03:30',
       },
     },
     {
@@ -175,18 +200,6 @@ function generateSitemap() {
         ...(lastmod ? { lastmod } : {}),
         changefreq: isAbout ? 'monthly' : 'yearly',
         priority: isAbout ? '0.70' : isContact ? '0.50' : '0.30',
-        ...(isAbout
-          ? {
-              video: {
-                thumbnail_loc: `${SITE_URL}/images/1403/video_poster.jpg`,
-                title: 'روایت مسیر فرانت‌چپتر — درباره ما',
-                description:
-                  'داستان شکل‌گیری جامعه‌ی هویجی فرانت‌چپتر و اهداف آن برای توسعه‌دهندگان وب ایران',
-                content_loc: `${SITE_URL}/videos/frontchapter-1403.mp4`,
-                publication_date: '2025-02-27T08:00:00+03:30',
-              },
-            }
-          : {}),
       });
     }
   }

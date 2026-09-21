@@ -185,8 +185,9 @@ export interface HomeVideoInput {
 
 export const buildHomeJsonLd = (
   events: CommunityEventInput[] = [],
-  video?: HomeVideoInput
+  _video?: HomeVideoInput
 ) => {
+  void _video;
   const { logo } = config.site as { logo: string };
   const { email, location } = config.contact_info as {
     email: string;
@@ -306,30 +307,6 @@ export const buildHomeJsonLd = (
     });
   }
 
-  if (video?.contentUrl || video?.embedUrl) {
-    graph.push({
-      '@type': 'VideoObject',
-      '@id': `${SITE_URL}/#hero-video`,
-      name: video.name ?? 'جامعه‌ی فرانت‌اند فرانت‌چپتر — ویدیوی معرفی',
-      description: plainifySync(
-        video.description ??
-          'معرفی جامعه‌ی فرانت‌چپتر؛ محلی صمیمی برای گفت‌وگوی تخصصی و اشتراک تجربیات توسعه‌دهندگان فرانت‌اند'
-      ),
-      thumbnailUrl: video.thumbnailUrl
-        ? resolveAbsoluteUrl(video.thumbnailUrl)
-        : `${SITE_URL}${DEFAULT_OG_IMAGE}`,
-      ...(video.contentUrl
-        ? { contentUrl: resolveAbsoluteUrl(video.contentUrl) }
-        : {}),
-      ...(video.embedUrl ? { embedUrl: video.embedUrl } : {}),
-      uploadDate: formatIsoUploadDate(video.uploadDate),
-      inLanguage: 'fa-IR',
-      publisher: {
-        '@id': organizationId,
-      },
-    });
-  }
-
   return {
     '@context': 'https://schema.org',
     '@graph': graph,
@@ -362,7 +339,6 @@ export const buildAboutJsonLd = ({
   description,
   image,
   people = [],
-  video,
 }: AboutJsonLdInput) => {
   const aboutUrl = `${SITE_URL}/about/`;
   const pageDescription = plainifySync(description || DEFAULT_DESCRIPTION);
@@ -427,22 +403,6 @@ export const buildAboutJsonLd = ({
       ...(employee.length ? { employee } : {}),
     },
   ];
-
-  if (video?.src) {
-    graph.push({
-      '@type': 'VideoObject',
-      '@id': `${aboutUrl}#video`,
-      name: video.title ? plainifySync(video.title) : 'معرفی فرانت‌چپتر',
-      description: plainifySync(video.description || pageDescription),
-      thumbnailUrl: video.poster ? resolveAbsoluteUrl(video.poster) : imageUrl,
-      contentUrl: resolveAbsoluteUrl(video.src),
-      uploadDate: formatIsoUploadDate(video.uploadDate),
-      inLanguage: 'fa-IR',
-      publisher: {
-        '@id': organizationId,
-      },
-    });
-  }
 
   return {
     '@context': 'https://schema.org',
@@ -584,6 +544,71 @@ export const buildSpeakersListJsonLd = (speakers: SpeakerProfile[]) => {
             ...(speakerLinks.length > 0 ? { sameAs: speakerLinks } : {}),
           };
         }),
+      },
+    ],
+  };
+};
+
+export interface WatchPageJsonLdInput {
+  slug: string;
+  title: string;
+  description: string;
+  poster: string;
+  src: string;
+  uploadDate: string;
+}
+
+export const buildWatchPageJsonLd = (video: WatchPageJsonLdInput) => {
+  const watchUrl = `${SITE_URL}/watch/${video.slug}/`;
+  const posterUrl = resolveAbsoluteUrl(video.poster);
+  const videoContentUrl = resolveAbsoluteUrl(video.src);
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${watchUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: SITE_NAME,
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'ویدیوها',
+            item: `${SITE_URL}/conferences/`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: video.title,
+            item: watchUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'VideoObject',
+        '@id': `${watchUrl}#video`,
+        name: video.title,
+        description: plainifySync(video.description),
+        thumbnailUrl: [posterUrl],
+        uploadDate: video.uploadDate,
+        contentUrl: videoContentUrl,
+        embedUrl: watchUrl,
+        inLanguage: 'fa-IR',
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          url: SITE_URL,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/images/logo.svg`,
+          },
+        },
       },
     ],
   };
