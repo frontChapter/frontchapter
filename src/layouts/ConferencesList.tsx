@@ -288,7 +288,7 @@ const ConferencesList = () => {
                         {event.date}
                       </span>
                       {event.time && (
-                        <span className="inline-flex items-center gap-1 font-mono text-[11px]">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium">
                           <IoTimeOutline className="text-primary text-sm shrink-0" />
                           {event.time}
                         </span>

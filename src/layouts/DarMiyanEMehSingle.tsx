@@ -24,11 +24,30 @@ import {
 import Banner from './components/Banner';
 import Cta from './components/Cta';
 
-const REGISTRATION_ARCHIVE_URL = 'https://mist.frontchapter.ir/';
+const withEventUtm = (
+  url: string,
+  medium = 'event_report',
+  campaign = 'dar-miyan-e-meh'
+): string => {
+  try {
+    const parsed = new URL(url);
+    parsed.searchParams.set('utm_source', 'frontchapter');
+    parsed.searchParams.set('utm_medium', medium);
+    parsed.searchParams.set('utm_campaign', campaign);
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+};
+
+const REGISTRATION_ARCHIVE_URL = withEventUtm('https://mist.frontchapter.ir/');
 const GOOGLE_PHOTOS_URL = 'https://photos.app.goo.gl/oZY9Y2vzwqm4cPpY8';
-const YASIN_ARTICLE_URL = 'https://yasiin.me/expertise-to-opportunity/';
-const CODEMEET_URL = 'https://codemeet.chat/';
-const WIDGETIFY_URL = 'https://widgetify.ir';
+const YASIN_ARTICLE_URL = withEventUtm(
+  'https://yasiin.me/expertise-to-opportunity/'
+);
+const CODEMEET_URL = withEventUtm('https://codemeet.chat/');
+const WIDGETIFY_URL = withEventUtm('https://widgetify.ir/');
+const LIARA_URL = withEventUtm('https://liara.ir/');
 
 interface SpeakerItem {
   name: string;
@@ -37,6 +56,7 @@ interface SpeakerItem {
   avatarText: string;
   image?: string;
   link?: string;
+  linkLabel?: string;
 }
 
 const speakers: SpeakerItem[] = [
@@ -45,47 +65,75 @@ const speakers: SpeakerItem[] = [
     role: 'بنیان‌گذار فرانت‌چپتر',
     topic: 'افتتاحیه: رویارویی با پارادایم‌شیفت‌ها و مهارت‌های پایدار انسانی',
     avatarText: 'ص.ش',
-    image: '/images/team/saleh_shojaei.webp',
+    image: '/images/events/dar-miyan-e-meh/speakers/saleh_shojaei.webp',
+    link: withEventUtm(
+      'https://www.linkedin.com/in/salehshojaei/',
+      'speaker_card'
+    ),
+    linkLabel: 'پروفایل لینکدین صالح',
   },
   {
     name: 'اتابک آکسون',
     role: 'کارخانه هوش مصنوعی ایران',
     topic: 'هوش مصنوعی در صنعت؛ ساختن یا انتظار در عصر تحولات AI؟',
     avatarText: 'ا.آ',
+    image: '/images/events/dar-miyan-e-meh/speakers/atabak_axon.webp',
+    link: withEventUtm(
+      'https://www.linkedin.com/in/atabakakson/',
+      'speaker_card'
+    ),
+    linkLabel: 'پروفایل لینکدین اتابک',
   },
   {
     name: 'دکتر مهیار پویامهر',
     role: 'روان‌شناس بالینی و مدرس دانشگاه',
     topic: 'کارگاه تعاملی ۹۰ دقیقه‌ای «از مِه تا وضوح» و مدیریت عدم‌قطعیت',
     avatarText: 'م.پ',
+    image: '/images/events/dar-miyan-e-meh/speakers/mahyar_pouyamehr.webp',
+    link: withEventUtm(
+      'https://www.instagram.com/mahyar.pouyamehr/',
+      'speaker_card'
+    ),
+    linkLabel: 'صفحه اینستاگرام دکتر پویامهر',
   },
   {
     name: 'شایان حیدری',
     role: 'بنیان‌گذار CodeMeet',
     topic: 'داستان کدمیت؛ از یک ایده آخرهفته‌ای تا محصول زنده جامعه',
     avatarText: 'ش.ح',
+    image: '/images/events/dar-miyan-e-meh/speakers/shayan_heidari.webp',
     link: CODEMEET_URL,
+    linkLabel: 'وب‌سایت کدمیت (CodeMeet)',
   },
   {
     name: 'حسین جوان',
     role: 'توسعه‌دهنده و هم‌بنیان‌گذار Widgetify',
     topic: 'تجربه بازمتن ویجتیفای؛ شکست‌ها، پیوت‌ها و ثبات در دیزاین محصول',
     avatarText: 'ح.ج',
+    image: '/images/events/dar-miyan-e-meh/speakers/hossein_javan.webp',
     link: WIDGETIFY_URL,
+    linkLabel: 'وب‌سایت ویجتیفای (Widgetify)',
   },
   {
     name: 'امیرحسین کریمی',
     role: 'مهندس ارشد نرم‌افزار و مدیر فناوری InteliCraft',
     topic: 'مدیر و مجری پنل گفت‌وگوی صریح و پرسش‌وپاسخ',
     avatarText: 'ا.ک',
-    image: '/images/team/amirhossein_karimi.webp',
+    image: '/images/events/dar-miyan-e-meh/speakers/amirhossein_karimi.webp',
+    link: withEventUtm(
+      'https://www.linkedin.com/in/amirhosseinkarimi/',
+      'speaker_card'
+    ),
+    linkLabel: 'پروفایل لینکدین امیرحسین',
   },
   {
     name: 'یاسین همتی',
     role: 'رئیس هیئت‌مدیره شرکت تأمین آلیاژ کارا صنعت',
     topic: 'عضو پنل تخصصی؛ اتصال فناوری و AI به نیازهای واقعی صنایع',
     avatarText: 'ی.ه',
+    image: '/images/events/dar-miyan-e-meh/speakers/yasin_hemmati.webp',
     link: YASIN_ARTICLE_URL,
+    linkLabel: 'مطالعه مقاله «از تخصص تا فرصت»',
   },
   {
     name: 'پویا صبرآموز',
@@ -93,6 +141,12 @@ const speakers: SpeakerItem[] = [
     topic:
       'عضو پنل تخصصی؛ مهارت‌های ماندگار در بازار کار با اتکا به ۵۰۰+ مصاحبه',
     avatarText: 'پ.ص',
+    image: '/images/events/dar-miyan-e-meh/speakers/pouya_sabramooz.webp',
+    link: withEventUtm(
+      'https://www.linkedin.com/in/pouya-sabramooz-53106815a/',
+      'speaker_card'
+    ),
+    linkLabel: 'پروفایل لینکدین پویا',
   },
 ];
 
@@ -249,7 +303,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                 <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <IoPeopleOutline className="text-xl" />
                 </span>
-                <div className="mt-3 font-mono text-2xl font-black text-dark sm:text-3xl">
+                <div className="mt-3 text-2xl font-bold text-dark sm:text-3xl">
                   ۵۰
                 </div>
                 <p className="mt-1 text-xs font-medium text-muted">
@@ -261,7 +315,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                 <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
                   <IoHeartOutline className="text-xl" />
                 </span>
-                <div className="mt-3 font-mono text-2xl font-black text-dark sm:text-3xl">
+                <div className="mt-3 text-2xl font-bold text-dark sm:text-3xl">
                   ۱۴
                 </div>
                 <p className="mt-1 text-xs font-medium text-muted">
@@ -273,7 +327,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                 <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
                   <IoCloudOutline className="text-xl" />
                 </span>
-                <div className="mt-3 font-mono text-xl font-black text-dark sm:text-2xl">
+                <div className="mt-3 text-xl font-bold text-dark sm:text-2xl">
                   ۲ میلیون
                 </div>
                 <p className="mt-1 text-xs font-medium text-muted">
@@ -285,7 +339,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                 <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                   <IoBookOutline className="text-xl" />
                 </span>
-                <div className="mt-3 font-mono text-2xl font-black text-dark sm:text-3xl">
+                <div className="mt-3 text-2xl font-bold text-dark sm:text-3xl">
                   ۵۰ جلد
                 </div>
                 <p className="mt-1 text-xs font-medium text-muted">
@@ -918,7 +972,9 @@ const DarMiyanEMehSingle: React.FC = () => {
                           rel="noopener noreferrer"
                           className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-primary hover:underline"
                         >
-                          <span>مشاهده پیوست / وب‌سایت</span>
+                          <span>
+                            {sp.linkLabel ?? 'مشاهده پیوست / وب‌سایت'}
+                          </span>
                           <IoOpenOutline className="text-sm" />
                         </a>
                       </div>
@@ -965,9 +1021,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                     </p>
                   </div>
                   <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                    <span className="font-mono text-xs text-muted">
-                      codemeet.chat
-                    </span>
+                    <span className="text-xs text-muted">codemeet.chat</span>
                     <a
                       href={CODEMEET_URL}
                       target="_blank"
@@ -1000,9 +1054,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                     </p>
                   </div>
                   <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                    <span className="font-mono text-xs text-muted">
-                      widgetify.ir
-                    </span>
+                    <span className="text-xs text-muted">widgetify.ir</span>
                     <a
                       href={WIDGETIFY_URL}
                       target="_blank"
@@ -1098,7 +1150,7 @@ const DarMiyanEMehSingle: React.FC = () => {
                       <span className="rounded-full border border-border bg-surface-muted px-2.5 py-0.5 text-[11px] font-medium text-muted">
                         {item.type}
                       </span>
-                      <time className="font-mono text-xs font-medium text-primary">
+                      <time className="text-xs font-semibold text-primary">
                         {item.time}
                       </time>
                     </div>
@@ -1122,7 +1174,12 @@ const DarMiyanEMehSingle: React.FC = () => {
                     اکوسیستم برگزار شد:
                   </p>
                   <div className="mt-4 space-y-3">
-                    <div className="flex items-center justify-between rounded-xl border border-border bg-surface-muted/50 p-3.5">
+                    <a
+                      href={LIARA_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between rounded-xl border border-border bg-surface-muted/50 p-3.5 transition-all hover:border-primary/40 hover:bg-surface-muted"
+                    >
                       <div>
                         <span className="text-sm font-bold text-dark">
                           پلتفرم ابری لیارا (Liara)
@@ -1131,10 +1188,11 @@ const DarMiyanEMehSingle: React.FC = () => {
                           اهدای اعتبار ابری ۲ میلیون تومانی به همه حاضران
                         </p>
                       </div>
-                      <span className="text-xs font-semibold text-primary">
-                        حامی ابری
+                      <span className="flex items-center gap-1 text-xs font-semibold text-primary">
+                        <span>ورود به لیارا</span>
+                        <IoOpenOutline className="text-sm" />
                       </span>
-                    </div>
+                    </a>
                     <div className="flex items-center justify-between rounded-xl border border-border bg-surface-muted/50 p-3.5">
                       <div>
                         <span className="text-sm font-bold text-dark">
