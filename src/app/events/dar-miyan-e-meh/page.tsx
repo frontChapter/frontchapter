@@ -9,26 +9,38 @@ const eventSlug = 'dar-miyan-e-meh';
 const eventCanonical = `/events/${eventSlug}/`;
 const eventUrl = `${SITE_URL}${eventCanonical}`;
 const externalEventUrl = 'https://mist.frontchapter.ir/';
+const googlePhotosUrl = 'https://photos.app.goo.gl/oZY9Y2vzwqm4cPpY8';
+const yasinArticleUrl = 'https://yasiin.me/expertise-to-opportunity/';
 
-const eventTitle = 'در میان مه | رویداد حضوری فرانت‌چپتر';
+const eventTitle = 'گزارش رویداد حضوری «در میان مِه» | فرانت‌چپتر';
 const eventDescription =
-  'رویداد تعاملی در میان مِه فرانت‌چپتر؛ مواجهه با بحران هوش مصنوعی و عدم‌قطعیت با حضور دکتر مهیار پویامهر و پنل گفت‌وگوی متخصصان در کارخانه نوآوری آزادی.';
+  'گزارش کامل رویداد حضوری در میان مِه فرانت‌چپتر؛ هم‌اندیشی در روزهای عدم‌قطعیت، کارگاه تعاملی دکتر پویامهر، ارائه کارخانه هوش مصنوعی ایران، معرفی کدمیت و ویجتیفای و پنل تخصصی بازار کار با دانلود آلبوم تصاویر.';
 
 const eventOgImage = '/images/events/dar-miyan-e-meh-banner.jpg';
 
 export const metadata: Metadata = buildPageMetadata({
-  title: 'در میان مه | رویداد حضوری فرانت‌چپتر',
-  meta_title: eventTitle,
+  title: eventTitle,
+  meta_title:
+    'گزارش کامل رویداد در میان مِه؛ هم‌اندیشی در روزهای عدم‌قطعیت | فرانت‌چپتر',
   description: eventDescription,
   image: eventOgImage,
   canonical: eventCanonical,
   keywords: [
     'در میان مه',
+    'گزارش رویداد در میان مه',
     'رویداد در میان مه',
     'رویداد حضوری فرانت‌چپتر',
     'هوش مصنوعی و بازار کار',
     'مهیار پویامهر',
-    'کارگاه تعاملی برنامه‌نویسان',
+    'کارگاه از مه تا وضوح',
+    'کدمیت',
+    'CodeMeet',
+    'ویجتیفای',
+    'Widgetify',
+    'لیارا',
+    'کارخانه هوش مصنوعی ایران',
+    'یاسین همتی',
+    'پویا صبرآموز',
     'فضای کار اشتراکی زاویه',
     'کارخانه نوآوری آزادی',
     'فرانت‌چپتر',
@@ -36,14 +48,18 @@ export const metadata: Metadata = buildPageMetadata({
   ],
   type: 'article',
   article: {
-    publishedTime: '2026-09-20T12:00:00+03:30',
-    modifiedTime: '2026-09-20T12:00:00+03:30',
+    publishedTime: '2026-09-24T15:00:00+03:30',
+    modifiedTime: '2026-09-30T09:30:00+03:30',
     tags: [
+      'گزارش رویداد',
       'رویداد حضوری',
       'در میان مه',
       'فرانت‌چپتر',
       'هوش مصنوعی',
+      'سلامت روان',
       'مهیار پویامهر',
+      'کارخانه هوش مصنوعی ایران',
+      'لیارا',
     ],
   },
 });
@@ -74,7 +90,7 @@ const buildDarMiyanEMehJsonLd = () => {
           {
             '@type': 'ListItem',
             position: 3,
-            name: 'رویداد حضوری در میان مِه',
+            name: 'گزارش رویداد حضوری در میان مِه',
             item: eventUrl,
           },
         ],
@@ -97,16 +113,38 @@ const buildDarMiyanEMehJsonLd = () => {
         },
       },
       {
+        '@type': 'Article',
+        '@id': `${eventUrl}#article`,
+        isPartOf: {
+          '@id': `${eventUrl}#webpage`,
+        },
+        headline:
+          'گزارش رویداد حضوری «در میان مِه»؛ هم‌اندیشی در روزهای عدم‌قطعیت',
+        description: eventDescription,
+        datePublished: '2026-09-24T15:00:00+03:30',
+        dateModified: '2026-09-30T09:30:00+03:30',
+        mainEntityOfPage: eventUrl,
+        publisher: {
+          '@id': organizationId,
+        },
+        image: [`${SITE_URL}${eventOgImage}`],
+        inLanguage: 'fa-IR',
+        author: {
+          '@id': organizationId,
+        },
+      },
+      {
         '@type': 'Event',
         '@id': `${eventUrl}#event`,
-        url: externalEventUrl,
-        name: eventTitle,
+        url: eventUrl,
+        name: 'رویداد حضوری در میان مِه',
         alternateName: [
-          'رویداد حضوری در میان مه',
           'Through the Fog',
+          'در میان مه فرانت‌چپتر',
           'FrontChapter In-person Event',
         ],
         description: eventDescription,
+        sameAs: [externalEventUrl, googlePhotosUrl],
         startDate: '2026-09-24T15:00:00+03:30',
         endDate: '2026-09-24T19:30:00+03:30',
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -117,6 +155,17 @@ const buildDarMiyanEMehJsonLd = () => {
         organizer: {
           '@id': organizationId,
         },
+        sponsor: [
+          {
+            '@type': 'Organization',
+            name: 'پلتفرم ابری لیارا (Liara)',
+            url: 'https://liara.ir/',
+          },
+          {
+            '@type': 'Organization',
+            name: 'کارخانه هوش مصنوعی ایران',
+          },
+        ],
         image: [`${SITE_URL}${eventOgImage}`],
         location: {
           '@type': 'Place',
@@ -129,14 +178,17 @@ const buildDarMiyanEMehJsonLd = () => {
             addressCountry: 'IR',
           },
         },
-        offers: {
-          '@type': 'Offer',
-          url: externalEventUrl,
-          price: '455000',
-          priceCurrency: 'IRR',
-          availability: 'https://schema.org/InStock',
-        },
         performer: [
+          {
+            '@type': 'Person',
+            name: 'صالح شجاعی',
+            jobTitle: 'بنیان‌گذار فرانت‌چپتر',
+          },
+          {
+            '@type': 'Person',
+            name: 'اتابک آکسون',
+            jobTitle: 'کارخانه هوش مصنوعی ایران',
+          },
           {
             '@type': 'Person',
             name: 'دکتر مهیار پویامهر',
@@ -144,18 +196,29 @@ const buildDarMiyanEMehJsonLd = () => {
           },
           {
             '@type': 'Person',
-            name: 'یاسین همتی',
-            jobTitle: 'رئیس هیئت‌مدیره شرکت تأمین آلیاژ کارا صنعت',
+            name: 'شایان حیدری',
+            jobTitle: 'بنیان‌گذار CodeMeet',
           },
           {
             '@type': 'Person',
-            name: 'امیر کریمی',
+            name: 'حسین جوان',
+            jobTitle: 'توسعه‌دهنده Widgetify',
+          },
+          {
+            '@type': 'Person',
+            name: 'امیرحسین کریمی',
             jobTitle: 'مهندس ارشد نرم‌افزار و مدیر فناوری InteliCraft',
           },
           {
             '@type': 'Person',
+            name: 'یاسین همتی',
+            jobTitle: 'رئیس هیئت‌مدیره شرکت تأمین آلیاژ کارا صنعت',
+            url: yasinArticleUrl,
+          },
+          {
+            '@type': 'Person',
             name: 'پویا صبرآموز',
-            jobTitle: 'مدیرعامل و مدیر فناوری سابق',
+            jobTitle: 'مدیرعامل سابق و مترجم کتاب «برنامه‌نویس عملگرا»',
           },
         ],
       },
